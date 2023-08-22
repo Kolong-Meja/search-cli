@@ -2,3 +2,6 @@ root | 2023-08-21 15:15:05,261 INFO - Looks for CLI version.
 root | 2023-08-21 15:17:57,400 INFO - Find a file with 'endswith' method
 root | 2023-08-21 22:34:16,373 INFO - Execute 'find' command to find a file by it's name.
 root | 2023-08-22 13:40:27,820 INFO - Execute 'find' command to find a file by it's name.
+root | 2023-08-22 16:03:33,799 INFO - Find a file with 'startswith' method
+root | 2023-08-22 16:10:49,913 INFO - Find a file with 'endswith' method
+root | 2023-08-22 16:14:04,821 INFO - Find a file with 'endswith' method
