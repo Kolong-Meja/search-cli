@@ -1,0 +1,3 @@
+root | 2023-08-21 15:15:05,261 INFO - Looks for CLI version.
+root | 2023-08-21 15:17:57,400 INFO - Find a file with 'endswith' method
+root | 2023-08-21 22:34:16,373 INFO - Execute 'find' command to find a file by it's name.
