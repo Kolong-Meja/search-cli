@@ -7,7 +7,6 @@ import pathlib
 import typer
 import rich
 
-from art import text2art 
 from rich.console import Console
 from rich.panel import Panel
 from rich.syntax import Syntax
@@ -16,9 +15,6 @@ from termcolor import colored
 from typing import Optional
 
 
-# create art below.
-my_art = colored(text2art("Search", font="block"), "light_green")
-
 # create typer object.
 app = typer.Typer(help="""[bold green]Easiest[/bold green] way to 
                 [bold yellow]find[/bold yellow], [bold]read[/bold], [bold green]create[/bold green],
@@ -26,11 +22,6 @@ app = typer.Typer(help="""[bold green]Easiest[/bold green] way to
                 pretty_exceptions_show_locals=False, 
                 pretty_exceptions_enable=True,
                 rich_markup_mode='rich')
-print(my_art)
-
-# create factory for exception.
-def exception_factory(exception, message: str):
-    return exception(message)
 
 def log_file():
     fullpath = os.path.join(pathlib.Path.cwd(), 'search', 'logs')
@@ -43,6 +34,14 @@ def log_file():
         pathlib.Path(fullpath).mkdir(exist_ok=False)
         file_target = os.path.join(fullpath, 'log.txt')
         return file_target
+
+# create factory for exception.
+def exception_factory(exception, message: str):
+    logging.basicConfig(filename=log_file(), filemode='a+', 
+                            format='%(name)s | %(asctime)s %(levelname)s - %(message)s',
+                            level=logging.ERROR)
+    logging.info(message)
+    return exception(message)
 
 # create version callback function.
 def version_callback(value: bool) -> None:
@@ -111,6 +110,8 @@ def file_endswith(value: str) -> None:
 @app.command(help="Command to [bold yellow]find[/bold yellow] a file by it's name 🔍.")
 def find(filename: str = typer.Argument(help="Name of file to [bold yellow]search[/bold yellow] for. :page_facing_up:", 
                                         metavar="FILENAME"),
+        path: str = typer.Argument(default=pathlib.Path.home(), 
+                                help="Directory path for the file to search."),
         log: bool = typer.Option(default=False, 
                                 help="Log the output into 'log.txt' file. :memo:", 
                                 is_flag=True),
@@ -123,37 +124,40 @@ def find(filename: str = typer.Argument(help="Name of file to [bold yellow]searc
                                     'endswith' method :sunrise_over_mountains:""", 
                                     is_eager=True, 
                                     callback=file_endswith)) -> None:
-    # user home root.
-    user_home_root = pathlib.Path.home()
-    # scan all root from user home root.
-    scanning_directory = os.walk(user_home_root, topdown=True)
-    # add total scanned file [optional]
-    count_total = 0
+    # current path.
+    curr_path = pathlib.Path(path)
 
-    # iterate all directory.
-    for root, dirs, files in scanning_directory:
-        for file in files:
-            # filter file same as filename param.
-            if fnmatch.fnmatch(file, filename):
-                count_total += 1 # [optional]
-                # join the root and file.
-                root = colored(root, "white")
-                file = colored(file, "yellow", attrs=['bold'])
-                fullpath = os.path.join(root, file)
-                print(fullpath)
+    if curr_path.is_dir():
+        # scan all root from user home root.
+        scanning_directory = os.walk(curr_path, topdown=True)
+
+        # iterate all directory.
+        for root, dirs, files in scanning_directory:
+            for file in files:
+                # filter file same as filename param.
+                if fnmatch.fnmatch(file, filename):
+                    # join the root and file.
+                    root = colored(root, "white")
+                    file = colored(file, "yellow", attrs=['bold'])
+                    fullpath = os.path.join(root, file)
+                    print(fullpath)
+    else:
+        raise exception_factory(FileNotFoundError, f"File or Directory not found: {curr_path}")
     
-    # do logging below,
-    logging.basicConfig(filename=log_file(), filemode='a+', 
-                        format='%(name)s | %(asctime)s %(levelname)s - %(message)s',
-                        level=logging.INFO)
-    logging.info("Execute 'find' command to find a file by it's name.")
-    rich.print(f"Search {filename} file [bold green]success![/bold green]")
-    raise typer.Exit()
+    if log:
+        # do logging below,
+        logging.basicConfig(filename=log_file(), filemode='a+', 
+                            format='%(name)s | %(asctime)s %(levelname)s - %(message)s',
+                            level=logging.INFO)
+        logging.info("Execute 'find' command to find a file by it's name.")
+        rich.print(f"Find {filename} file [bold green]success![/bold green]")
+        raise typer.Exit()
 
 @app.command(help="Command to [bold green]create[/bold green] new file followed by a path :cookie:.")
 def create(filename: str = typer.Argument(metavar="FILENAME", 
                                         help="Name of file to [bold green]create[/bold green] a new one. :page_facing_up:"),
-            path: str = typer.Argument( metavar="PATH", 
+            path: str = typer.Argument(default=pathlib.Path.home(), 
+                                    metavar="PATH", 
                                     help="Directory [bold blue]path[/bold blue] for file that has been created. :file_folder:"),
             log: bool = typer.Option(default=False, 
                                     help="Log the output into 'log.txt' file. :memo:")) -> None:
@@ -168,15 +172,24 @@ def create(filename: str = typer.Argument(metavar="FILENAME",
         if os.path.exists(real_path):
             raise exception_factory(FileExistsError, f"File exists: {real_path}")
         else:
-            open(os.path.join(curr_path, filename), 'x')
-            rich.print(f"[bold green]Success creating file[/bold green], {real_path}")
+            with open(os.path.join(curr_path, filename), 'x'):
+                rich.print(f"[bold green]Success creating file[/bold green], {real_path}")
     else:
         raise exception_factory(FileNotFoundError, f"File or Directory not found: {curr_path}")
     
+    if log:
+        # do logging below,
+        logging.basicConfig(filename=log_file(), filemode='a+', 
+                            format='%(name)s | %(asctime)s %(levelname)s - %(message)s',
+                            level=logging.INFO)
+        logging.info("Execute 'create' command to create a file.")
+        rich.print(f"Create {filename} file [bold green]success![/bold green]")
+        raise typer.Exit()
 @app.command(help="Command to [bold]read[/bold] a file from a directory :book:.")
 def read(filename: str = typer.Argument(metavar="FILENAME", 
                                         help="Name of file to read of. :page_facing_up:"),
-        path: str = typer.Argument(metavar="PATH", 
+        path: str = typer.Argument(default=pathlib.Path.home(), 
+                                metavar="PATH", 
                                 help="Directory path of file that want to read of. :file_folder:"),
         log: bool = typer.Option(default=False, 
                                 help="Log the output into 'log.txt' file. :memo:"),
@@ -200,19 +213,27 @@ def read(filename: str = typer.Argument(metavar="FILENAME",
                 # we use panel for easy to read.
                 rich.print(Panel(user_file.read(), title=f"{filename}", title_align="center", style="white"))
             else:
-                user_file = open(os.path.join(curr_path, filename), 'r')
-                code_syntax = Syntax(user_file.read(), file_type, theme="dracula", line_numbers=True, padding=1)
-                console = Console()
-                console.print(Panel(code_syntax, title=f"{filename}", title_align="center"))
-            # rich.print(f"[bold green]Success creating file[/bold green], {real_path}")
+                with open(os.path.join(curr_path, filename), 'r') as file:
+                    code_syntax = Syntax(file.read(), file_type, theme="dracula", line_numbers=True, padding=1)
+                    console = Console()
+                    console.print(Panel(code_syntax, title=f"{filename}", title_align="center"))
     else:
         raise exception_factory(FileNotFoundError, f"File or Directory not found: {curr_path}")
     
-
+    if log:
+        # do logging below,
+        logging.basicConfig(filename=log_file(), filemode='a+', 
+                            format='%(name)s | %(asctime)s %(levelname)s - %(message)s',
+                            level=logging.INFO)
+        logging.info("Execute 'read' command to read a file.")
+        rich.print(f"Read {filename} file [bold green]success![/bold green]")
+        raise typer.Exit()
+    
 @app.command(help="Command to [bold red]delete[/bold red] one or more file :eyes:.")
 def delete(filename: str = typer.Argument(metavar="FILENAME", 
                                         help="Name of file to be deleted. :page_facing_up:"),
-            path: str = typer.Argument(metavar="PATH", 
+            path: str = typer.Argument(default=pathlib.Path.home(), 
+                                    metavar="PATH", 
                                     help="Directory of file to be deleted. :file_folder:"),
             log: bool = typer.Option(default=False, 
                                     help="Log the output into 'log.txt' file. :memo:")) -> None:
@@ -226,15 +247,25 @@ def delete(filename: str = typer.Argument(metavar="FILENAME",
         # check if real path is exist.
         if os.path.exists(real_path):
             # create confirm, and if N then abort it.
-            delete = typer.confirm("Are you sure want to delete it?", abort=True)
-            # we remove the file.
-            os.remove(real_path)
-            rich.print(f"Success to delete {real_path} file.")
+            with typer.confirm("Are you sure want to delete it?", abort=True):
+                # we remove the file.
+                os.remove(real_path)
+                rich.print(f"Success to delete {real_path} file.")
         else:
             raise exception_factory(FileNotFoundError, f"File or Directory not found: {real_path}")
     else:
         raise exception_factory(FileNotFoundError, f"File or Directory not found: {curr_path}")
 
+    if log:
+        # do logging below,
+        logging.basicConfig(filename=log_file(), filemode='a+', 
+                            format='%(name)s | %(asctime)s %(levelname)s - %(message)s',
+                            level=logging.INFO)
+        logging.info("Execute 'delete' command to delete a file.")
+        rich.print(f"Delete {filename} file [bold green]success![/bold green]")
+        raise typer.Exit()
+    
+# main function in here!
 @app.callback()
 def main(version: Optional[bool] = typer.Option(None, "--version", "-v", 
                                                 help="Show version of search CLI.", 
