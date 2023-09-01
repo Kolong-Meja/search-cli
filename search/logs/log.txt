@@ -5,3 +5,4 @@ root | 2023-08-22 13:40:27,820 INFO - Execute 'find' command to find a file by i
 root | 2023-08-22 16:03:33,799 INFO - Find a file with 'startswith' method
 root | 2023-08-22 16:10:49,913 INFO - Find a file with 'endswith' method
 root | 2023-08-22 16:14:04,821 INFO - Find a file with 'endswith' method
+root | 2023-09-01 20:07:32,097 INFO - Looks for CLI version.
