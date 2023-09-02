@@ -6,6 +6,7 @@ import os
 import pathlib
 import typer
 import rich
+import platform
 
 from rich.console import Console
 from rich.panel import Panel

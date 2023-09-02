@@ -2,37 +2,53 @@
 
 Search CLI is a personal project created by Faisal Ramadhan or myself. This project was built using the Python programming language. At the time of its creation, this CLI was only useful for finding the desired file according to the initial directory, but over time I started adding several new commands, such as Create, Read, and Delete. All of these commands have their own purpose and function.
 
+> **Warning**
+This project does not support yet for Windows and Mac operating system.
+
 ## Requirements
 
 Each project must have additional modules or packages for ease of project creation. I myself use a lot of packages to make this CLI. The modules or packages list that I use is:
+
 * **fnmatch**
 
-Info: if you want more information about this library, see https://docs.python.org/3/library/fnmatch.html
+> **Info**
+if you want more information about this library, see https://docs.python.org/3/library/fnmatch.html
+
 * **logging**
 
-Info: if you want more information about this library, see https://docs.python.org/3/howto/logging.html
+> **Info**
+if you want more information about this library, see https://docs.python.org/3/howto/logging.html
+
 * **os**
 
 Info: if you want more information about this library, see https://docs.python.org/3/library/os.html
+
 * **pathlib**
 
-Info: if you want more information about this library, see https://docs.python.org/3/library/pathlib.html
+> **Info** 
+if you want more information about this library, see https://docs.python.org/3/library/pathlib.html
+
 * **typer**
 
 Installation:
 ```bash
 python -m pip install "typer[all]"
 ```
-Info: if you want more information about this library, see https://typer.tiangolo.com/tutorial/first-steps/
+> **Info** 
+if you want more information about this library, see https://typer.tiangolo.com/tutorial/first-steps/
+
 * **rich**
 
-**WARNING**: If you do **pip install "typer[all]"** before, then you don't have to install the rich module.
+> **Warning**
+If you do **pip install "typer[all]"** before, then you don't have to install the rich module.
 
 Installation:
 ```bash
 python -m pip install rich
 ```
-Info: If you want more information about this library, see https://rich.readthedocs.io/en/stable/introduction.html
+> **Info** 
+If you want more information about this library, see https://rich.readthedocs.io/en/stable/introduction.html
+
 * **termcolor**
 
 Installation: 
@@ -40,10 +56,13 @@ Installation:
 python -m pip install termcolor
 ```
 
-Info: if you want more information about this library, see https://github.com/termcolor/termcolor
+> **Info** 
+if you want more information about this library, see https://github.com/termcolor/termcolor
+
 * **typing**
 
-Info: if you want more information about this library, see https://docs.python.org/3/library/typing.html
+> **Info** 
+if you want more information about this library, see https://docs.python.org/3/library/typing.html
 
 ## How to use it
 
@@ -88,7 +107,9 @@ python -m search find example.txt
 
 or
 
-Info: You can specify the initial directory path to find the file you want.
+> **Info** 
+You can specify the initial directory path to find the file you want.
+
 ```bash
 python -m search find example.txt /home/yourname/Documents
 ```
@@ -97,7 +118,9 @@ At first I created this based only on the filename, but eventually I added new f
 
 * **--startswith** flag is useful for searching files with your own custom prefix. Usage examples:
 
-Info: **--startswith** flag has been set as **is_eager=True**, meaning this parameter will be executed and the main parameter will be overridden.
+> **Info** 
+**--startswith** flag has been set as **is_eager=True**, meaning this parameter will be executed and the main parameter will be overridden.
+
 ```bash
 python -m search find --startswith=main
 ```
@@ -106,7 +129,8 @@ When you do this, the system will automatically look for files with a certain (i
 
 * **--endswith** flag is useful for searching files with your own custome prefix. Usage examples:
 
-Info: **--endswith** flag has been set as **is_eager=True**, meaning this parameter will be executed and the main parameter will be overridden.
+> **Info** 
+**--endswith** flag has been set as **is_eager=True**, meaning this parameter will be executed and the main parameter will be overridden.
 
 ```bash
 ptyhon -m search find --endswith=.py
@@ -114,7 +138,8 @@ ptyhon -m search find --endswith=.py
 
 This flag has same functional as **--startswith** flag, but search file by the end name of the file that match with your custome prefix.
 
-Info: you can also add your own initial path, example usage:
+> **Info** 
+you can also add your own initial path, example usage:
 
 ```bash
 python -m search find --startswith=main /home
@@ -125,7 +150,8 @@ python -m search find --startswith=main /home
 ```bash
 python -m search create example.txt
 ```
-Info: Default directory set as **/home/username**
+> **Info** 
+Default directory set as **/home/username**
 
 or 
 
@@ -156,7 +182,8 @@ def my_func() -> None:
     print("Hello World!")
 ```
 
-Info: this is just an example, the output will vary depending on the type of file you entered and the program in the file you entered
+> **Info** 
+this is just an example, the output will vary depending on the type of file you entered and the program in the file you entered
 
 ### How to delete a file?
 
