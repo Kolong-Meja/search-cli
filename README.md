@@ -11,22 +11,22 @@ Each project must have additional modules or packages for ease of project creati
 
 * **fnmatch**
 
-> **Info**
-if you want more information about this library, see https://docs.python.org/3/library/fnmatch.html
+> [!NOTE]
+> if you want more information about this library, see https://docs.python.org/3/library/fnmatch.html
 
 * **logging**
 
-> **Info**
-if you want more information about this library, see https://docs.python.org/3/howto/logging.html
+> [!NOTE]
+> if you want more information about this library, see https://docs.python.org/3/howto/logging.html
 
 * **os**
 
-Info: if you want more information about this library, see https://docs.python.org/3/library/os.html
+Info: > if you want more information about this library, see https://docs.python.org/3/library/os.html
 
 * **pathlib**
 
-> **Info** 
-if you want more information about this library, see https://docs.python.org/3/library/pathlib.html
+> [!NOTE] 
+> if you want more information about this library, see https://docs.python.org/3/library/pathlib.html
 
 * **typer**
 
@@ -34,20 +34,20 @@ Installation:
 ```bash
 python -m pip install "typer[all]"
 ```
-> **Info** 
-if you want more information about this library, see https://typer.tiangolo.com/tutorial/first-steps/
+> [!NOTE] 
+> if you want more information about this library, see https://typer.tiangolo.com/tutorial/first-steps/
 
 * **rich**
 
-> **Warning**
-If you do **pip install "typer[all]"** before, then you don't have to install the rich module.
+> [!WARNING]
+> If you do **pip install "typer[all]"** before, then you don't have to install the rich module.
 
 Installation:
 ```bash
 python -m pip install rich
 ```
-> **Info** 
-If you want more information about this library, see https://rich.readthedocs.io/en/stable/introduction.html
+> [!NOTE] 
+> If you want more information about this library, see https://rich.readthedocs.io/en/stable/introduction.html
 
 * **termcolor**
 
@@ -56,13 +56,13 @@ Installation:
 python -m pip install termcolor
 ```
 
-> **Info** 
-if you want more information about this library, see https://github.com/termcolor/termcolor
+> [!NOTE] 
+> if you want more information about this library, see https://github.com/termcolor/termcolor
 
 * **typing**
 
-> **Info** 
-if you want more information about this library, see https://docs.python.org/3/library/typing.html
+> [!NOTE] 
+> if you want more information about this library, see https://docs.python.org/3/library/typing.html
 
 ## How to use it
 
@@ -107,8 +107,8 @@ python -m search find example.txt
 
 or
 
-> **Info** 
-You can specify the initial directory path to find the file you want.
+> [!NOTE] 
+> You can specify the initial directory path to find the file you want.
 
 ```bash
 python -m search find example.txt /home/yourname/Documents
@@ -118,8 +118,8 @@ At first I created this based only on the filename, but eventually I added new f
 
 * **--startswith** flag is useful for searching files with your own custom prefix. Usage examples:
 
-> **Info** 
-**--startswith** flag has been set as **is_eager=True**, meaning this parameter will be executed and the main parameter will be overridden.
+> [!NOTE] 
+> **--startswith** flag has been set as **is_eager=True**, meaning this parameter will be executed and the main parameter will be overridden.
 
 ```bash
 python -m search find --startswith=main
@@ -129,8 +129,8 @@ When you do this, the system will automatically look for files with a certain (i
 
 * **--endswith** flag is useful for searching files with your own custome prefix. Usage examples:
 
-> **Info** 
-**--endswith** flag has been set as **is_eager=True**, meaning this parameter will be executed and the main parameter will be overridden.
+> [!NOTE] 
+> **--endswith** flag has been set as **is_eager=True**, meaning this parameter will be executed and the main parameter will be overridden.
 
 ```bash
 ptyhon -m search find --endswith=.py
@@ -138,8 +138,8 @@ ptyhon -m search find --endswith=.py
 
 This flag has same functional as **--startswith** flag, but search file by the end name of the file that match with your custome prefix.
 
-> **Info** 
-you can also add your own initial path, example usage:
+> [!NOTE] 
+> you can also add your own initial path, example usage:
 
 ```bash
 python -m search find --startswith=main /home
@@ -150,8 +150,8 @@ python -m search find --startswith=main /home
 ```bash
 python -m search create example.txt
 ```
-> **Info** 
-Default directory set as **/home/username**
+> [!NOTE] 
+> Default directory set as **/home/username**
 
 or 
 
@@ -182,8 +182,8 @@ def my_func() -> None:
     print("Hello World!")
 ```
 
-> **Info** 
-this is just an example, the output will vary depending on the type of file you entered and the program in the file you entered
+> [!NOTE] 
+> this is just an example, the output will vary depending on the type of file you entered and the program in the file you entered
 
 ### How to delete a file?
 
