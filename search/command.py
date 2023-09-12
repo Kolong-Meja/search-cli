@@ -7,6 +7,8 @@ import pathlib
 import typer
 import rich
 import platform
+import npyscreen
+import curses
 
 from rich.console import Console
 from rich.panel import Panel
@@ -229,7 +231,20 @@ def read(filename: str = typer.Argument(metavar="FILENAME",
         logging.info("Execute 'read' command to read a file.")
         rich.print(f"Read {filename} file [bold green]success![/bold green]")
         raise typer.Exit()
-    
+
+@app.command(help="Command to [bold blue]write[/bold blue] one file :page_facing_up:")
+def write(filename: str = typer.Argument(default=None, 
+                                         metavar="FILENAME", 
+                                         help="Name of file to be write :pencil2:"
+                                         ),
+          path: str = typer.Argument(default=pathlib.Path.home(), 
+                                     metavar="PATH", 
+                                     help="Directory of file to be write :file_folder:" ),
+          log: bool = typer.Option(default=False, 
+                                   help="Log the output into 'log.txt' file. :memo:")) -> None:
+    # write your custom code editor here 
+    pass
+
 @app.command(help="Command to [bold red]delete[/bold red] one or more file :eyes:.")
 def delete(filename: str = typer.Argument(metavar="FILENAME", 
                                         help="Name of file to be deleted. :page_facing_up:"),
