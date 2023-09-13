@@ -6,3 +6,29 @@ root | 2023-08-22 16:03:33,799 INFO - Find a file with 'startswith' method
 root | 2023-08-22 16:10:49,913 INFO - Find a file with 'endswith' method
 root | 2023-08-22 16:14:04,821 INFO - Find a file with 'endswith' method
 root | 2023-09-01 20:07:32,097 INFO - Looks for CLI version.
+root | 2023-09-13 23:25:43,367 INFO - Looks for CLI version.
+root | 2023-09-13 23:30:03,084 INFO - Looks for CLI version.
+root | 2023-09-13 23:32:18,753 INFO - Looks for CLI version.
+root | 2023-09-13 23:33:07,508 INFO - Looks for CLI version.
+root | 2023-09-13 23:34:05,009 INFO - Looks for CLI version.
+root | 2023-09-13 23:39:14,419 INFO - Looks for CLI version.
+root | 2023-09-13 23:51:54,438 INFO - Looks for application info.
+root | 2023-09-13 23:52:18,365 INFO - Looks for application info.
+root | 2023-09-13 23:52:25,435 INFO - Looks for application info.
+root | 2023-09-13 23:52:42,974 INFO - Looks for application info.
+root | 2023-09-13 23:52:56,283 INFO - Looks for application info.
+root | 2023-09-13 23:53:18,977 INFO - Looks for application info.
+root | 2023-09-13 23:55:10,237 INFO - Looks for application info.
+root | 2023-09-13 23:56:14,872 INFO - Looks for application info.
+root | 2023-09-13 23:56:23,870 INFO - Looks for application info.
+root | 2023-09-13 23:56:33,120 INFO - Looks for application info.
+root | 2023-09-13 23:56:41,178 INFO - Looks for application info.
+root | 2023-09-13 23:57:12,072 INFO - Looks for application info.
+root | 2023-09-13 23:57:23,362 INFO - Looks for application info.
+root | 2023-09-13 23:58:30,682 INFO - Looks for application info.
+root | 2023-09-13 23:58:40,531 INFO - Looks for application info.
+root | 2023-09-13 23:59:16,355 INFO - Looks for application info.
+root | 2023-09-13 23:59:35,450 INFO - Looks for application info.
+root | 2023-09-14 00:00:29,443 INFO - Looks for application info.
+root | 2023-09-14 00:13:52,248 INFO - Looks for application info.
+root | 2023-09-14 00:14:58,808 INFO - Looks for application info.
