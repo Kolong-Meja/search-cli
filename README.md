@@ -1,5 +1,7 @@
 # Search CLI
 
+![SEARCH_v1](https://github.com/Kolong-Meja/search-cli/assets/90602095/7c957267-d608-4720-aa5e-f37736a68dca)
+
 Search CLI is a personal project created by Faisal Ramadhan or myself. This project was built using the Python programming language. At the time of its creation, this CLI was only useful for finding the desired file according to the initial directory, but over time I started adding several new commands, such as Create, Read, and Delete. All of these commands have their own purpose and function.
 
 > **Warning**
