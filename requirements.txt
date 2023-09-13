@@ -1,2 +1,4 @@
 npyscreen==4.10.5
-
+colored==2.2.3
+pyfiglet==1.0.1
+ascii-magic==2.3.0
