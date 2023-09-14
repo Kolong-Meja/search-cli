@@ -110,8 +110,8 @@ def read(filename: str = typer.Argument(metavar="FILENAME",
         # we join the path with filename value.
         real_path = os.path.join(curr_path, filename)
         # check if real path is exist.
-        if os.path.exists(real_path):
-            raise _some_log.error_log(FileExistsError, f"File exists: {real_path}")
+        if not os.path.exists(real_path):
+            raise _some_log.error_log(FileExistsError, f"File not exists: {real_path}")
         else:
             # check if the file is .txt
             if filename.endswith(".txt"):
@@ -121,7 +121,7 @@ def read(filename: str = typer.Argument(metavar="FILENAME",
             else:
                 with open(os.path.join(curr_path, filename), 'r') as file:
                     code_syntax = Syntax(file.read(), file_type, theme="dracula", line_numbers=True, padding=1)
-                    Console.print(Panel(code_syntax, title=f"{filename}", title_align="center"))
+                    Console().print(Panel(code_syntax, title=f"{filename}", title_align="center"))
         # do logging below,
         _some_log.info_log(message=f"Read '{real_path}' file")
         rich.print(f"Read {filename} file [bold green]success![/bold green]")

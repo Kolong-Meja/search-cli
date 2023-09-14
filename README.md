@@ -11,6 +11,11 @@ This project does not support yet for Windows and Mac operating system.
 
 Each project must have additional modules or packages for ease of project creation. I myself use a lot of packages to make this CLI. The modules or packages list that I use is:
 
+* **typing**
+
+> [!NOTE] 
+> if you want more information about this library, see https://docs.python.org/3/library/typing.html
+
 * **fnmatch**
 
 > [!NOTE]
@@ -61,10 +66,45 @@ python -m pip install termcolor
 > [!NOTE] 
 > if you want more information about this library, see https://github.com/termcolor/termcolor
 
-* **typing**
+* **npyscreen**
 
-> [!NOTE] 
-> if you want more information about this library, see https://docs.python.org/3/library/typing.html
+Installation: 
+```bash
+python -m pip install npyscreen
+```
+
+> [!NOTE]
+> if you want more information about this library, see https://npyscreen.readthedocs.io/introduction.html
+
+* **ascii-magic**
+
+Installation: 
+```bash
+python -m pip install ascii-magic
+```
+
+> [!NOTE]
+> if you want more information about this library, see https://pypi.org/project/ascii-magic/
+
+* **colorama**
+
+Installation: 
+```bash
+python -m pip install colorama
+```
+
+> [!NOTE]
+> if you want more information about this library, see https://pypi.org/project/colorama/
+
+* **Pillow**
+
+Installation: 
+```bash
+python -m pip install Pillow
+```
+
+> [!NOTE]
+> if you want more information about this library, see https://pillow.readthedocs.io/en/stable/
 
 ## How to use it
 
@@ -73,10 +113,11 @@ It's quite easy, you just need to enter the command **python -m search --help**,
 ```bash
  Usage: search [OPTIONS] COMMAND [ARGS]...                                                                                             
                                                                                                                                        
- Easiest way to  find, read, create, and delete a file 📁.                                                                             
+ Easiest way to find, read, create, and delete a file 📁.                                                                              
                                                                                                                                        
 ╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
 │ --version             -v        Show version of search CLI.                                                                         │
+│ --info                -i        Display info about the application                                                                  │
 │ --install-completion            Install completion for the current shell.                                                           │
 │ --show-completion               Show completion for the current shell, to copy it or customize the installation.                    │
 │ --help                          Show this message and exit.                                                                         │
@@ -86,6 +127,7 @@ It's quite easy, you just need to enter the command **python -m search --help**,
 │ delete            Command to delete one or more file 👀.                                                                            │
 │ find              Command to find a file by it's name 🔍.                                                                           │
 │ read              Command to read a file from a directory 📖.                                                                       │
+│ write             Command to write one file 📄                                                                                      │
 ╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ```
 
@@ -169,13 +211,19 @@ The system will automatically create a file with a certain file type (according 
 python -m search read example.py /home
 ```
 
-or 
+or
+
+* **--file-type** flag is especially useful for reading files of a certain type. Default file typer set as **text** or **.txt**. Example of the output:
+
+**Example 1**:
+
+Do this command in your terminal:
 
 ```bash
 python -m search read example.py /home --file-type=python
 ```
 
-* **--file-type** flag is especially useful for reading files of a certain type. Default file typer set as **text** or **.txt**. Example of the output:
+And you get a result like this in your terminal (**NOTE**: This is just example)
 
 ```python
 # example.py
@@ -184,6 +232,35 @@ def my_func() -> None:
     print("Hello World!")
 ```
 
+**Example 2**:
+
+Do this command in terminal:
+
+```bash
+python -m search read example.py /home --file-type=go
+```
+
+And you get a result like this in your terminal (**NOTE**: This is just example)
+
+```go
+// main.go
+
+func playingPythagoras(altitude, base, hypotenus float64) {
+	if altitude == 0.0 {
+		formula := math.Pow(hypotenus, 2.0) - math.Pow(base, 2.0)
+		fmt.Printf("altitude = %.1f² - %.1f²", hypotenus, base)
+		fmt.Printf("Result = %.1f", math.Round(formula))
+	} else if base == 0.0 {
+		formula := math.Pow(hypotenus, 2.0) - math.Pow(altitude, 2.0)
+		fmt.Printf("base = %.1f² - %.1f²", hypotenus, altitude)
+		fmt.Printf("Result = %.1f", math.Round(formula))
+	} else {
+		formula := math.Pow(altitude, 2.0) + math.Pow(base, 2.0)
+		fmt.Printf("hypotenus = %.1f² + %.1f²", altitude, base)
+		fmt.Printf("\nResult = %.1f", math.Round(formula))
+	}
+}
+```
 > [!NOTE] 
 > this is just an example, the output will vary depending on the type of file you entered and the program in the file you entered
 
@@ -195,15 +272,29 @@ python -m search delete example.py /home
 
 You can add the path as you wish, but make sure that the files you delete are in your destination directory.
 
-## Other useful things
-
-You can add **--log** flag in every command. This flag is useful for creating a log for every action you take while running this CLI program. Including every error you get.
+### How to write a file?
 
 ```bash
-python -m search find example.py /home --log
+python -m search write
 ```
 
-This will create a new directory in your project directory named **logs**, and will add a file called **log.txt**. In this file you can monitor all your activities while running this program.
+And you get this layer of nice UI
+
+> [!NOTE]
+> you need specifiy the Filename and Path first, before you do code or creating text.
+
+So this write command, doesn't need ARGS at all, you just input command in your terminal above, and you can do code in your terminal.
+
+**INFORMATION**:
+
+So if you notice, theres is **'EXIT'** button and **'SAVE'** button right? the functionality of these 2(two) button are same as **'EXIT'** button and **'SAVE'** button in your code editor. 
+
+You can exit whatever you want, but you can't save the code if you not input value in **'Filename'** and **'Folder Path'**. So be careful when you use this. 
+
+## Other information
+
+When you do execute the command, it will automatically **log** itself. You can check out in **logs/log.txt** file.
+
 
 ## Keep in mind
 
