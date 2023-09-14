@@ -280,6 +280,8 @@ python -m search write
 
 And you get this layer of nice UI
 
+![Screenshot from 2023-09-14 19-45-02](https://github.com/Kolong-Meja/search-cli/assets/90602095/79ffa7eb-31cf-4feb-85ec-a44db00f32f0)
+
 > [!NOTE]
 > you need specifiy the Filename and Path first, before you do code or creating text.
 
