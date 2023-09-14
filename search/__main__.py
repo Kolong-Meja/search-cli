@@ -1,7 +1,6 @@
 # search_app/__main__.py
 
 import platform
-
 from search import command, __app_name__
 
 
