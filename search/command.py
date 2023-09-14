@@ -5,6 +5,7 @@ import os
 import pathlib
 import typer
 import rich
+from dotenv import load_dotenv
 from search.callbacks import (
     _some_log,
     info_callback,
@@ -12,7 +13,10 @@ from search.callbacks import (
     file_endswith,
     version_callback,
     )
-from search.config import app
+from search.config import (
+    app, 
+    app_level
+    )
 from search.logs import exception_factory
 from search.npyscreen_app import (
     CodeEditorApp,
@@ -60,11 +64,21 @@ def find(filename: str = typer.Argument(help="Name of file to [bold yellow]searc
                         )
                     print(fullpath)
         # do logging below,
-        _some_log.info_log(message=f"Find '{filename}' file in '{path}' directory")
+        """
+        TODO: DEBUG IN HERE!
+        """
+        if app_level != 'development':
+            _some_log.info_log(message=f"Find '{filename}' file in '{path}' directory")
         rich.print(f"Find {filename} file [bold green]success![/bold green]")
         raise typer.Exit()
     else:
-        _some_log.error_log(FileNotFoundError, f"File or Directory not found: {curr_path}")
+        """
+        TODO: DEBUG IN HERE!
+        """
+        if app_level != 'development':
+            raise _some_log.error_log(FileNotFoundError, f"File or Directory not found: {curr_path}")
+        else:
+            raise exception_factory(FileNotFoundError, f"File or Directory not found: {curr_path}")
 
 @app.command(help="Command to [bold green]create[/bold green] new file followed by a path :cookie:.")
 def create(filename: str = typer.Argument(metavar="FILENAME", 
@@ -81,18 +95,33 @@ def create(filename: str = typer.Argument(metavar="FILENAME",
         real_path = os.path.join(curr_path, filename)
         # check if real path is exist.
         if os.path.exists(real_path):
-            _some_log.error_log(FileExistsError, f"File exists: {real_path}")
+            """
+            TODO: DEBUG IN HERE!
+            """
+            if app_level != 'development':
+                raise _some_log.error_log(FileExistsError, f"File exists: {real_path}")
+            else:
+                raise exception_factory(FileExistsError, f"File exists: {real_path}")
         else:
             with open(os.path.join(curr_path, filename), 'x'):
                 rich.print(f"[bold green]Success creating file[/bold green], {real_path}")
         
         # do logging below,
-        _some_log.info_log(message=f"Create new '{real_path}' file")
+        """
+        TODO: DEBUG IN HERE!
+        """
+        if app_level != 'development':
+            _some_log.info_log(message=f"Create new '{real_path}' file")
         rich.print(f"Create {filename} file [bold green]success![/bold green]")
         raise typer.Exit()
     else:
-        raise _some_log.error_log(FileNotFoundError, f"File or Directory not found: {curr_path}")
-    
+        """
+        TODO: DEBUG IN HERE!
+        """
+        if app_level != 'development':
+            raise _some_log.error_log(FileNotFoundError, f"File or Directory not found: {curr_path}")
+        else:
+            raise exception_factory(FileNotFoundError, f"File or Directory not found: {curr_path}")
 @app.command(help="Command to [bold]read[/bold] a file from a directory :book:.")
 def read(filename: str = typer.Argument(metavar="FILENAME", 
                                         help="Name of file to read of. :page_facing_up:"),
@@ -111,7 +140,14 @@ def read(filename: str = typer.Argument(metavar="FILENAME",
         real_path = os.path.join(curr_path, filename)
         # check if real path is exist.
         if not os.path.exists(real_path):
-            raise _some_log.error_log(FileExistsError, f"File not exists: {real_path}")
+            """
+            TODO: DEBUG IN HERE!
+            """
+            app_level = os.environ.get('APP_LEVEL')
+            if app_level != 'development':
+                raise _some_log.error_log(FileExistsError, f"File not exists: {real_path}")
+            else:
+                raise exception_factory(FileExistsError, f"File not exists: {real_path}")
         else:
             # check if the file is .txt
             if filename.endswith(".txt"):
@@ -123,11 +159,21 @@ def read(filename: str = typer.Argument(metavar="FILENAME",
                     code_syntax = Syntax(file.read(), file_type, theme="dracula", line_numbers=True, padding=1)
                     Console().print(Panel(code_syntax, title=f"{filename}", title_align="center"))
         # do logging below,
-        _some_log.info_log(message=f"Read '{real_path}' file")
+        """
+        TODO: DEBUG IN HERE!
+        """
+        if app_level != 'development':
+            _some_log.info_log(message=f"Read '{real_path}' file")
         rich.print(f"Read {filename} file [bold green]success![/bold green]")
         raise typer.Exit()
     else:
-        raise exception_factory(FileNotFoundError, f"File or Directory not found: {curr_path}")
+        """
+        TODO: DEBUG IN HERE!
+        """
+        if app_level != 'development':
+            raise _some_log.error_log(FileNotFoundError, f"File or Directory not found: {curr_path}")
+        else:
+            raise exception_factory(FileNotFoundError, f"File or Directory not found: {curr_path}")
 
 @app.command(help="Command to [bold blue]write[/bold blue] one file :page_facing_up:")
 def write() -> None:
@@ -136,14 +182,19 @@ def write() -> None:
         code_editor_app.run()
         form_editor = CodeEditor()
         # condition if user pick 'EXIT' earlier
-        if not form_editor.filename.value or not form_editor.path.value:
+        if (not form_editor.filename.value or 
+            not form_editor.path.value):
             rich.print('See ya :wave:')
         else:
-            _some_log.info_log(message=f"Create and write file")
+            """
+            TODO: DEBUG IN HERE!
+            """
+            app_level = os.environ.get('APP_LEVEL')
+            if app_level != 'development':
+                _some_log.info_log(message=f"Create and write file")
             real_path = os.path.join(form_editor.path.value, form_editor.filename.value)
             rich.print(f"Write {real_path} file [bold green]success![/bold green]")
             raise typer.Exit()
-
 
 @app.command(help="Command to [bold red]delete[/bold red] one or more file :eyes:.")
 def delete(filename: str = typer.Argument(metavar="FILENAME", 
@@ -160,7 +211,14 @@ def delete(filename: str = typer.Argument(metavar="FILENAME",
         real_path = os.path.join(curr_path, filename)
         # check if real path is exist.
         if not os.path.exists(real_path):
-            raise _some_log.error_log(FileNotFoundError, f"File or Directory not found: {real_path}")
+            """
+            TODO: DEBUG IN HERE!
+            """
+            app_level = os.environ.get('APP_LEVEL')
+            if app_level != 'development':
+                raise _some_log.error_log(FileNotFoundError, f"File or Directory not found: {real_path}")
+            else:
+                raise exception_factory(FileNotFoundError, f"File or Directory not found: {real_path}")
         else:
              # create confirm, and if N then abort it.
             with typer.confirm("Are you sure want to delete it?", abort=True):
@@ -168,12 +226,23 @@ def delete(filename: str = typer.Argument(metavar="FILENAME",
                 os.remove(real_path)
                 rich.print(f"Success to delete {real_path} file.")
         # do logging below,
-        _some_log.info_log(message=f"Delete '{real_path}' file")
+        """
+        TODO: DEBUG IN HERE!
+        """
+        app_level = os.environ.get('APP_LEVEL')
+        if app_level != 'development':
+            _some_log.info_log(message=f"Delete '{real_path}' file")
         rich.print(f"Delete {filename} file [bold green]success![/bold green]")
         raise typer.Exit()
     else:
-        raise _some_log.error_log(FileNotFoundError, f"File or Directory not found: {curr_path}")
-    
+        """
+        TODO: DEBUG IN HERE!
+        """
+        if app_level != 'development':
+            raise _some_log.error_log(FileNotFoundError, f"File or Directory not found: {curr_path}")
+        else:
+            raise exception_factory(FileNotFoundError, f"File or Directory not found: {curr_path}")
+
 # main function in here!
 @app.callback()
 def main(version: Optional[bool] = typer.Option(None, "--version", "-v", 

@@ -8,7 +8,8 @@ from termcolor import colored
 from search import __app_name__, __version__
 from datetime import date
 from ascii_magic import AsciiArt
-from search.logs import CustomLog 
+from search.logs import CustomLog
+from search.config import app_level
 
 
 # define private instance for CustomLog class
@@ -17,14 +18,22 @@ _some_log = CustomLog(format_log='%(name)s | %(asctime)s %(levelname)s - %(messa
 # create version callback function.
 def version_callback(value: bool) -> None:
     if value:
-        _some_log.info_log(message='Checking app version',)
+        """
+        TODO: DEBUG IN HERE!
+        """
+        if app_level != 'development':
+            _some_log.info_log(message='Checking app version',)
         rich.print(f"[bold]{__app_name__} version[/bold]: {__version__}")
         raise typer.Exit()
 
 # cretae info callback function.
 def info_callback(value: bool) -> None:
     if value:
-        _some_log.info_log(message='Checking app information')
+        """
+        TODO: DEBUG IN HERE!
+        """
+        if app_level != 'development':
+            _some_log.info_log(message='Checking app information')
         # show logo
         print('\n')
         AsciiArt.from_image('SEARCH_v1.png').to_terminal()
@@ -62,7 +71,11 @@ def file_startswith(value: str) -> None:
                     print(fullpath)
         
         # do logging below,
-        _some_log.info_log(message=f"Find '{value}' file with '--startswith' flag.")
+        """
+        TODO: DEBUG IN HERE!
+        """
+        if app_level != 'development':
+            _some_log.info_log(message=f"Find '{value}' file with '--startswith' flag.")
         rich.print(f"Search file startswith '{value}' [bold green]success![/bold green]")
         raise typer.Exit()
 
@@ -84,6 +97,10 @@ def file_endswith(value: str) -> None:
                         )
                     print(fullpath)
         # do logging below,
-        _some_log.info_log(message=f"Find '{value}' file with '--endswith' flag.")
+        """
+        TODO: DEBUG IN HERE!
+        """
+        if app_level != 'development':
+            _some_log.info_log(message=f"Find '{value}' file with '--endswith' flag.")
         rich.print(f"Search file endswith '{value}' [bold green]success![/bold green]")
         raise typer.Exit()
