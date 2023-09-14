@@ -1,6 +1,0 @@
-root | 2023-09-14 19:34:22,403 ERROR - File exists: /home/faisalramadhan/Documents/LatihanCoding/GoLang/main.go
-root | 2023-09-14 19:36:19,309 INFO - Read '/home/faisalramadhan/Documents/LatihanCoding/GoLang/main.go' file
-root | 2023-09-14 19:36:28,355 INFO - Read '/home/faisalramadhan/Documents/LatihanCoding/GoLang/main.go' file
-root | 2023-09-14 19:36:32,812 INFO - Read '/home/faisalramadhan/Documents/LatihanCoding/GoLang/main.go' file
-root | 2023-09-14 19:36:42,191 INFO - Read '/home/faisalramadhan/Documents/LatihanCoding/GoLang/main.go' file
-root | 2023-09-14 19:36:53,162 INFO - Read '/home/faisalramadhan/Documents/LatihanCoding/GoLang/main.go' file
