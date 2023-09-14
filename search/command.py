@@ -1,13 +1,10 @@
 # search_app/command.py
 
 import fnmatch
-import logging
 import os
 import pathlib
 import typer
 import rich
-import npyscreen
-import curses
 from search.callbacks import (
     _some_log,
     info_callback,
@@ -16,10 +13,7 @@ from search.callbacks import (
     version_callback,
     )
 from search.config import app
-from search.logs import (
-    log_file, 
-    exception_factory
-    )
+from search.logs import exception_factory
 from search.npyscreen_app import (
     CodeEditorApp,
     CodeEditor,

@@ -4,7 +4,6 @@ import npyscreen
 import curses
 import pathlib
 import os
-import rich
 from search.callbacks import _some_log
 
 # write your custom code editor here 

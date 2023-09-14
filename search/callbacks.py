@@ -2,7 +2,6 @@
 
 import pathlib
 import os
-import logging
 import rich
 import typer
 from termcolor import colored
