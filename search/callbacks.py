@@ -10,6 +10,7 @@ from datetime import date
 from ascii_magic import AsciiArt
 from search.logs import CustomLog
 from search.config import app_level
+from search.logs import exception_factory
 
 
 # define private instance for CustomLog class
@@ -50,6 +51,20 @@ def info_callback(value: bool) -> None:
                 """
         rich.print(output)
         raise typer.Exit()
+
+def auto_create_callback(value: bool) -> None:
+    if value:
+        curr_path = os.path.join(pathlib.Path.home(), "Create")
+        if os.path.exists(curr_path):
+            raise exception_factory(FileExistsError, f"Folder exists: {curr_path}")
+        else:
+            os.mkdir(curr_path)
+            real_path = os.path.join(curr_path, 'main.py')
+            if os.path.exists(real_path):
+                raise exception_factory(FileExistsError, f"File exists: {real_path}")
+            else:
+                with open(real_path, 'x'):
+                    rich.print(f"[bold green]Success creating file[/bold green], {real_path}")
 
 def file_startswith(value: str) -> None:
     if value:

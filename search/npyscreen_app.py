@@ -1,5 +1,6 @@
 # search/npyscreen_app.py
 
+import inspect
 import npyscreen
 import curses
 import pathlib
@@ -82,8 +83,12 @@ class CodeEditor(npyscreen.ActionForm):
     
     # add method for condition where user pick 'SAVE' button
     def on_ok(self):
+        # raise error if filename not include file type
+        if self.filename.value.find(".") == -1:
+            raise ValueError(f"'filename' needs file type at the end, file: {self.filename.value}")
+        
+        # define path
         curr_path = pathlib.Path(self.path.value)
-
         if curr_path.is_dir():
             real_path = os.path.join(curr_path, self.filename.value)
             if not self.filename.value or self.path.value:
