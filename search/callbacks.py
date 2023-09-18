@@ -95,12 +95,11 @@ def file_startswith(value: str) -> None:
             transient=True,
             get_time=None,
             ) as progress:
-            task = progress.add_task(f"Find file startswith '{value}' from {user_home_root}")
+            task = progress.add_task(f"Find file startswith '{value}' from {user_home_root}", total=100_000_000)
             for root, dirs, files in scanning_directory:
                 for file in files:
                     # filter file same as filename param.
                     if file.startswith(value):
-                        time.sleep(0.1)
                         # join the root and file.
                         root = f"[white]{root}[/white]"
                         file = f"[bold yellow]{file}[/bold yellow]"
@@ -129,13 +128,12 @@ def file_endswith(value: str) -> None:
             auto_refresh=True, 
             transient=True,
             ) as progress:
-            task = progress.add_task(f"Find file startswith '{value}' from {user_home_root}")
+            task = progress.add_task(f"Find file startswith '{value}' from {user_home_root}", total=100_000_000)
             # iterate all directory.
             for root, dirs, files in scanning_directory:
                 for file in files:
                     # filter file same as filename param.
                     if file.endswith(value):
-                        time.sleep(0.1)
                         root = f"[white]{root}[/white]"
                         file = f"[bold yellow]{file}[/bold yellow]"
                         # join the root and file.

@@ -42,13 +42,12 @@ def find_logic(filename: str, path: str, startswith: str, endswith: str) -> None
             auto_refresh=True, 
             transient=True
             ) as progress:
-            task = progress.add_task(f"Find '{filename}' file from {path}")
+            task = progress.add_task(f"Find '{filename}' file from {path}", total=100_000_000)
             for root, dirs, files in scanning_directory:
                 for file in files:
                     is_same_file = fnmatch.fnmatchcase(file, filename)
                     # filter file same as filename param.
                     if is_same_file:
-                        time.sleep(0.1)
                         # join the root and file.
                         root = f"[white]{root}[/white]"
                         file = f"[bold yellow]{file}[/bold yellow]"
