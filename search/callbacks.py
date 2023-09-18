@@ -60,6 +60,7 @@ def info_callback(value: bool) -> None:
 
 def auto_create_callback(value: bool) -> None:
     if value:
+        _some_log.info_log(message="Auto create file")
         curr_path = os.path.join(pathlib.Path.home(), "Create")
         if os.path.exists(curr_path):
             raise exception_factory(FileExistsError, f"Folder exists: {curr_path}")
