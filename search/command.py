@@ -1,12 +1,8 @@
 # search_app/command.py
 
-import inspect
-import fnmatch
 import os
 import pathlib
 import typer
-import rich
-from dotenv import load_dotenv
 from search.controllers import (
     find_logic,
     create_logic,
@@ -22,17 +18,7 @@ from search.callbacks import (
     version_callback,
     auto_create_callback,
     )
-from search.config import (
-    app, 
-    app_level,
-    FileTypes,
-    )
-from search.logs import exception_factory
-from rich.console import Console
-from rich.panel import Panel
-from rich.syntax import Syntax
-from search import __app_name__, __version__
-
+from search.config import FileTypes
 from typing import Optional
 
 
