@@ -2,4 +2,4 @@
 # search_app/__init__.py
 
 __app_name__ = "Search CLI Tool"
-__version__ = "2.3.0"
+__version__ = "2.3.2"
