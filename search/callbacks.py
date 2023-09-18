@@ -1,9 +1,11 @@
 # search/callback.py
 
+import time
 import pathlib
 import os
 import rich
 import typer
+from rich.progress import Progress, SpinnerColumn, TextColumn
 from termcolor import colored
 from search import __app_name__, __version__
 from datetime import date
@@ -11,6 +13,7 @@ from ascii_magic import AsciiArt
 from search.logs import CustomLog
 from search.config import app_level
 from search.logs import exception_factory
+
 
 def _code_example() -> str:
     output = """
@@ -84,17 +87,26 @@ def file_startswith(value: str) -> None:
         user_home_root = pathlib.Path.home()
         # scan all root from user home root.
         scanning_directory = os.walk(user_home_root, topdown=True)
-        bunch_of_files = []
         # iterate all directory.
-        for root, dirs, files in scanning_directory:
-            for file in files:
-                # filter file same as filename param.
-                if file.startswith(value):
-                    # join the root and file.
-                    fullpath = os.path.join(colored(root, "white"), colored(file, "yellow", attrs=['bold']))
-                    bunch_of_files.append(fullpath)
-        for i, f in enumerate(bunch_of_files):
-            print(f"{i+1}. {f}")
+        with Progress(
+            SpinnerColumn(spinner_name="dots9"),
+            TextColumn("[progress.description]{task.description}"),
+            auto_refresh=True, 
+            transient=True,
+            get_time=None,
+            ) as progress:
+            task = progress.add_task(f"Find file startswith '{value}' from {user_home_root}")
+            for root, dirs, files in scanning_directory:
+                for file in files:
+                    # filter file same as filename param.
+                    if file.startswith(value):
+                        time.sleep(0.1)
+                        # join the root and file.
+                        root = f"[white]{root}[/white]"
+                        file = f"[bold yellow]{file}[/bold yellow]"
+                        fullpath = os.path.join(root, file)
+                        rich.print(f"{fullpath}")
+                        progress.advance(task)
         
         # do logging below,
         """
@@ -111,17 +123,26 @@ def file_endswith(value: str) -> None:
         user_home_root = pathlib.Path.home()
         # scan all root from user home root.
         scanning_directory = os.walk(user_home_root, topdown=True)
-        bunch_of_files = []
-        # iterate all directory.
-        for root, dirs, files in scanning_directory:
-            for file in files:
-                # filter file same as filename param.
-                if file.endswith(value):
-                    # join the root and file.
-                    fullpath = os.path.join(colored(root, "white"), colored(file, "yellow", attrs=['bold']))
-                    bunch_of_files.append(fullpath)
-        for i, f in enumerate(bunch_of_files):
-            print(f"{i+1}. {f}")
+        with Progress(
+            SpinnerColumn(spinner_name="dots9"),
+            TextColumn("[progress.description]{task.description}"),
+            auto_refresh=True, 
+            transient=True,
+            ) as progress:
+            task = progress.add_task(f"Find file startswith '{value}' from {user_home_root}")
+            # iterate all directory.
+            for root, dirs, files in scanning_directory:
+                for file in files:
+                    # filter file same as filename param.
+                    if file.endswith(value):
+                        time.sleep(0.1)
+                        root = f"[white]{root}[/white]"
+                        file = f"[bold yellow]{file}[/bold yellow]"
+                        # join the root and file.
+                        fullpath = os.path.join(root, file)
+                        rich.print(f"{fullpath}")
+                        progress.advance(task)
+        
         # do logging below,
         """
         TODO: DEBUG IN HERE!

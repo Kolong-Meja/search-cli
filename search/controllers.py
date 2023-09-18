@@ -8,7 +8,6 @@ import rich
 import inspect
 import typer
 from typing import Optional
-from termcolor import colored
 from rich.console import Console
 from rich.syntax import Syntax
 from rich.panel import Panel
@@ -38,8 +37,9 @@ def find_logic(filename: str, path: str, startswith: str, endswith: str) -> None
         scanning_directory = os.walk(curr_path, topdown=True)
         # iterate all directory.
         with Progress(
-            SpinnerColumn(), 
-            TextColumn("[progress.description]{task.description}"), 
+            SpinnerColumn(spinner_name="dots9"),
+            TextColumn("[progress.description]{task.description}"),
+            auto_refresh=True, 
             transient=True
             ) as progress:
             task = progress.add_task(f"Find '{filename}' file from {path}")
@@ -48,10 +48,12 @@ def find_logic(filename: str, path: str, startswith: str, endswith: str) -> None
                     is_same_file = fnmatch.fnmatchcase(file, filename)
                     # filter file same as filename param.
                     if is_same_file:
-                        time.sleep(0.5)
+                        time.sleep(0.1)
                         # join the root and file.
-                        fullpath = os.path.join(colored(text=root, color="white"), colored(text=file, color="yellow", attrs=['bold']))
-                        print(fullpath)
+                        root = f"[white]{root}[/white]"
+                        file = f"[bold yellow]{file}[/bold yellow]"
+                        fullpath = os.path.join(root, file)
+                        rich.print(f"{fullpath}")
                         progress.advance(task)
 
         # do logging below,
