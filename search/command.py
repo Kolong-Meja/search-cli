@@ -18,15 +18,10 @@ from search.callbacks import (
     version_callback,
     auto_create_callback,
     )
-<<<<<<< HEAD
-from search.config import app
-from search.config import FileTypes
-=======
 from search.config import (
     app, 
     FileTypes
     )
->>>>>>> dev_fix_app_cli_v3
 from typing import Optional
 
 
