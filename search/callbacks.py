@@ -12,6 +12,17 @@ from search.logs import CustomLog
 from search.config import app_level
 from search.logs import exception_factory
 
+def _code_example() -> str:
+    output = """
+# create/main.py
+                        
+def main() -> None:
+    pass
+                        
+if __name__ == '__main__':
+    main()
+    """
+    return output
 
 # define private instance for CustomLog class
 _some_log = CustomLog(format_log='%(name)s | %(asctime)s %(levelname)s - %(message)s')
@@ -63,7 +74,8 @@ def auto_create_callback(value: bool) -> None:
             if os.path.exists(real_path):
                 raise exception_factory(FileExistsError, f"File exists: {real_path}")
             else:
-                with open(real_path, 'x'):
+                with open(real_path, 'w+') as file:
+                    file.write(_code_example())
                     rich.print(f"[bold green]Success creating file[/bold green], {real_path}")
 
 def file_startswith(value: str) -> None:
@@ -72,18 +84,17 @@ def file_startswith(value: str) -> None:
         user_home_root = pathlib.Path.home()
         # scan all root from user home root.
         scanning_directory = os.walk(user_home_root, topdown=True)
-
+        bunch_of_files = []
         # iterate all directory.
         for root, dirs, files in scanning_directory:
             for file in files:
                 # filter file same as filename param.
                 if file.startswith(value):
                     # join the root and file.
-                    fullpath = os.path.join(
-                        colored(root, "white"), 
-                        colored(file, "yellow", attrs=['bold'])
-                        )
-                    print(fullpath)
+                    fullpath = os.path.join(colored(root, "white"), colored(file, "yellow", attrs=['bold']))
+                    bunch_of_files.append(fullpath)
+        for i, f in enumerate(bunch_of_files):
+            print(f"{i+1}. {f}")
         
         # do logging below,
         """
@@ -100,17 +111,17 @@ def file_endswith(value: str) -> None:
         user_home_root = pathlib.Path.home()
         # scan all root from user home root.
         scanning_directory = os.walk(user_home_root, topdown=True)
+        bunch_of_files = []
         # iterate all directory.
         for root, dirs, files in scanning_directory:
             for file in files:
                 # filter file same as filename param.
                 if file.endswith(value):
                     # join the root and file.
-                    fullpath = os.path.join(
-                        colored(root, "white"), 
-                        colored(file, "yellow", attrs=['bold'])
-                        )
-                    print(fullpath)
+                    fullpath = os.path.join(colored(root, "white"), colored(file, "yellow", attrs=['bold']))
+                    bunch_of_files.append(fullpath)
+        for i, f in enumerate(bunch_of_files):
+            print(f"{i+1}. {f}")
         # do logging below,
         """
         TODO: DEBUG IN HERE!
