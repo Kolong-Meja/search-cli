@@ -18,6 +18,7 @@ from search.callbacks import (
     version_callback,
     auto_create_callback,
     )
+from search.config import app
 from search.config import FileTypes
 from typing import Optional
 
