@@ -60,19 +60,20 @@ def info_callback(value: bool) -> None:
 
 def auto_create_callback(value: bool) -> None:
     if value:
-        _some_log.info_log(message="Auto create file")
         curr_path = os.path.join(pathlib.Path.home(), "Create")
         if os.path.exists(curr_path):
-            raise exception_factory(FileExistsError, f"Folder exists: {curr_path}")
+            raise _some_log.error_log(FileExistsError, f"Folder exists: {curr_path}")
         else:
             os.mkdir(curr_path)
             real_path = os.path.join(curr_path, 'main.py')
             if os.path.exists(real_path):
-                raise exception_factory(FileExistsError, f"File exists: {real_path}")
+                raise _some_log.error_log(FileExistsError, f"File exists: {real_path}")
             else:
                 with open(real_path, 'w+') as file:
                     file.write(_code_example())
+                    _some_log.info_log(message="Auto create file")
                     rich.print(f"[bold green]Success creating file[/bold green], {real_path}")
+                    raise typer.Exit()
 
 def file_startswith(value: str) -> None:
     if value:
