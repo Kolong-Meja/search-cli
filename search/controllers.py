@@ -1,5 +1,6 @@
 # search/controllers.py
 
+import time
 import fnmatch
 import pathlib
 import os
@@ -11,6 +12,7 @@ from termcolor import colored
 from rich.console import Console
 from rich.syntax import Syntax
 from rich.panel import Panel
+from rich.progress import Progress, SpinnerColumn, TextColumn
 from search.config import (
     app_level, 
     FileTypes
@@ -34,21 +36,24 @@ def find_logic(filename: str, path: str, startswith: str, endswith: str) -> None
     if curr_path.is_dir():
         # scan all root from user home root.
         scanning_directory = os.walk(curr_path, topdown=True)
-        # append all file in empty list
-        bunch_of_files = []
         # iterate all directory.
-        for root, dirs, files in scanning_directory:
-            for file in files:
-                is_same_file = fnmatch.fnmatchcase(file, filename)
-                # filter file same as filename param.
-                if is_same_file:
-                    # join the root and file.
-                    fullpath = os.path.join(colored(root, "white"), colored(file, "yellow", attrs=['bold']))
-                    # append file one by one
-                    bunch_of_files.append(fullpath)
-        
-        for i, f in enumerate(bunch_of_files):
-            print(f"{i+1}. {f}")
+        with Progress(
+            SpinnerColumn(), 
+            TextColumn("[progress.description]{task.description}"), 
+            transient=True
+            ) as progress:
+            task = progress.add_task(f"Find '{filename}' file from {path}")
+            for root, dirs, files in scanning_directory:
+                for file in files:
+                    is_same_file = fnmatch.fnmatchcase(file, filename)
+                    # filter file same as filename param.
+                    if is_same_file:
+                        time.sleep(0.5)
+                        # join the root and file.
+                        fullpath = os.path.join(colored(text=root, color="white"), colored(text=file, color="yellow", attrs=['bold']))
+                        print(fullpath)
+                        progress.advance(task)
+
         # do logging below,
         """
         TODO: DEBUG IN HERE!
