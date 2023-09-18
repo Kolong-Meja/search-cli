@@ -2,7 +2,7 @@
 
 ![SEARCH_v1](https://github.com/Kolong-Meja/search-cli/assets/90602095/7c957267-d608-4720-aa5e-f37736a68dca)
 
-Search CLI is a personal project created by Faisal Ramadhan or myself. This project was built using the Python programming language. At the time of its creation, this CLI was only useful for finding the desired file according to the initial directory, but over time I started adding several new commands, such as Create, Read, and Delete. All of these commands have their own purpose and function.
+Search CLI is a personal project created by Faisal Ramadhan or myself. This project was built using the Python programming language. At the time of its creation, this CLI was only useful for finding the desired file according to the initial directory, but over time I started adding several new commands, such as Create, Read, Write and Delete. All of these commands have their own purpose and function.
 
 > **Warning**
 This project does not support yet for Windows and Mac operating system.
@@ -111,16 +111,14 @@ python -m pip install Pillow
 It's quite easy, you just need to enter the command **python -m search --help**, then you get the output like this:
 
 ```bash
- Usage: search [OPTIONS] COMMAND [ARGS]...                                                                                             
+Usage: Search CLI Tool [OPTIONS] COMMAND [ARGS]...                                                                                    
                                                                                                                                        
- Easiest way to find, read, create, and delete a file 📁.                                                                              
+Easiest way to find, read, create, and delete a file 📁.                                                                              
                                                                                                                                        
 ╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│ --version             -v        Show version of search CLI.                                                                         │
-│ --info                -i        Display info about the application                                                                  │
-│ --install-completion            Install completion for the current shell.                                                           │
-│ --show-completion               Show completion for the current shell, to copy it or customize the installation.                    │
-│ --help                          Show this message and exit.                                                                         │
+│ --version  -v        Show version of search CLI.                                                                                    │
+│ --info     -i        Display info about the application                                                                             │
+│ --help               Show this message and exit.                                                                                    │
 ╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ╭─ Commands ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
 │ create            Command to create new file followed by a path 🍪.                                                                 │
@@ -182,13 +180,6 @@ ptyhon -m search find --endswith=.py
 
 This flag has same functional as **--startswith** flag, but search file by the end name of the file that match with your custome prefix.
 
-> [!NOTE] 
-> you can also add your own initial path, example usage:
-
-```bash
-python -m search find --startswith=main /home
-```
-
 ### How to create a file?
 
 ```bash
@@ -205,6 +196,15 @@ python -m search create example.txt /home/username/Documents
 
 The system will automatically create a file with a certain file type (according to the type you add at the end of the file) in the directory you enter.
 
+> [!NOTE]
+> In newest update, there's one Options called **--auto**. This useful for you if you too lazy for creating new file. **Remember** this Options, will create **Create/main.py** file. You can detected it from your **home** directory.
+
+To run **--auto** Options, you just simply write it in your terminal like this below:
+
+```bash
+python -m search create --auto
+```
+
 ### How to read a file?
 
 ```bash
@@ -213,14 +213,14 @@ python -m search read example.py /home
 
 or
 
-* **--file-type** flag is especially useful for reading files of a certain type. Default file typer set as **text** or **.txt**. Example of the output:
+* **--read-type** flag is especially useful for reading files of a certain type. Default file typer set as **text** or **.txt**. Example of the output:
 
 **Example 1**:
 
 Do this command in your terminal:
 
 ```bash
-python -m search read example.py /home --file-type=python
+python -m search read example.py /home --read-type=python
 ```
 
 And you get a result like this in your terminal (**NOTE**: This is just example)
@@ -237,7 +237,7 @@ def my_func() -> None:
 Do this command in terminal:
 
 ```bash
-python -m search read example.py /home --file-type=go
+python -m search read example.py /home --read-type=go
 ```
 
 And you get a result like this in your terminal (**NOTE**: This is just example)
@@ -300,4 +300,14 @@ When you do execute the command, it will automatically **log** itself. You can c
 
 ## Keep in mind
 
-This program is only useful for **find, create, read, and delete**. Apart from that, I have nothing to add. I personally will only focus on the main command program, because there are still many things that can be updated in the future.
+This program is only useful for **find, create, read, write and delete**. Apart from that, I have nothing to add. I personally will only focus on the main command program, because there are still many things that can be updated in the future.
+
+## Updates Incoming
+
+In incoming updates, i will add some new functionality into this CLI tool, for information i will write it below:
+
+* Publish CLI as a python package on https://pypi.org/
+* Add specific information on App Info feature
+* Add **--path** Options when do execute **--startswith** and **--endswith** Options
+* Add flexibility to **--auto** Options so user can create certain file based on choice
+* Fix all bugs 
