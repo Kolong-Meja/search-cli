@@ -11,7 +11,6 @@ from search.controllers import (
     delete_logic,
     )
 from search.callbacks import (
-    _some_log,
     info_callback,
     file_startswith,
     file_endswith,

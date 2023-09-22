@@ -6,8 +6,6 @@ import curses
 import pathlib
 import os
 from search.callbacks import _some_log
-from search.logs import exception_factory
-from search.config import app_level
 
 # write your custom code editor here 
 class CodeEditorApp(npyscreen.NPSAppManaged):

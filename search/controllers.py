@@ -18,7 +18,6 @@ from rich.progress import (
     )
 from search.config import FileTypes
 from search.callbacks import _some_log
-from search.logs import exception_factory
 from search.npyscreen_app import (
     CodeEditorApp,
     CodeEditor,

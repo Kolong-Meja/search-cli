@@ -1,23 +1,18 @@
 # search/callback.py
 
-import time
 import pathlib
 import os
 import rich
 import typer
 from rich.progress import Progress, SpinnerColumn, TextColumn
-from termcolor import colored
 from search import __app_name__, __version__
 from datetime import date
 from ascii_magic import AsciiArt
 from search.logs import CustomLog
-from search.config import app_level
-from search.logs import exception_factory
 
 
 def _code_example() -> str:
-    output = """
-# create/main.py
+    output = """# create/main.py
                         
 def main() -> None:
     pass
@@ -43,7 +38,7 @@ def info_callback(value: bool) -> None:
         _some_log.info_log(message='Checking app information')
         # show logo
         print('\n')
-        AsciiArt.from_image('SEARCH_v1.png').to_terminal()
+        AsciiArt.from_image(os.path.join(pathlib.Path.cwd(), 'search', 'SEARCH_v1.png')).to_terminal()
         print('\n')
         # create long text
         output = f"""[yellow]{'*'*52}[bold]Creator Info[/bold]{'*'*52}[/yellow]\
