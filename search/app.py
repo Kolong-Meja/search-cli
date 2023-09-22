@@ -1,4 +1,4 @@
-# search_app/__main__.py
+# search_app/app.py
 
 import platform
 from search import command, __app_name__
