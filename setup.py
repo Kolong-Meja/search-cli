@@ -22,7 +22,7 @@ setup(
     ],
     url="https://github.com/Kolong-Meja/search-cli",
     entry_points="""
-    [console_scripts]
-    sefile=search.app:main
-    """,
+        [console_scripts]
+        sefile=search.app:main
+        """,
 )
