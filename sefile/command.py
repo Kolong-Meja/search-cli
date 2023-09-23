@@ -3,22 +3,21 @@
 import os
 import pathlib
 import typer
-from search.controllers import (
+from sefile.controllers import (
     find_logic,
     create_logic,
     read_logic,
     write_logic,
     delete_logic,
     )
-from search.callbacks import (
-    _some_log,
+from sefile.callbacks import (
     info_callback,
     file_startswith,
     file_endswith,
     version_callback,
     auto_create_callback,
     )
-from search.config import (
+from sefile.config import (
     app, 
     FileTypes
     )

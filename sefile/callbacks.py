@@ -1,18 +1,15 @@
 # search/callback.py
 
-import time
+import art
 import pathlib
 import os
 import rich
 import typer
 from rich.progress import Progress, SpinnerColumn, TextColumn
-from termcolor import colored
-from search import __app_name__, __version__
+from sefile import __app_name__, __version__
 from datetime import date
-from ascii_magic import AsciiArt
-from search.logs import CustomLog
-from search.config import app_level
-from search.logs import exception_factory
+from sefile.logs import CustomLog
+from sefile.logs import exception_factory
 
 
 def _code_example() -> str:
@@ -33,25 +30,15 @@ _some_log = CustomLog(format_log='%(name)s | %(asctime)s %(levelname)s - %(messa
 # create version callback function.
 def version_callback(value: bool) -> None:
     if value:
-        """
-        TODO: DEBUG IN HERE!
-        """
-        if app_level != 'development':
-            _some_log.info_log(message='Checking app version',)
         rich.print(f"[bold]{__app_name__} version[/bold]: {__version__}")
         raise typer.Exit()
 
 # cretae info callback function.
 def info_callback(value: bool) -> None:
     if value:
-        """
-        TODO: DEBUG IN HERE!
-        """
-        if app_level != 'development':
-            _some_log.info_log(message='Checking app information')
         # show logo
         print('\n')
-        AsciiArt.from_image('SEARCH_v1.png').to_terminal()
+        art.tprint("SEFILE", font="rnd-large")
         print('\n')
         # create long text
         output = f"""[yellow]{'*'*52}[bold]Creator Info[/bold]{'*'*52}[/yellow]\
@@ -107,12 +94,6 @@ def file_startswith(value: str) -> None:
                         rich.print(f"{fullpath}")
                         progress.advance(task)
         
-        # do logging below,
-        """
-        TODO: DEBUG IN HERE!
-        """
-        if app_level != 'development':
-            _some_log.info_log(message=f"Find '{value}' file with '--startswith' flag.")
         rich.print(f"Search file startswith '{value}' [bold green]success![/bold green]")
         raise typer.Exit()
 
@@ -140,12 +121,7 @@ def file_endswith(value: str) -> None:
                         fullpath = os.path.join(root, file)
                         rich.print(f"{fullpath}")
                         progress.advance(task)
-        
-        # do logging below,
-        """
-        TODO: DEBUG IN HERE!
-        """
-        if app_level != 'development':
-            _some_log.info_log(message=f"Find '{value}' file with '--endswith' flag.")
+
         rich.print(f"Search file endswith '{value}' [bold green]success![/bold green]")
         raise typer.Exit()
+    

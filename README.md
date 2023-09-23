@@ -1,8 +1,6 @@
-# Search CLI
+# Sefile CLI
 
-![SEARCH_v1](https://github.com/Kolong-Meja/search-cli/assets/90602095/7c957267-d608-4720-aa5e-f37736a68dca)
-
-Search CLI is a personal project created by Faisal Ramadhan or myself. This project was built using the Python programming language. At the time of its creation, this CLI was only useful for finding the desired file according to the initial directory, but over time I started adding several new commands, such as Create, Read, Write and Delete. All of these commands have their own purpose and function.
+Sefile CLI is a personal project created by Faisal Ramadhan or myself. This project was built using the Python programming language. At the time of its creation, this CLI was only useful for finding the desired file according to the initial directory, but over time I started adding several new commands, such as Create, Read, Write and Delete. All of these commands have their own purpose and function.
 
 > **Warning**
 This project does not support yet for Windows and Mac operating system.
@@ -105,6 +103,16 @@ python -m pip install Pillow
 
 > [!NOTE]
 > if you want more information about this library, see https://pillow.readthedocs.io/en/stable/
+
+* **art**
+
+Installation:
+```bash
+python -m pip install art
+```
+
+> [!NOTE]
+> if you want more information about this library, see https://www.ascii-art.site/
 
 ## How to use it
 

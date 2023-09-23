@@ -1,7 +1,7 @@
 # search_app/__main__.py
 
 import platform
-from search import command, __app_name__
+from sefile import command, __app_name__
 
 
 def main() -> None:

@@ -1,13 +1,12 @@
 # search/npyscreen_app.py
 
-import inspect
 import npyscreen
 import curses
 import pathlib
 import os
-from search.callbacks import _some_log
-from search.logs import exception_factory
-from search.config import app_level
+from sefile.callbacks import _some_log
+from sefile.logs import exception_factory
+from sefile.config import app_level
 
 # write your custom code editor here 
 class CodeEditorApp(npyscreen.NPSAppManaged):
@@ -92,22 +91,10 @@ class CodeEditor(npyscreen.ActionForm):
         if curr_path.is_dir():
             real_path = os.path.join(curr_path, self.filename.value)
             if not self.filename.value or self.path.value:
-                """
-                TODO: DEBUG IN HERE!
-                """
-                if app_level != 'development':
-                    raise _some_log.error_log(ValueError, message="Filename and Path required!")
-                else:
-                    raise exception_factory(ValueError, message="Filename and Path required!")
+                raise exception_factory(ValueError, message="Filename and Path required!")
             else:
                 if os.path.exists(real_path):
-                    """
-                    TODO: DEBUG IN HERE!
-                    """
-                    if app_level != 'development':
-                        raise _some_log.error_log(FileExistsError, f"File exists: {real_path}")
-                    else:
-                        raise exception_factory(FileExistsError, f"File exists: {real_path}")
+                    raise exception_factory(FileExistsError, f"File exists: {real_path}")
                 else:
                     if self.filename.value.endswith('.txt'):
                         with open(os.path.join(self.path.value, self.filename.value), "a+") as file:

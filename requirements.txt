@@ -7,3 +7,5 @@ Pillow==10.0.0
 rich==13.5.2
 termcolor==2.3.0
 python-dotenv==1.0.0
+art==6.1
+
