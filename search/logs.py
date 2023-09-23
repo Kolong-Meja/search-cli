@@ -6,7 +6,7 @@ import logging
 
 
 def log_file():
-    fullpath = os.path.join(pathlib.Path.cwd(), 'search', 'logs')
+    fullpath = os.path.join(pathlib.Path.cwd(), 'logs')
     has_dir = os.path.isdir(fullpath)
     
     if has_dir:

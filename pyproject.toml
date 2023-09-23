@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "new-sefile"
-version = "0.0.2"
+version = "0.0.3"
 authors = [
   { name="Faisal Ramadhan", email="faisalramadhan1299@gmail.com" },
 ]
@@ -23,7 +23,7 @@ dynamic = ["dependencies"]
 "Bug Tracker" = "https://github.com/Kolong-Meja/search-cli/issues"
 
 [project.scripts]
-my-client = "search.app:main"
+sefile = "search.app:main"
 
 [tool.setuptools.dynamic]
 dependencies = {file = ["requirements.txt"]}
