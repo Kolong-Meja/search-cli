@@ -4,10 +4,10 @@ import pathlib
 import os
 import rich
 import typer
+import art
 from rich.progress import Progress, SpinnerColumn, TextColumn
 from search import __app_name__, __version__
 from datetime import date
-from ascii_magic import AsciiArt
 from search.logs import CustomLog
 
 
@@ -37,9 +37,7 @@ def info_callback(value: bool) -> None:
     if value:
         _some_log.info_log(message='Checking app information')
         # show logo
-        print('\n')
-        AsciiArt.from_image(os.path.join(pathlib.Path.cwd(), 'search', 'SEARCH_v1.png')).to_terminal()
-        print('\n')
+        art.tprint("SEFILE", font="rnd-large")
         # create long text
         output = f"""[yellow]{'*'*52}[bold]Creator Info[/bold]{'*'*52}[/yellow]\
                     \n\n[bold]Creator name[/bold]: Faisal Ramadhan\

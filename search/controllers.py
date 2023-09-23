@@ -1,6 +1,5 @@
 # search/controllers.py
 
-import time
 import fnmatch
 import pathlib
 import os

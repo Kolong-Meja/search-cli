@@ -1,6 +1,5 @@
 # search/npyscreen_app.py
 
-import inspect
 import npyscreen
 import curses
 import pathlib
