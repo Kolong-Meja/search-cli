@@ -1,5 +1,7 @@
 # Sefile CLI
 
+![SEFILE_v1](https://github.com/Kolong-Meja/search-cli/assets/90602095/579d3cd7-6e68-451f-8c1f-575d8059ef5f)
+
 Sefile CLI is a personal project created by Faisal Ramadhan or myself. This project was built using the Python programming language. At the time of its creation, this CLI was only useful for finding the desired file according to the initial directory, but over time I started adding several new commands, such as Create, Read, Write and Delete. All of these commands have their own purpose and function.
 
 ## Installation
