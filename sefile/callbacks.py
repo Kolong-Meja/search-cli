@@ -10,6 +10,7 @@ from sefile import __app_name__, __version__
 from datetime import date
 from sefile.logs import CustomLog
 from sefile.logs import exception_factory
+from termcolor import colored
 
 
 def _code_example() -> str:
@@ -38,7 +39,8 @@ def info_callback(value: bool) -> None:
     if value:
         # show logo
         print('\n')
-        art.tprint("SEFILE", font="rnd-large")
+        ascii_art = art.text2art("SEFILE", font="swampland", chr_ignore=True)
+        print(colored(ascii_art, color="green", attrs=["bold"]))
         print('\n')
         # create long text
         output = f"""[yellow]{'*'*52}[bold]Creator Info[/bold]{'*'*52}[/yellow]\
