@@ -324,8 +324,8 @@ This program is only useful for **find, create, read, write and delete**. Apart 
 
 In incoming updates, i will add some new functionality into this CLI tool, for information i will write it below:
 
-* Publish CLI as a python package on https://pypi.org/
 * Add specific information on App Info feature
 * Add **--path** Options when do execute **--startswith** and **--endswith** Options
 * Add flexibility to **--auto** Options so user can create certain file based on choice
 * Fix all bugs 
+* Removing Logs (Optional)
