@@ -4,9 +4,7 @@ import npyscreen
 import curses
 import pathlib
 import os
-from sefile.callbacks import _some_log
 from sefile.logs import exception_factory
-from sefile.config import app_level
 
 # write your custom code editor here 
 class CodeEditorApp(npyscreen.NPSAppManaged):

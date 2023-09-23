@@ -116,15 +116,15 @@ python -m pip install art
 
 ## How to use it
 
-It's quite easy, you just need to enter the command **python -m search --help**, then you get the output like this:
+It's quite easy, you just need to enter the command **python -m sefile --help**, then you get the output like this:
 
 ```bash
-Usage: Search CLI Tool [OPTIONS] COMMAND [ARGS]...                                                                                    
+Usage: Sefile CLI Tool [OPTIONS] COMMAND [ARGS]...                                                                                    
                                                                                                                                        
 Easiest way to find, read, create, and delete a file 📁.                                                                              
                                                                                                                                        
 ╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│ --version  -v        Show version of search CLI.                                                                                    │
+│ --version  -v        Show version of sefile CLI.                                                                                    │
 │ --info     -i        Display info about the application                                                                             │
 │ --help               Show this message and exit.                                                                                    │
 ╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
@@ -140,19 +140,19 @@ Easiest way to find, read, create, and delete a file 📁.
 ### How to show CLI version?
 
 ```bash
-python -m search --version
+python -m sefile --version
 ```
 
 or
 
 ```bash
-python -m search -v
+python -m sefile -v
 ```
 
 ### How to find a file?
 
 ```bash
-python -m search find example.txt
+python -m sefile find example.txt
 ```
 
 or
@@ -161,7 +161,7 @@ or
 > You can specify the initial directory path to find the file you want.
 
 ```bash
-python -m search find example.txt /home/yourname/Documents
+python -m sefile find example.txt /home/yourname/Documents
 ```
 
 At first I created this based only on the filename, but eventually I added new flag options, namely --startswith and --endswith.
@@ -172,7 +172,7 @@ At first I created this based only on the filename, but eventually I added new f
 > **--startswith** flag has been set as **is_eager=True**, meaning this parameter will be executed and the main parameter will be overridden.
 
 ```bash
-python -m search find --startswith=main
+python -m sefile find --startswith=main
 ```
 
 When you do this, the system will automatically look for files with a certain (in this case **main**) prefix from each directory or sub-directory that matches the initial directory.
@@ -183,7 +183,7 @@ When you do this, the system will automatically look for files with a certain (i
 > **--endswith** flag has been set as **is_eager=True**, meaning this parameter will be executed and the main parameter will be overridden.
 
 ```bash
-ptyhon -m search find --endswith=.py
+python -m sefile find --endswith=.py
 ```
 
 This flag has same functional as **--startswith** flag, but search file by the end name of the file that match with your custome prefix.
@@ -191,7 +191,7 @@ This flag has same functional as **--startswith** flag, but search file by the e
 ### How to create a file?
 
 ```bash
-python -m search create example.txt
+python -m sefile create example.txt
 ```
 > [!NOTE] 
 > Default directory set as **/home/username**
@@ -199,7 +199,7 @@ python -m search create example.txt
 or 
 
 ```bash
-python -m search create example.txt /home/username/Documents
+python -m sefile create example.txt /home/username/Documents
 ```
 
 The system will automatically create a file with a certain file type (according to the type you add at the end of the file) in the directory you enter.
@@ -210,13 +210,13 @@ The system will automatically create a file with a certain file type (according 
 To run **--auto** Options, you just simply write it in your terminal like this below:
 
 ```bash
-python -m search create --auto
+python -m sefile create --auto
 ```
 
 ### How to read a file?
 
 ```bash
-python -m search read example.py /home
+python -m sefile read example.py /home
 ```
 
 or
@@ -228,7 +228,7 @@ or
 Do this command in your terminal:
 
 ```bash
-python -m search read example.py /home --read-type=python
+python -m sefile read example.py /home --read-type=python
 ```
 
 And you get a result like this in your terminal (**NOTE**: This is just example)
@@ -245,7 +245,7 @@ def my_func() -> None:
 Do this command in terminal:
 
 ```bash
-python -m search read example.py /home --read-type=go
+python -m sefile read example.py /home --read-type=go
 ```
 
 And you get a result like this in your terminal (**NOTE**: This is just example)
@@ -275,7 +275,7 @@ func playingPythagoras(altitude, base, hypotenus float64) {
 ### How to delete a file?
 
 ```bash
-python -m search delete example.py /home
+python -m sefile delete example.py /home
 ```
 
 You can add the path as you wish, but make sure that the files you delete are in your destination directory.
@@ -283,7 +283,7 @@ You can add the path as you wish, but make sure that the files you delete are in
 ### How to write a file?
 
 ```bash
-python -m search write
+python -m sefile write
 ```
 
 And you get this layer of nice UI
@@ -314,8 +314,8 @@ This program is only useful for **find, create, read, write and delete**. Apart 
 
 In incoming updates, i will add some new functionality into this CLI tool, for information i will write it below:
 
-* Publish CLI as a python package on https://pypi.org/
 * Add specific information on App Info feature
 * Add **--path** Options when do execute **--startswith** and **--endswith** Options
 * Add flexibility to **--auto** Options so user can create certain file based on choice
-* Fix all bugs 
+* Fix all bugs
+* Remove logging (Optional) 
