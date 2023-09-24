@@ -84,36 +84,36 @@ class CodeEditor(npyscreen.ActionForm):
         if self.filename.value.find(".") == -1:
             raise ValueError(f"'filename' needs file type at the end, file: {self.filename.value}")
         
+        if not self.path.value:
+            raise ValueError(f"Path is required, path: '{self.path.value}'")
+        
         # define path
         curr_path = pathlib.Path(self.path.value)
         if curr_path.is_dir():
             real_path = os.path.join(curr_path, self.filename.value)
-            if not self.filename.value or self.path.value:
-                raise exception_factory(ValueError, message="Filename and Path required!")
+            if os.path.exists(real_path):
+                raise exception_factory(FileExistsError, f"File exists: {real_path}")
             else:
-                if os.path.exists(real_path):
-                    raise exception_factory(FileExistsError, f"File exists: {real_path}")
-                else:
-                    if self.filename.value.endswith('.txt'):
-                        with open(os.path.join(self.path.value, self.filename.value), "a+") as file:
-                            file.seek(0)
-                            is_content_exist = file.read()
+                if self.filename.value.endswith('.txt'):
+                    with open(os.path.join(self.path.value, self.filename.value), "a+") as file:
+                        file.seek(0)
+                        is_content_exist = file.read()
 
-                            if is_content_exist:
-                                file.write("\n"+self.code.value)
-                            else:
-                                file.write(self.code.value)
-                            file.close()
-                    else:
-                        with open(os.path.join(self.path.value, self.filename.value), 'a+') as file:
-                            file.seek(0)
-                            is_code_exist = file.read()
-                            
-                            if is_code_exist:
-                                file.write("\n\n"+self.code.value)
-                            else:
-                                file.write(f"# {self.filename.value}\n\n"+self.code.value)
-                            file.close()
+                        if is_content_exist:
+                            file.write("\n"+self.code.value)
+                        else:
+                            file.write(self.code.value)
+                        file.close()
+                else:
+                    with open(os.path.join(self.path.value, self.filename.value), 'a+') as file:
+                        file.seek(0)
+                        is_code_exist = file.read()
+                        
+                        if is_code_exist:
+                            file.write("\n\n"+self.code.value)
+                        else:
+                            file.write(f"# {self.filename.value}\n\n"+self.code.value)
+                        file.close()
         self.parentApp.setNextForm(None)
     
     # add method for condition where user pick 'EXIT' button
