@@ -34,6 +34,7 @@ def find_logic(filename: str, path: str, startswith: str, endswith: str) -> None
     if curr_path.is_dir():
         # scan all root from user home root.
         scanning_directory = os.walk(curr_path, topdown=True)
+        same_file_total = 0
         # iterate all directory.
         with Progress(
             SpinnerColumn(spinner_name="dots9"),
@@ -47,6 +48,7 @@ def find_logic(filename: str, path: str, startswith: str, endswith: str) -> None
                     is_same_file = fnmatch.fnmatchcase(file, filename)
                     # filter file same as filename param.
                     if is_same_file:
+                        same_file_total += 1
                         # join the root and file.
                         root = f"[white]{root}[/white]"
                         file = f"[bold yellow]{file}[/bold yellow]"
@@ -55,9 +57,12 @@ def find_logic(filename: str, path: str, startswith: str, endswith: str) -> None
                         progress.advance(task)
 
         # do logging below,
-        _some_log.info_log(message=f"Find '{filename}' file in '{path}' directory")
-        rich.print(f"Find {filename} file [bold green]success![/bold green]")
-        raise typer.Exit()
+        if same_file_total != 0:
+            _some_log.info_log(message=f"Find '{filename}' file in '{path}' directory")
+            rich.print(f"Find {filename} file [bold green]success![/bold green]")
+            raise typer.Exit()
+        else:
+            _some_log.error_log(FileNotFoundError, message=f"File '{filename}' not found.")
     else:
         raise _some_log.error_log(FileNotFoundError, f"File or Directory not found: {curr_path}")
 

@@ -9,6 +9,7 @@ from rich.progress import Progress, SpinnerColumn, TextColumn
 from search import __app_name__, __version__
 from datetime import date
 from search.logs import CustomLog
+from termcolor import colored
 
 
 def _code_example() -> str:
@@ -37,16 +38,15 @@ def info_callback(value: bool) -> None:
     if value:
         _some_log.info_log(message='Checking app information')
         # show logo
-        art.tprint("SEFILE", font="rnd-large")
+        ascii_art = art.text2art("SEFILE", font="swampland", chr_ignore=True)
+        print(f"\n{colored(ascii_art, color='green', attrs=['bold'])}\n")
         # create long text
-        output = f"""[yellow]{'*'*52}[bold]Creator Info[/bold]{'*'*52}[/yellow]\
+        output = f"""[yellow]{'*'*40}|[bold]Information[/bold]|{'*'*40}[/yellow]\
+                    \n\n[bold]App name[/bold]: {__app_name__}\
+                    \n[bold]{__app_name__} version[/bold]: {__version__}\
                     \n\n[bold]Creator name[/bold]: Faisal Ramadhan\
                     \n[bold]Creator email[/bold]: faisalramadhan1299@gmail.com\
                     \n[bold]Creator github[/bold]: https://github.com/kolong-meja\
-                    \n\n[yellow]{'*'*50}[bold]Application Info[/bold]{'*'*50}[/yellow]\
-                    \n\n[bold]App name[/bold]: {__app_name__}\
-                    \n[bold]{__app_name__} version[/bold]: {__version__}\
-                    \n[bold]Update on[/bold]: {date(year=2023, month=9, day=14)}\
                 """
         rich.print(output)
         raise typer.Exit()
@@ -74,6 +74,7 @@ def file_startswith(value: str) -> None:
         user_home_root = pathlib.Path.home()
         # scan all root from user home root.
         scanning_directory = os.walk(user_home_root, topdown=True)
+        file_total = 0
         # iterate all directory.
         with Progress(
             SpinnerColumn(spinner_name="dots9"),
@@ -87,6 +88,7 @@ def file_startswith(value: str) -> None:
                 for file in files:
                     # filter file same as filename param.
                     if file.startswith(value):
+                        file_total += 1 
                         # join the root and file.
                         root = f"[white]{root}[/white]"
                         file = f"[bold yellow]{file}[/bold yellow]"
@@ -95,9 +97,12 @@ def file_startswith(value: str) -> None:
                         progress.advance(task)
         
         # do logging below,
-        _some_log.info_log(message=f"Find '{value}' file with '--startswith' flag.")
-        rich.print(f"Search file startswith '{value}' [bold green]success![/bold green]")
-        raise typer.Exit()
+        if file_total != 0:
+            _some_log.info_log(message=f"Find '{value}' file with '--startswith' flag.")
+            rich.print(f"Search file startswith '{value}' [bold green]success![/bold green]")
+            raise typer.Exit()
+        else:
+            _some_log.error_log(FileNotFoundError, message=f"File '{value}' not found.")
 
 def file_endswith(value: str) -> None:
     if value:
@@ -105,6 +110,7 @@ def file_endswith(value: str) -> None:
         user_home_root = pathlib.Path.home()
         # scan all root from user home root.
         scanning_directory = os.walk(user_home_root, topdown=True)
+        file_total = 0
         with Progress(
             SpinnerColumn(spinner_name="dots9"),
             TextColumn("[progress.description]{task.description}"),
@@ -117,6 +123,7 @@ def file_endswith(value: str) -> None:
                 for file in files:
                     # filter file same as filename param.
                     if file.endswith(value):
+                        file_total += 1
                         root = f"[white]{root}[/white]"
                         file = f"[bold yellow]{file}[/bold yellow]"
                         # join the root and file.
@@ -125,6 +132,10 @@ def file_endswith(value: str) -> None:
                         progress.advance(task)
         
         # do logging below,
-        _some_log.info_log(message=f"Find '{value}' file with '--endswith' flag.")
-        rich.print(f"Search file endswith '{value}' [bold green]success![/bold green]")
-        raise typer.Exit()
+        if file_total != 0:
+            _some_log.info_log(message=f"Find '{value}' file with '--endswith' flag.")
+            rich.print(f"Search file endswith '{value}' [bold green]success![/bold green]")
+            raise typer.Exit()
+        else:
+            _some_log.error_log(FileNotFoundError, message=f"File '{value}' not found.")
+            
