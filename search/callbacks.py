@@ -7,7 +7,6 @@ import typer
 import art
 from rich.progress import Progress, SpinnerColumn, TextColumn
 from search import __app_name__, __version__
-from datetime import date
 from search.logs import CustomLog
 from termcolor import colored
 

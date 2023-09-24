@@ -129,16 +129,9 @@ def write_logic() -> None:
     # running the app
     code_editor_app = CodeEditorApp()
     code_editor_app.run()
-    form_editor = CodeEditor()
-    # condition if user pick 'EXIT' earlier
-    if (not form_editor.filename.value or 
-        not form_editor.path.value):
-        rich.print('See ya :wave:')
-    else:
-        _some_log.info_log(message=f"Create and write file")
-        real_path = os.path.join(form_editor.path.value, form_editor.filename.value)
-        rich.print(f"Write {real_path} file [bold green]success![/bold green]")
-        raise typer.Exit()
+    _some_log.info_log(message=f"Create and write file")
+    rich.print('See ya :wave:')
+    raise typer.Exit()
 
 def delete_logic(filename: str, path: str) -> None:
     # raise error if filename not include file type
