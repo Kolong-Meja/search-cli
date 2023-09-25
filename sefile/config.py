@@ -1,7 +1,9 @@
 # search/config.py
 
-import typer
-from enum import Enum
+from sefile import (
+    typer, 
+    Enum
+    )
 
 
 # create typer object.

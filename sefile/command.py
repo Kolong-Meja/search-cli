@@ -1,8 +1,11 @@
 # search_app/command.py
 
-import os
-import pathlib
-import typer
+from sefile import (
+    os, 
+    pathlib, 
+    typer, 
+    Optional
+    )
 from sefile.controllers import (
     find_logic,
     create_logic,
@@ -21,7 +24,6 @@ from sefile.config import (
     app, 
     FileTypes
     )
-from typing import Optional
 
 
 @app.command(help="Command to [bold yellow]find[/bold yellow] a file by it's name 🔍.")

@@ -1,21 +1,27 @@
 # search/callback.py
 
-import art
-import pathlib
-import os
-import rich
-import typer
-from rich.progress import Progress, SpinnerColumn, TextColumn
-from sefile import __app_name__, __version__
-from datetime import date
+from sefile import (
+    art,
+    rich,
+    typer,
+    colored,
+    os,
+    pathlib,
+    Progress,
+    SpinnerColumn,
+    TextColumn,
+    __app_name__,
+    __version__,
+    __creator__,
+    __creator_email__,
+    __project_url__,
+    )
 from sefile.logs import CustomLog
 from sefile.logs import exception_factory
-from termcolor import colored
 
 
 def _code_example() -> str:
-    output = """
-# create/main.py
+    output = """# create/main.py
                         
 def main() -> None:
     pass
@@ -44,9 +50,9 @@ def info_callback(value: bool) -> None:
         output = f"""[yellow]{'*'*40}|[bold]Information[/bold]|{'*'*40}[/yellow]\
                     \n\n[bold]App name[/bold]: {__app_name__}\
                     \n[bold]{__app_name__} version[/bold]: {__version__}\
-                    \n[bold]Creator name[/bold]: Faisal Ramadhan\
-                    \n[bold]Creator email[/bold]: faisalramadhan1299@gmail.com\
-                    \n[bold]Creator github[/bold]: https://github.com/kolong-meja\
+                    \n[bold]Creator name[/bold]: {__creator__}\
+                    \n[bold]Creator email[/bold]: {__creator_email__}\
+                    \n[bold]Creator github[/bold]: {__project_url__}\
                 """
         rich.print(output)
         raise typer.Exit()

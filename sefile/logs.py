@@ -1,8 +1,10 @@
 # search/logs.py
 
-import os
-import pathlib
-import logging
+from sefile import (
+    os, 
+    pathlib, 
+    logging
+    )
 
 
 def log_file():

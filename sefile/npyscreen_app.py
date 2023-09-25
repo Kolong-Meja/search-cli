@@ -1,9 +1,11 @@
 # search/npyscreen_app.py
 
-import npyscreen
-import curses
-import pathlib
-import os
+from sefile import (
+    npyscreen, 
+    curses, 
+    os, 
+    pathlib
+    )
 from sefile.logs import exception_factory
 
 # write your custom code editor here 

@@ -1,16 +1,20 @@
 # search/controllers.py
 
-import fnmatch
-import pathlib
-import os
-import rich
-import inspect
-import typer
-from typing import Optional
-from rich.console import Console
-from rich.syntax import Syntax
-from rich.panel import Panel
-from rich.progress import Progress, SpinnerColumn, TextColumn
+from sefile import (
+    os, 
+    pathlib, 
+    fnmatch, 
+    inspect,
+    rich,
+    typer,
+    Progress,
+    SpinnerColumn,
+    TextColumn,
+    Optional,
+    Console,
+    Panel,
+    Syntax
+    )
 from sefile.config import FileTypes
 from sefile.logs import exception_factory
 from sefile.npyscreen_app import CodeEditorApp
