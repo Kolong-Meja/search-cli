@@ -10,7 +10,15 @@ import curses
 import os
 import pathlib
 import rich
+import time
 import typer
+from bullet import (
+    colors,
+    Bullet, 
+    VerticalPrompt,
+    SlidePrompt,
+    Input,
+    )
 from enum import Enum
 from termcolor import colored
 from typing import Optional

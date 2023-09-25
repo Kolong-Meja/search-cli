@@ -15,22 +15,57 @@ from sefile import (
     __creator__,
     __creator_email__,
     __project_url__,
+    colors,
+    Bullet,
+    Input,
     )
 from sefile.logs import CustomLog
 from sefile.logs import exception_factory
 
 
-def _code_example() -> str:
-    output = """# create/main.py
-                        
-def main() -> None:
-    pass
-                        
-if __name__ == '__main__':
-    main()
-    """
-    return output
-
+def _create_project(choice: str):
+    some_input = Input("What's the name of the project? ", word_color=colors.foreground["yellow"])
+    input_result = some_input.launch()
+    project_dir = os.path.join(pathlib.Path.home(), input_result)
+    
+    if os.path.exists(project_dir):
+        raise exception_factory(FileExistsError, f"Folder exists: '{project_dir}'")
+    else:
+        if "Python" in choice:
+            os.mkdir(project_dir)
+            # create sub directory
+            for subdir in ["src", "tests"]:
+                os.makedirs(os.path.join(project_dir, subdir))
+            # create files in src directory
+            for src_file in ['__init__.py', 'main.py']:
+                open(os.path.join(os.path.join(project_dir, 'src'), src_file), 'x')
+            # create files in tests directory
+            for tests_file in ['__init__.py', 'test.py']:
+                open(os.path.join(os.path.join(project_dir, 'tests'), tests_file), 'x')
+            # create required file on project.
+            for req_file in ['LICENSE.md', 'README.md', 'requirements.txt']:
+                open(os.path.join(project_dir, req_file), 'x')
+            rich.print(f"All [bold green]Done![/bold green], path: {project_dir}")
+        elif "Javascript" in choice:
+            os.mkdir(project_dir)
+            # create sub directory
+            for subdir in ["src", "tests", "public"]:
+                os.makedirs(os.path.join(project_dir, subdir))
+            # create files in src directory
+            for src_file in ["index.js", "app.js"]:
+                open(os.path.join(os.path.join(project_dir, 'src'), src_file), 'x')
+            # create files in public directory
+            for public_file in ['index.html', 'style.css', 'script.js']:
+                open(os.path.join(os.path.join(project_dir, 'public'), public_file), 'x')
+            # create files in tests directory
+            for tests_file in ['service.test.js', 'component.test.js']:
+                open(os.path.join(os.path.join(project_dir, 'tests'), tests_file), 'x')
+            # create required file on project
+            for req_file in ['LICENSE.md', 'README.md', 'package.json']:
+                open(os.path.join(project_dir, req_file), 'x')
+            rich.print(f"All [bold green]Done![/bold green], path: {project_dir}")
+        else:
+            pass
 # define private instance for CustomLog class
 _some_log = CustomLog(format_log='%(name)s | %(asctime)s %(levelname)s - %(message)s')
 
@@ -59,18 +94,28 @@ def info_callback(value: bool) -> None:
 
 def auto_create_callback(value: bool) -> None:
     if value:
-        curr_path = os.path.join(pathlib.Path.home(), "Create")
-        if os.path.exists(curr_path):
-            raise exception_factory(FileExistsError, f"Folder exists: {curr_path}")
+        some_cli = Bullet(
+            "What's simple project you want to create? ", 
+            choices=["🐍 Python", "☕ Javascript", "🐼 Go", "🔴 Cancel"],
+            bullet=" >",
+            margin=2,
+            bullet_color=colors.bright(colors.foreground["cyan"]),
+            background_color=colors.background["default"],
+            background_on_switch=colors.background["default"],
+            word_color=colors.foreground["white"],
+            word_on_switch=colors.foreground["white"],
+            )
+        result = some_cli.launch()
+
+        if result == "🐍 Python":
+            _create_project(choice=result)
+        elif result == "☕ Javascript":
+            _create_project(choice=result)
+        elif result == "🐼 Go":
+            rich.print("Sorry, now I'm still working on it, please wait 😃")
         else:
-            os.mkdir(curr_path)
-            real_path = os.path.join(curr_path, 'main.py')
-            if os.path.exists(real_path):
-                raise exception_factory(FileExistsError, f"File exists: {real_path}")
-            else:
-                with open(real_path, 'w+') as file:
-                    file.write(_code_example())
-                    rich.print(f"[bold green]Success creating file[/bold green], {real_path}")
+            print("See ya! 👋")
+            raise typer.Exit()
 
 def file_startswith(value: str) -> None:
     if value:
