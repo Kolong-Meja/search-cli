@@ -118,24 +118,7 @@ python -m pip install art
 
 It's quite easy, you just need to enter the command **python -m sefile --help**, then you get the output like this:
 
-```bash
-Usage: Sefile CLI Tool [OPTIONS] COMMAND [ARGS]...                                                                                    
-                                                                                                                                       
-Easiest way to find, read, create, and delete a file 📁.                                                                              
-                                                                                                                                       
-╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│ --version  -v        Show version of sefile CLI.                                                                                    │
-│ --info     -i        Display info about the application                                                                             │
-│ --help               Show this message and exit.                                                                                    │
-╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
-╭─ Commands ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│ create            Command to create new file followed by a path 🍪.                                                                 │
-│ delete            Command to delete one or more file 👀.                                                                            │
-│ find              Command to find a file by it's name 🔍.                                                                           │
-│ read              Command to read a file from a directory 📖.                                                                       │
-│ write             Command to write one file 📄                                                                                      │
-╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
-```
+# this is the video showing CLI in generally!
 
 ### How to show CLI version?
 
@@ -205,13 +188,15 @@ python -m sefile create example.txt /home/username/Documents
 The system will automatically create a file with a certain file type (according to the type you add at the end of the file) in the directory you enter.
 
 > [!NOTE]
-> In newest update, there's one Options called **--auto**. This useful for you if you too lazy for creating new file. **Remember** this Options, will create **Create/main.py** file. You can detected it from your **home** directory.
+> In newest update, there's one Options called **--auto**. This useful for you if you too lazy for creating simple project. **Remember** this Options, will create **Python, Javascript, or Go** project, depends on your choice. You can detected it from your **home** directory.
 
 To run **--auto** Options, you just simply write it in your terminal like this below:
 
 ```bash
 python -m sefile create --auto
 ```
+
+# This video showing about --auto options only!
 
 ### How to read a file?
 
@@ -288,7 +273,7 @@ python -m sefile write
 
 And you get this layer of nice UI
 
-![Screenshot from 2023-09-14 19-45-02](https://github.com/Kolong-Meja/search-cli/assets/90602095/79ffa7eb-31cf-4feb-85ec-a44db00f32f0)
+# This video showing about GUI of simple code editor on Write command only! 
 
 > [!NOTE]
 > you need specifiy the Filename and Path first, before you do code or creating text.
@@ -310,12 +295,3 @@ When you do execute the command, it will automatically **log** itself. You can c
 
 This program is only useful for **find, create, read, write and delete**. Apart from that, I have nothing to add. I personally will only focus on the main command program, because there are still many things that can be updated in the future.
 
-## Updates Incoming
-
-In incoming updates, i will add some new functionality into this CLI tool, for information i will write it below:
-
-* Add specific information on App Info feature
-* Add **--path** Options when do execute **--startswith** and **--endswith** Options
-* Add flexibility to **--auto** Options so user can create certain file based on choice
-* Fix all bugs
-* Remove logging (Optional) 

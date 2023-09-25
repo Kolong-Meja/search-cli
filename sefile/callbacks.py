@@ -24,7 +24,7 @@ from sefile.logs import exception_factory
 
 
 def _create_project(choice: str):
-    some_input = Input("What's the name of the project? ", word_color=colors.foreground["yellow"])
+    some_input = Input(f"What's the name of the {choice} project? ", word_color=colors.foreground["yellow"])
     input_result = some_input.launch()
     project_dir = os.path.join(pathlib.Path.home(), input_result)
     
@@ -45,7 +45,7 @@ def _create_project(choice: str):
             # create required file on project.
             for req_file in ['LICENSE.md', 'README.md', 'requirements.txt']:
                 open(os.path.join(project_dir, req_file), 'x')
-            rich.print(f"All [bold green]Done![/bold green], path: {project_dir}")
+            rich.print(f"All [bold green]Done![/bold green] ✅, path: {project_dir}")
         elif "Javascript" in choice:
             os.mkdir(project_dir)
             # create sub directory
@@ -63,9 +63,23 @@ def _create_project(choice: str):
             # create required file on project
             for req_file in ['LICENSE.md', 'README.md', 'package.json']:
                 open(os.path.join(project_dir, req_file), 'x')
-            rich.print(f"All [bold green]Done![/bold green], path: {project_dir}")
+            rich.print(f"All [bold green]Done![/bold green] ✅, path: {project_dir}")
         else:
-            pass
+            os.mkdir(project_dir)
+            # create sub directory
+            for subdir in ["src", "tests"]:
+                os.makedirs(os.path.join(project_dir, subdir))
+            # create files in src directory
+            for src_file in ["main.go", "utils.go"]:
+                open(os.path.join(os.path.join(project_dir, 'src'), src_file), 'x')
+            # create files in tests directory
+            for tests_file in ["test.go"]:
+                open(os.path.join(os.path.join(project_dir, 'tests'), tests_file), 'x')
+            # create required file on project
+            for req_file in ["LICENSE.md", "README.md", "config.go"]:
+                open(os.path.join(project_dir, req_file), 'x')
+            rich.print(f"All [bold green]Done![/bold green] ✅, path: {project_dir}")
+
 # define private instance for CustomLog class
 _some_log = CustomLog(format_log='%(name)s | %(asctime)s %(levelname)s - %(message)s')
 
@@ -96,7 +110,7 @@ def auto_create_callback(value: bool) -> None:
     if value:
         some_cli = Bullet(
             "What's simple project you want to create? ", 
-            choices=["🐍 Python", "☕ Javascript", "🐼 Go", "🔴 Cancel"],
+            choices=["🐍 Python", "☕ Javascript", "🐼 Go", "❌ Cancel"],
             bullet=" >",
             margin=2,
             bullet_color=colors.bright(colors.foreground["cyan"]),
@@ -112,7 +126,7 @@ def auto_create_callback(value: bool) -> None:
         elif result == "☕ Javascript":
             _create_project(choice=result)
         elif result == "🐼 Go":
-            rich.print("Sorry, now I'm still working on it, please wait 😃")
+            _create_project(choice=result)
         else:
             print("See ya! 👋")
             raise typer.Exit()

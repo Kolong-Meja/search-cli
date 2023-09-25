@@ -51,7 +51,7 @@ def create(filename: str = typer.Argument(default=None, metavar="FILENAME",
            path: str = typer.Argument(default=None, metavar="PATH", 
                                       help="Directory [bold blue]path[/bold blue] for file that has been created. :file_folder:"),
            auto: Optional[bool] = typer.Option(None, "--auto", 
-                                               help=f"Automatically create main.py file in {os.path.join(pathlib.Path.home(), 'Create')}", 
+                                               help=f"Automatically create simple (Python, Javascript, and Go) project in '{pathlib.Path.home()}'", 
                                                is_eager=True,
                                                callback=auto_create_callback)) -> None:
     """
