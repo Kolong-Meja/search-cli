@@ -130,7 +130,7 @@ python -m pip install art
 
 It's quite easy, you just need to enter the command **sefile --help**, then you get the output like this:
 
-# this video showing CLI app in generally
+![Screenshot from 2023-09-25 18-04-19](https://github.com/Kolong-Meja/search-cli/assets/90602095/d6fb2031-6c3c-4a78-84c8-58ee026e7448)
 
 ### How to show CLI version?
 
@@ -208,7 +208,7 @@ To run **--auto** Options, you just simply write it in your terminal like this b
 sefile create --auto
 ```
 
-# This video showing --auto option on Create command.
+![Screenshot from 2023-09-25 18-05-02](https://github.com/Kolong-Meja/search-cli/assets/90602095/a42f5fe5-d51b-49e4-839f-92fae0aff8f2)
 
 ### How to read a file?
 
@@ -285,7 +285,7 @@ sefile write
 
 And you get this layer of nice UI
 
-# This video showing GUI of simple code editor on Write command
+![Screenshot from 2023-09-25 18-05-15](https://github.com/Kolong-Meja/search-cli/assets/90602095/85b9d585-8f73-4b59-9a1f-d84e2b5083fb)
 
 > [!NOTE]
 > you need specifiy the Filename and Path first, before you do code or creating text.
