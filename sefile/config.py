@@ -1,13 +1,11 @@
-# search/config.py
+# sefile/config.py
 
-import typer
-import os
-from dotenv import load_dotenv
-from enum import Enum
+from sefile import (
+    typer, 
+    Enum
+    )
 
 
-load_dotenv()
-app_level = os.environ.get('APP_LEVEL')
 # create typer object.
 app = typer.Typer(help="[bold green]Easiest[/bold green] way to [bold yellow]find[/bold yellow], [bold]read[/bold], [bold green]create[/bold green], [bold cyan]write[/bold cyan], and [bold red]delete[/bold red] a file :file_folder:.", 
                 add_completion=False,

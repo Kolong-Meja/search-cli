@@ -1,27 +1,28 @@
-# search_app/command.py
+# sefile/command.py
 
-import os
-import pathlib
-import typer
-from search.controllers import (
+from sefile import (
+    pathlib, 
+    typer, 
+    Optional
+    )
+from sefile.controllers import (
     find_logic,
     create_logic,
     read_logic,
     write_logic,
     delete_logic,
     )
-from search.callbacks import (
+from sefile.callbacks import (
     info_callback,
     file_startswith,
     file_endswith,
     version_callback,
     auto_create_callback,
     )
-from search.config import (
+from sefile.config import (
     app, 
     FileTypes
     )
-from typing import Optional
 
 
 @app.command(help="Command to [bold yellow]find[/bold yellow] a file by it's name 🔍.")
@@ -49,7 +50,7 @@ def create(filename: str = typer.Argument(default=None, metavar="FILENAME",
            path: str = typer.Argument(default=None, metavar="PATH", 
                                       help="Directory [bold blue]path[/bold blue] for file that has been created. :file_folder:"),
            auto: Optional[bool] = typer.Option(None, "--auto", 
-                                               help=f"Automatically create main.py file in {os.path.join(pathlib.Path.home(), 'Create')}", 
+                                               help=f"Automatically create simple (Python, Javascript, and Go) project in '{pathlib.Path.home()}'", 
                                                is_eager=True,
                                                callback=auto_create_callback)) -> None:
     """

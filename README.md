@@ -1,18 +1,6 @@
 # Sefile CLI
 
-![SEFILE_v1](https://github.com/Kolong-Meja/search-cli/assets/90602095/579d3cd7-6e68-451f-8c1f-575d8059ef5f)
-
 Sefile CLI is a personal project created by Faisal Ramadhan or myself. This project was built using the Python programming language. At the time of its creation, this CLI was only useful for finding the desired file according to the initial directory, but over time I started adding several new commands, such as Create, Read, Write and Delete. All of these commands have their own purpose and function.
-
-## Installation
-
-You can install this cli from https://pypi.org/project/new-sefile/ or you can just type in command into your terminal like below:
-
-```bash
-python3 -m pip install new-sefile
-```
-
-Enjoy your exploration on my CLI tool!
 
 > **Warning**
 This project does not support yet for Windows and Mac operating system.
@@ -128,43 +116,26 @@ python -m pip install art
 
 ## How to use it
 
-It's quite easy, you just need to enter the command **sefile --help**, then you get the output like this:
+It's quite easy, you just need to enter the command **python -m sefile --help**, then you get the output like this:
 
-```bash
-Usage: Sefile CLI Tool [OPTIONS] COMMAND [ARGS]...                                                                                    
-                                                                                                                                       
-Easiest way to find, read, create, write and delete a file 📁.                                                                              
-                                                                                                                                       
-╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│ --version  -v        Show version of search CLI.                                                                                    │
-│ --info     -i        Display info about the application                                                                             │
-│ --help               Show this message and exit.                                                                                    │
-╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
-╭─ Commands ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│ create            Command to create new file followed by a path 🍪.                                                                 │
-│ delete            Command to delete one or more file 👀.                                                                            │
-│ find              Command to find a file by it's name 🔍.                                                                           │
-│ read              Command to read a file from a directory 📖.                                                                       │
-│ write             Command to write one file 📄                                                                                      │
-╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
-```
+# this is the video showing CLI in generally!
 
 ### How to show CLI version?
 
 ```bash
-sefile --version
+python -m sefile --version
 ```
 
 or
 
 ```bash
-sefile -v
+python -m sefile -v
 ```
 
 ### How to find a file?
 
 ```bash
-sefile find example.txt
+python -m sefile find example.txt
 ```
 
 or
@@ -173,7 +144,7 @@ or
 > You can specify the initial directory path to find the file you want.
 
 ```bash
-sefile find example.txt /home/yourname/Documents
+python -m sefile find example.txt /home/yourname/Documents
 ```
 
 At first I created this based only on the filename, but eventually I added new flag options, namely --startswith and --endswith.
@@ -184,7 +155,7 @@ At first I created this based only on the filename, but eventually I added new f
 > **--startswith** flag has been set as **is_eager=True**, meaning this parameter will be executed and the main parameter will be overridden.
 
 ```bash
-sefile find --startswith=main
+python -m sefile find --startswith=main
 ```
 
 When you do this, the system will automatically look for files with a certain (in this case **main**) prefix from each directory or sub-directory that matches the initial directory.
@@ -195,7 +166,7 @@ When you do this, the system will automatically look for files with a certain (i
 > **--endswith** flag has been set as **is_eager=True**, meaning this parameter will be executed and the main parameter will be overridden.
 
 ```bash
-sefile find --endswith=.py
+python -m sefile find --endswith=.py
 ```
 
 This flag has same functional as **--startswith** flag, but search file by the end name of the file that match with your custome prefix.
@@ -203,7 +174,7 @@ This flag has same functional as **--startswith** flag, but search file by the e
 ### How to create a file?
 
 ```bash
-sefile create example.txt
+python -m sefile create example.txt
 ```
 > [!NOTE] 
 > Default directory set as **/home/username**
@@ -211,24 +182,26 @@ sefile create example.txt
 or 
 
 ```bash
-sefile create example.txt /home/username/Documents
+python -m sefile create example.txt /home/username/Documents
 ```
 
 The system will automatically create a file with a certain file type (according to the type you add at the end of the file) in the directory you enter.
 
 > [!NOTE]
-> In newest update, there's one Options called **--auto**. This useful for you if you too lazy for creating new file. **Remember** this Options, will create **Create/main.py** file. You can detected it from your **home** directory.
+> In newest update, there's one Options called **--auto**. This useful for you if you too lazy for creating simple project. **Remember** this Options, will create **Python, Javascript, or Go** project, depends on your choice. You can detected it from your **home** directory.
 
 To run **--auto** Options, you just simply write it in your terminal like this below:
 
 ```bash
-sefile create --auto
+python -m sefile create --auto
 ```
+
+# This video showing about --auto options only!
 
 ### How to read a file?
 
 ```bash
-sefile read example.py /home
+python -m sefile read example.py /home
 ```
 
 or
@@ -240,7 +213,7 @@ or
 Do this command in your terminal:
 
 ```bash
-sefile read example.py /home --read-type=python
+python -m sefile read example.py /home --read-type=python
 ```
 
 And you get a result like this in your terminal (**NOTE**: This is just example)
@@ -257,7 +230,7 @@ def my_func() -> None:
 Do this command in terminal:
 
 ```bash
-sefile read example.py /home --read-type=go
+python -m sefile read example.py /home --read-type=go
 ```
 
 And you get a result like this in your terminal (**NOTE**: This is just example)
@@ -287,7 +260,7 @@ func playingPythagoras(altitude, base, hypotenus float64) {
 ### How to delete a file?
 
 ```bash
-sefile delete example.py /home
+python -m sefile delete example.py /home
 ```
 
 You can add the path as you wish, but make sure that the files you delete are in your destination directory.
@@ -295,12 +268,12 @@ You can add the path as you wish, but make sure that the files you delete are in
 ### How to write a file?
 
 ```bash
-sefile write
+python -m sefile write
 ```
 
 And you get this layer of nice UI
 
-![Screenshot from 2023-09-14 19-45-02](https://github.com/Kolong-Meja/search-cli/assets/90602095/79ffa7eb-31cf-4feb-85ec-a44db00f32f0)
+# This video showing about GUI of simple code editor on Write command only! 
 
 > [!NOTE]
 > you need specifiy the Filename and Path first, before you do code or creating text.
@@ -313,21 +286,7 @@ So if you notice, theres is **'EXIT'** button and **'SAVE'** button right? the f
 
 You can exit whatever you want, but you can't save the code if you not input value in **'Filename'** and **'Folder Path'**. So be careful when you use this. 
 
-## Other information
-
-When you do execute the command, it will automatically **log** itself. You can check out in **logs/log.txt** file.
-
-
 ## Keep in mind
 
 This program is only useful for **find, create, read, write and delete**. Apart from that, I have nothing to add. I personally will only focus on the main command program, because there are still many things that can be updated in the future.
 
-## Updates Incoming
-
-In incoming updates, i will add some new functionality into this CLI tool, for information i will write it below:
-
-* Add specific information on App Info feature
-* Add **--path** Options when do execute **--startswith** and **--endswith** Options
-* Add flexibility to **--auto** Options so user can create certain file based on choice
-* Fix all bugs 
-* Removing Logs (Optional)

@@ -1,12 +1,18 @@
 # search/logs.py
 
-import os
-import pathlib
-import logging
+"""
+THIS FILE IS NO LONGER USED IN THE NEXT UPDATE
+"""
+
+from sefile import (
+    os, 
+    pathlib, 
+    logging
+    )
 
 
 def log_file():
-    fullpath = os.path.join(pathlib.Path.cwd(), 'logs')
+    fullpath = os.path.join(pathlib.Path.cwd(), 'search', 'logs')
     has_dir = os.path.isdir(fullpath)
     
     if has_dir:
