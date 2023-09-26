@@ -20,6 +20,7 @@ from bullet import (
     SlidePrompt,
     Input,
     )
+from dataclasses import dataclass
 from enum import Enum
 from termcolor import colored
 from typing import Optional

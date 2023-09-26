@@ -6,13 +6,7 @@ from sefile import (
     typer, 
     Optional
     )
-from sefile.controllers import (
-    find_logic,
-    create_logic,
-    read_logic,
-    write_logic,
-    delete_logic,
-    )
+from sefile.controllers import Controller
 from sefile.callbacks import (
     info_callback,
     file_startswith,
@@ -43,7 +37,8 @@ def find(filename: str = typer.Argument(help="Name of file to [bold yellow]searc
     """
     TODO: Define find logic from controllers
     """
-    find_logic(filename=filename, path=path, startswith=startswith, endswith=endswith)
+    find_logic = Controller(filename=filename, path=path)
+    find_logic.find_controller(startswith=startswith, endswith=endswith)
 
 @app.command(help="Command to [bold green]create[/bold green] new file followed by a path :cookie:.")
 def create(filename: str = typer.Argument(default=None, metavar="FILENAME", 
@@ -57,26 +52,30 @@ def create(filename: str = typer.Argument(default=None, metavar="FILENAME",
     """
     TODO: Define create logic from controllers
     """
-    create_logic(filename=filename, path=path, auto=auto)
+    create_logic = Controller(filename=filename, path=path)
+    create_logic.create_controller(auto=auto)
+
 @app.command(help="Command to [bold]read[/bold] a file from a directory :book:.")
 def read(filename: str = typer.Argument(metavar="FILENAME", 
                                         help="Name of file to read of. :page_facing_up:"),
         path: str = typer.Argument(metavar="PATH", 
                                    help="Directory path of file that want to read of. :file_folder:"),
-        read_type: FileTypes = typer.Option(default=FileTypes.text, 
+        read_type: FileTypes = typer.Option(default=FileTypes.text.value, 
                                        is_flag=True, 
                                        help="Read files according to type selection. :computer:")) -> None:
     """
     TODO: Define read logic from controllers
     """
-    read_logic(filename=filename, path=path, read_type=read_type)
+    read_logic = Controller(filename=filename, path=path)
+    read_logic.read_controller(read_type=read_type)
+    # read_logic(filename=filename, path=path, read_type=read_type)
 
 @app.command(help="Command to [bold blue]write[/bold blue] one file :page_facing_up:")
 def write() -> None:
     """
     TODO: Define write logic from controllers
     """
-    write_logic()
+    Controller.write_controller()
 
 @app.command(help="Command to [bold red]delete[/bold red] one or more file :eyes:.")
 def delete(filename: str = typer.Argument(metavar="FILENAME", 
@@ -86,7 +85,8 @@ def delete(filename: str = typer.Argument(metavar="FILENAME",
     """
     TODO: Define write logic from controllers
     """
-    delete_logic(filename=filename, path=path)
+    delete_logic = Controller(filename=filename, path=path)
+    delete_logic.delete_controller()
 
 # main function in here!
 @app.callback()
