@@ -1,7 +1,10 @@
 # search_app/__main__.py
 
-import platform
-from sefile import command, __app_name__
+from sefile import (
+    __app_name__, 
+    command, 
+    platform,
+    )
 
 
 def main() -> None:

@@ -9,6 +9,7 @@ import npyscreen
 import curses
 import os
 import pathlib
+import platform
 import rich
 import time
 import typer
