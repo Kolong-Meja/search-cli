@@ -41,7 +41,7 @@ class Controller:
             raise exception_factory(ValueError, message=f"'{params[0]}' needs file type at the end, file: '{filename}'")
     # to be implement in find_controller() method
     def _is_zero_total(self, total: int, filename: str) -> None:
-        if total == 0:
+        if total < 1:
             raise exception_factory(FileNotFoundError, f"File '{filename}' not found.")
         else:
             rich.print(f"Find {filename} file [bold green]success![/bold green]")

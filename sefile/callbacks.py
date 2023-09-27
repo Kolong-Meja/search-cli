@@ -92,21 +92,29 @@ class _ProjectType:
 class Callback:
     @staticmethod
     def _create_project(choice: str) -> None:
-        some_input = Input(f"What's the name of the {choice} project? ", word_color=colors.foreground["yellow"])
-        input_result = some_input.launch()
-        project_dir = os.path.join(pathlib.Path.home(), input_result)
+        # input project name
+        project_name = Input(f"What's the name of the {choice} project? ", word_color=colors.foreground["yellow"])
+        project_name_result = project_name.launch()
+        # input project directory
+        project_dir = Input(f"Where do you want to save this {project_name_result}? ", word_color=colors.foreground["yellow"])
+        project_dir_result = project_dir.launch()
+        # check if project dir exists in your PC
+        if not pathlib.Path(project_dir_result).is_dir():
+            raise exception_factory(FileNotFoundError, f"File or Path not found, path: '{project_dir_result}'")
+        else:    
+            project_path = os.path.join(project_dir_result, project_name_result)
         
-        if os.path.exists(project_dir):
-            raise exception_factory(FileExistsError, f"Folder exists: '{project_dir}'")
+        if os.path.exists(project_path):
+            raise exception_factory(FileExistsError, f"Folder exists: '{project_path}'")
         else:
             if "Python" in choice:
-                _python_project = _ProjectType(dir_path=project_dir)
+                _python_project = _ProjectType(dir_path=project_path)
                 _python_project._py_project()
             elif "Javascript" in choice:
-                _javascript_project = _ProjectType(dir_path=project_dir)
+                _javascript_project = _ProjectType(dir_path=project_path)
                 _javascript_project._js_project()
             elif "Go" in choice:
-                _golang_project = _ProjectType(dir_path=project_dir)
+                _golang_project = _ProjectType(dir_path=project_path)
                 _golang_project._go_project()
             else:
                 pass
@@ -124,7 +132,10 @@ class Callback:
                     """)
             raise typer.Exit()
     
-    def auto_create_callback(self, value: bool) -> None:
+    def auto_create_callback(self, ctx: typer.Context, value: bool) -> None:
+        if ctx.resilient_parsing:
+            return
+        
         if value:
             some_cli = Bullet(
                 "What's simple project you want to create? ", 
