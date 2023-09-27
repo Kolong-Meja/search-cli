@@ -1,19 +1,12 @@
 # search_app/command.py
 
 from sefile import (
-    os, 
     pathlib, 
     typer, 
-    Optional
+    Optional,
     )
 from sefile.controllers import Controller
-from sefile.callbacks import (
-    info_callback,
-    file_startswith,
-    file_endswith,
-    version_callback,
-    auto_create_callback,
-    )
+from sefile.callbacks import Callback
 from sefile.config import (
     app, 
     FileTypes
@@ -28,12 +21,12 @@ def find(filename: str = typer.Argument(help="Name of file to [bold yellow]searc
         startswith: str = typer.Option(default=None, 
                                         help="Search specific file with 'startswith' method :rocket:.", 
                                         is_eager=True, 
-                                        callback=file_startswith), 
+                                        callback=Callback.startswith_search), 
         endswith: str = typer.Option(default=None, 
                                     help="""Search specific file with 
                                     'endswith' method :sunrise_over_mountains:""", 
                                     is_eager=True, 
-                                    callback=file_endswith)) -> None:
+                                    callback=Callback.endswith_search)) -> None:
     """
     TODO: Define find logic from controllers
     """
@@ -48,7 +41,7 @@ def create(filename: str = typer.Argument(default=None, metavar="FILENAME",
            auto: Optional[bool] = typer.Option(None, "--auto", 
                                                help=f"Automatically create simple (Python, Javascript, and Go) project in '{pathlib.Path.home()}'", 
                                                is_eager=True,
-                                               callback=auto_create_callback)) -> None:
+                                               callback=Callback.auto_create_callback)) -> None:
     """
     TODO: Define create logic from controllers
     """
@@ -93,11 +86,7 @@ def delete(filename: str = typer.Argument(metavar="FILENAME",
 def main(version: Optional[bool] = typer.Option(None, "--version", "-v", 
                                                 help="Show version of search CLI.", 
                                                 is_eager=True, 
-                                                callback=version_callback),
-         info: Optional[bool] = typer.Option(None, "--info", "-i", 
-                                             help="Display info about the application", 
-                                             is_eager=True, 
-                                             callback=info_callback)) -> None: return
+                                                callback=Callback.version_callback)) -> None: return
 
 
 

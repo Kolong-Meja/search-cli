@@ -17,8 +17,8 @@ from sefile import (
     Syntax
     )
 from sefile.config import FileTypes
-from sefile.logs import exception_factory
-from sefile.npyscreen_app import CodeEditorApp
+from sefile.logging import exception_factory
+from sefile.editor import CodeEditorApp
 
 @dataclass(frozen=True)
 class Controller:

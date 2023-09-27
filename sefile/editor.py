@@ -6,7 +6,7 @@ from sefile import (
     os, 
     pathlib
     )
-from sefile.logs import exception_factory
+from sefile.logging import exception_factory
 
 # write your custom code editor here 
 class CodeEditorApp(npyscreen.NPSAppManaged):
