@@ -1,4 +1,4 @@
-# search/controllers.py
+# sefile/controllers.py
 
 from sefile import (
     dataclass,
