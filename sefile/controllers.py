@@ -16,8 +16,10 @@ from sefile import (
     Panel,
     Syntax
     )
-from sefile.config import FileTypes
-from sefile.logging import exception_factory
+from sefile.config import (
+    FileTypes, 
+    exception_factory
+    )
 from sefile.editor import CodeEditorApp
 
 @dataclass(frozen=True)

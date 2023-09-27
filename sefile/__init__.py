@@ -21,6 +21,11 @@ from bullet import (
     SlidePrompt,
     Input,
     )
+from colorama import (
+    Fore, 
+    Back, 
+    Style
+    )
 from dataclasses import dataclass
 from enum import Enum
 from termcolor import colored

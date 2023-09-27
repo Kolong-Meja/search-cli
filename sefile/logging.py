@@ -8,6 +8,7 @@ from sefile import (
     functools,
     Optional,
     )
+from sefile.config import exception_factory
 
 
 def log_file():
@@ -21,10 +22,6 @@ def log_file():
         pathlib.Path(fullpath).mkdir(exist_ok=False)
         file_target = os.path.join(fullpath, 'log.txt')
         return file_target
-
-# create factory for exception.
-def exception_factory(exception, message: str) -> Exception:
-    return exception(message)
 
 # create decorator for logging
 def do_log(func=None, 

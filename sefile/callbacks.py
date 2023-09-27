@@ -21,7 +21,7 @@ from sefile import (
     Input,
     )
 from sefile.logging import CustomLogging
-from sefile.logging import exception_factory
+from sefile.config import exception_factory
 
 
 # define private instance for CustomLog class
@@ -132,10 +132,7 @@ class Callback:
                     """)
             raise typer.Exit()
     
-    def auto_create_callback(self, ctx: typer.Context, value: bool) -> None:
-        if ctx.resilient_parsing:
-            return
-        
+    def auto_create_callback(self, value: bool) -> None:
         if value:
             some_cli = Bullet(
                 "What's simple project you want to create? ", 
@@ -162,49 +159,61 @@ class Callback:
     
     def startswith_search(self, value: str) -> None:
         if value:
-            total_file = 0
-            with Progress(
-                SpinnerColumn(spinner_name="dots9"),
-                TextColumn("[progress.description]{task.description}"),
-                auto_refresh=True,
-                transient=True,
-                get_time=None,
-            ) as progress:
-                task = progress.add_task(f"Find file startswith '{value}' from {pathlib.Path.home()}", total=100_000)
-                for root, dirs, files in os.walk(pathlib.Path.home(), topdown=True):
-                    for some_file in files:
-                        if some_file.startswith(value):
-                            total_file += 1
-                            fullpath = os.path.join(f"[white]{root}[/white]", f"[bold yellow]{some_file}[/bold yellow]")
-                            rich.print(f"{fullpath}")
-                            progress.advance(task)
-            if total_file < 1:
-                raise exception_factory(FileNotFoundError, f"File startswith '{value}' not found from '{pathlib.Path.home()}' path")
+            dir_start = Input(f"From where do you want to find '{value}' file? ", word_color=colors.foreground["yellow"])
+            dir_start_result = dir_start.launch()
+
+            if not pathlib.Path(dir_start_result).is_dir():
+                raise exception_factory(FileNotFoundError, f"File or Path not found, path: '{dir_start_result}'")
             else:
-                rich.print(f"Search file startswith '{value}' [bold green]success![/bold green]")
-                raise typer.Exit()
+                total_file = 0
+                with Progress(
+                    SpinnerColumn(spinner_name="dots9"),
+                    TextColumn("[progress.description]{task.description}"),
+                    auto_refresh=True,
+                    transient=True,
+                    get_time=None,
+                ) as progress:
+                    task = progress.add_task(f"Find file startswith '{value}' from {dir_start_result}", total=100_000)
+                    for root, dirs, files in os.walk(dir_start_result, topdown=True):
+                        for some_file in files:
+                            if some_file.startswith(value):
+                                total_file += 1
+                                fullpath = os.path.join(f"[white]{root}[/white]", f"[bold yellow]{some_file}[/bold yellow]")
+                                rich.print(f"{fullpath}")
+                                progress.advance(task)
+                if total_file < 1:
+                    raise exception_factory(FileNotFoundError, f"File startswith '{value}' not found from '{dir_start_result}' path")
+                else:
+                    rich.print(f"Search file startswith '{value}' [bold green]success![/bold green]")
+                    raise typer.Exit()
     
     def endswith_search(self, value: str) -> None:
         if value:
-            total_file = 0
-            with Progress(
-                SpinnerColumn(spinner_name="dots9"),
-                TextColumn("[progress.description]{task.description}"),
-                auto_refresh=True,
-                transient=True,
-                get_time=None,
-            ) as progress:
-                task = progress.add_task(f"Find file endswith '{value}' from {pathlib.Path.home()}", total=100_000)
-                for root, dirs, files in os.walk(pathlib.Path.home(), topdown=True):
-                    for some_file in files:
-                        if some_file.endswith(value):
-                            total_file += 1
-                            fullpath = os.path.join(f"[white]{root}[/white]", f"[bold yellow]{some_file}[/bold yellow]")
-                            rich.print(f"{fullpath}")
-                            progress.advance(task)
-            if total_file < 1:
-                raise exception_factory(FileNotFoundError, f"File endswith '{value}' not found from '{pathlib.Path.home()}' path")
+            dir_start = Input(f"From where do you want to find '{value}' file? ", word_color=colors.foreground["yellow"])
+            dir_start_result = dir_start.launch()
+
+            if not pathlib.Path(dir_start_result).is_dir():
+                raise exception_factory(FileNotFoundError, f"File or Path not found, path: '{dir_start_result}'")
             else:
-                rich.print(f"Search file startswith '{value}' [bold green]success![/bold green]")
-                raise typer.Exit()
+                total_file = 0
+                with Progress(
+                    SpinnerColumn(spinner_name="dots9"),
+                    TextColumn("[progress.description]{task.description}"),
+                    auto_refresh=True,
+                    transient=True,
+                    get_time=None,
+                ) as progress:
+                    task = progress.add_task(f"Find file endswith '{value}' from {dir_start_result}", total=100_000)
+                    for root, dirs, files in os.walk(dir_start_result, topdown=True):
+                        for some_file in files:
+                            if some_file.endswith(value):
+                                total_file += 1
+                                fullpath = os.path.join(f"[white]{root}[/white]", f"[bold yellow]{some_file}[/bold yellow]")
+                                rich.print(f"{fullpath}")
+                                progress.advance(task)
+                if total_file < 1:
+                    raise exception_factory(FileNotFoundError, f"File endswith '{value}' not found from '{dir_start_result}' path")
+                else:
+                    rich.print(f"Search file startswith '{value}' [bold green]success![/bold green]")
+                    raise typer.Exit()
     
