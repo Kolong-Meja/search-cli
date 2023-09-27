@@ -1,6 +1,7 @@
 """Top-Level package for search file"""
 # sefile/__init__.py
 
+import functools
 import art
 import fnmatch
 import inspect
@@ -20,9 +21,18 @@ from bullet import (
     SlidePrompt,
     Input,
     )
+from colorama import (
+    Fore, 
+    Back, 
+    Style
+    )
+from dataclasses import dataclass
 from enum import Enum
 from termcolor import colored
-from typing import Optional
+from typing import (
+    Optional, 
+    Union
+    )
 from rich.console import Console
 from rich.panel import Panel
 from rich.progress import (
@@ -34,7 +44,7 @@ from rich.syntax import Syntax
 
 # throw all information about this CLI below
 __app_name__ = "Sefile CLI Tool"
-__version__ = "0.0.8"
+__version__ = "0.0.10"
 __creator__ = "Faisal Ramadhan"
 __creator_email__ = "faisalramadhan1299@gmail.com"
 __project_url__ = "https://github.com/kolong-meja"

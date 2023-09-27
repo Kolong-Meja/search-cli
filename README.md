@@ -200,7 +200,7 @@ sefile create example.txt /home/username/Documents
 The system will automatically create a file with a certain file type (according to the type you add at the end of the file) in the directory you enter.
 
 > [!NOTE]
-> In newest update, there's one Options called **--auto**. This useful for you if you too lazy for creating simple project. **Remember** this Options, will create **Python, Javascript, or Go** depends on your choice. You can detected it from your **home** directory.
+> In newest update, there's one Options called **--auto**. This useful for you if you too lazy for creating simple project. **Remember** this Options, will create **Python, Javascript, or Go** depends on your choice.
 
 To run **--auto** Options, you just simply write it in your terminal like this below:
 

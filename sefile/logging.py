@@ -1,14 +1,14 @@
-# search/logs.py
-
-"""
-THIS FILE IS NO LONGER USED IN THE NEXT UPDATE
-"""
+# sefile/logging.py
 
 from sefile import (
+    dataclass,
     os, 
     pathlib, 
-    logging
+    logging,
+    functools,
+    Optional,
     )
+from sefile.config import exception_factory
 
 
 def log_file():
@@ -23,17 +23,46 @@ def log_file():
         file_target = os.path.join(fullpath, 'log.txt')
         return file_target
 
-# create factory for exception.
-def exception_factory(exception, message: str) -> Exception:
-    return exception(message)
+# create decorator for logging
+def do_log(func=None, 
+           message: Optional[str] = None, 
+           pause: bool = True, 
+           format: str = '%(name)s | %(asctime)s %(levelname)s - %(message)s'
+           ) -> None:
+    def decorator(func):
+        @functools.wraps(func)
+        def wrapper(*args, **kwargs):
+            if pause:
+                return func(*args, **kwargs)
+            else:
+                try:
+                    some_object = func(*args, **kwargs)
+                except Exception as error:
+                    logging.basicConfig(filename=log_file(), filemode='a+', 
+                            format=format,
+                            level=logging.ERROR)
+                    logging.error(error)
+                    raise error
+                else:
+                    logging.basicConfig(filename=log_file(), 
+                            filemode='a+', 
+                            format='%(name)s | %(asctime)s %(levelname)s - %(message)s', 
+                            level=logging.INFO)
+                    logging.info(message)
+            return some_object
+        return wrapper
+    return decorator
 
-class CustomLog:
-    def __init__(
-            self,
-            format_log: str = '%(name)s | %(asctime)s %(levelname)s - %(message)s'
-            ) -> None:
-        self.format_log = format_log
+@dataclass(frozen=True)
+class CustomLogging:
+    format_log: str = '%(name)s | %(asctime)s %(levelname)s - %(message)s'
 
+    def __str__(self) -> None:
+        return f"({self.format_log})"
+
+    def __repr__(self) -> None:
+        return f"{self.__class__.__name__}({self.format_log})"
+    
     def info_log(self, message: str) -> None:
         logging.basicConfig(filename=log_file(), filemode='a+', 
                             format=self.format_log,
