@@ -77,7 +77,11 @@ def write() -> None:
 def delete(filename: str = typer.Argument(metavar="FILENAME", 
                                         help="Name of file to be deleted. :page_facing_up:"),
             path: str = typer.Argument(metavar="PATH", 
-                                       help="Directory of file to be deleted. :file_folder:")) -> None:
+                                       help="Directory of file to be deleted. :file_folder:"),
+            auto: Optional[bool] = typer.Option(None, "--auto", 
+                                                help="Search empty file from <path> and delete it automatically.", 
+                                                is_eager=True, 
+                                                callback=None)) -> None:
     """
     TODO: Define write logic from controllers
     """

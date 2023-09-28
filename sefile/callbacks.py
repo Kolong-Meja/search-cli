@@ -175,8 +175,7 @@ class Callback:
         if value:
             ascii_art = art.text2art("SEFILE", font="swampland", chr_ignore=True)
             print(f"\n{colored(ascii_art, color='green', attrs=['bold'])}\n")
-            rich.print(f"""[yellow]{'*'*40}|[bold]Information[/bold]|{'*'*40}[/yellow]\
-                    \n\n[bold]App name[/bold]: {__app_name__}\
+            rich.print(f"""[bold]App name[/bold]: {__app_name__}\
                     \n[bold]{__app_name__} version[/bold]: {__version__}\
                     \n[bold]Creator name[/bold]: {__creator__}\
                     \n[bold]Creator email[/bold]: {__creator_email__}\
@@ -219,7 +218,9 @@ class Callback:
         if value:
             dir_start = Input(f"From where do you want to find '{value}' file? ", word_color=colors.foreground["yellow"])
             dir_start_result = dir_start.launch()
-
+            if dir_start_result.find("quit") != -1 or dir_start_result.find("exit") != -1:
+                print("See ya! 👋")
+                raise typer.Exit()
             if not pathlib.Path(dir_start_result).is_dir():
                 raise FileNotFoundError(f"File or Path not found, path: '{dir_start_result}'")
             else:
@@ -231,7 +232,7 @@ class Callback:
                     transient=True,
                     get_time=None,
                 ) as progress:
-                    task = progress.add_task(f"Find file startswith '{value}' from {dir_start_result}", total=100_000)
+                    task = progress.add_task(f"Please wait for a moment...", total=100_000)
                     for root, dirs, files in os.walk(dir_start_result, topdown=True):
                         for some_file in files:
                             if some_file.startswith(value):
@@ -249,7 +250,9 @@ class Callback:
         if value:
             dir_start = Input(f"From where do you want to find '{value}' file? ", word_color=colors.foreground["yellow"])
             dir_start_result = dir_start.launch()
-
+            if dir_start_result.find("quit") != -1 or dir_start_result.find("exit") != -1:
+                print("See ya! 👋")
+                raise typer.Exit()
             if not pathlib.Path(dir_start_result).is_dir():
                 raise FileNotFoundError(f"File or Path not found, path: '{dir_start_result}'")
             else:
@@ -261,7 +264,7 @@ class Callback:
                     transient=True,
                     get_time=None,
                 ) as progress:
-                    task = progress.add_task(f"Find file endswith '{value}' from {dir_start_result}", total=100_000)
+                    task = progress.add_task(f"Please wait for a moment...", total=100_000)
                     for root, dirs, files in os.walk(dir_start_result, topdown=True):
                         for some_file in files:
                             if some_file.endswith(value):
