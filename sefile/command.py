@@ -26,7 +26,11 @@ def find(filename: str = typer.Argument(help="Name of file to [bold yellow]searc
                                     help="""Search specific file with 
                                     'endswith' method :sunrise_over_mountains:""", 
                                     is_eager=True, 
-                                    callback=Callback.endswith_search)) -> None:
+                                    callback=Callback.endswith_search),
+        lazy: Optional[bool] = typer.Option(None, "--lazy", 
+                                            help=f"Input a special query if you are too lazy to type using CLI commands", 
+                                            is_eager=True, 
+                                            callback=Callback.lazy_search)) -> None:
     """
     TODO: Define find logic from controllers
     """
@@ -61,7 +65,6 @@ def read(filename: str = typer.Argument(metavar="FILENAME",
     """
     read_logic = Controller(filename=filename, path=path)
     read_logic.read_controller(read_type=read_type)
-    # read_logic(filename=filename, path=path, read_type=read_type)
 
 @app.command(help="Command to [bold blue]write[/bold blue] one file :page_facing_up:")
 def write() -> None:

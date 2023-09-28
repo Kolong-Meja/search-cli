@@ -44,7 +44,7 @@ from rich.syntax import Syntax
 
 # throw all information about this CLI below
 __app_name__ = "Sefile CLI Tool"
-__version__ = "1.0.6"
+__version__ = "1.0.8"
 __creator__ = "Faisal Ramadhan"
 __creator_email__ = "faisalramadhan1299@gmail.com"
 __project_url__ = "https://github.com/kolong-meja"

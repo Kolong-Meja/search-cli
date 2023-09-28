@@ -7,6 +7,7 @@ from sefile import (
     colored,
     dataclass,
     os,
+    fnmatch,
     pathlib,
     Progress,
     SpinnerColumn,
@@ -19,13 +20,9 @@ from sefile import (
     colors,
     Bullet,
     Input,
+    Console,
+    Panel,
     )
-from sefile.logging import CustomLogging
-from sefile.config import exception_factory
-
-
-# define private instance for CustomLog class
-_some_log = CustomLogging(format_log='%(name)s | %(asctime)s %(levelname)s - %(message)s')
 
 @dataclass(frozen=True)
 class _ProjectType:
@@ -95,17 +92,23 @@ class Callback:
         # input project name
         project_name = Input(f"What's the name of the {choice} project? ", word_color=colors.foreground["yellow"])
         project_name_result = project_name.launch()
+        if project_name_result.find("quit") != -1 or project_name_result.find("exit") != -1:
+            print("See ya! 👋")
+            raise typer.Exit()
         # input project directory
         project_dir = Input(f"Where do you want to save this {project_name_result}? ", word_color=colors.foreground["yellow"])
         project_dir_result = project_dir.launch()
+        if project_dir_result.find("quit") != -1 or project_dir_result.find("exit") != -1:
+            print("See ya! 👋")
+            raise typer.Exit()
         # check if project dir exists in your PC
         if not pathlib.Path(project_dir_result).is_dir():
-            raise exception_factory(FileNotFoundError, f"File or Path not found, path: '{project_dir_result}'")
+            raise FileNotFoundError(f"File or Path not found, path: '{project_dir_result}'")
         else:    
             project_path = os.path.join(project_dir_result, project_name_result)
         
         if os.path.exists(project_path):
-            raise exception_factory(FileExistsError, f"Folder exists: '{project_path}'")
+            raise FileExistsError(f"Folder exists: '{project_path}'")
         else:
             if "Python" in choice:
                 _python_project = _ProjectType(dir_path=project_path)
@@ -118,6 +121,55 @@ class Callback:
                 _golang_project._go_project()
             else:
                 pass
+    
+    @staticmethod
+    def _lazy_controller(user_input: str) -> None:
+        # exit if user input 'quit' or 'exit'
+        if user_input.find("quit") != -1 or user_input.find("exit") != -1:
+            print("See ya! 👋")
+            raise typer.Exit()
+        # we must input all user input into sublist
+        # so we can detect if user input more than 4 command
+        _results = [[] for _ in range(4)]
+        try:
+            for i, value in enumerate(user_input.split()):
+                _results[i].append(value)
+        except:
+            raise ValueError(f"Invalid input format. Please use format: find <filename> from <path>, input: '{user_input}'")
+        if len(_results[-1]) == 0:
+            raise ValueError(f"Path is required")
+        # then we flat the sublist into 1-dimensional list
+        _flat_list = [subitem for item in _results for subitem in item]
+        if _flat_list[0] != "find" or _flat_list[2] != "from":
+            raise ValueError(f"Invalid input format. Please use format: find <filename> from <path>, input: '{user_input}'")
+        # if 2 (second) element does not have file type, it will be error.
+        if _flat_list[1].find(".") == -1:
+            raise ValueError(f"Need to specified file, file: {_flat_list[1]}")
+        # then we check if the path is a real directory or folder
+        if (curr_path := pathlib.Path(_flat_list[-1])) and not curr_path.is_dir():
+            raise FileNotFoundError(f"Directory '{_flat_list[-1]}' not found.")
+        rich.print(f"System 🤖> [bold green]Allright[/bold green] we'll search [bold yellow]{_flat_list[1]}[/bold yellow] from [bold yellow]{_flat_list[-1]}[/bold yellow] for you\n")
+        with Progress(
+            SpinnerColumn(spinner_name="dots9"),
+            TextColumn("[progress.description]{task.description}"),
+            auto_refresh=True,
+            transient=True,
+            get_time=None,
+        ) as progress:
+            task = progress.add_task(f"Please wait for a moment...", total=100_000)
+            same_file_total = 0
+            for root, dirs, files in os.walk(curr_path):
+                for some_file in files:
+                    if fnmatch.fnmatchcase(some_file, _flat_list[1]):
+                        same_file_total += 1
+                        fullpath = os.path.join(f"[white]{root}[/white]", f"[bold yellow]{some_file}[/bold yellow]")
+                        rich.print(f"{fullpath}")
+                        progress.advance(task)
+        if same_file_total < 1:
+            raise FileNotFoundError(f"File '{_flat_list[1]}' not found.")
+        else:
+            rich.print(f"Find {_flat_list[1]} file [bold green]success![/bold green]")
+            raise typer.Exit()
 
     def version_callback(self, value: bool) -> None:
         if value:
@@ -157,13 +209,19 @@ class Callback:
                 print("See ya! 👋")
                 raise typer.Exit()
     
+    def lazy_search(self, value: bool) -> None:
+        if value:
+            user_input = Input(f"Command 😃> ", word_color=colors.foreground["yellow"])
+            user_input_result = user_input.launch()
+            Callback._lazy_controller(user_input=user_input_result)
+    
     def startswith_search(self, value: str) -> None:
         if value:
             dir_start = Input(f"From where do you want to find '{value}' file? ", word_color=colors.foreground["yellow"])
             dir_start_result = dir_start.launch()
 
             if not pathlib.Path(dir_start_result).is_dir():
-                raise exception_factory(FileNotFoundError, f"File or Path not found, path: '{dir_start_result}'")
+                raise FileNotFoundError(f"File or Path not found, path: '{dir_start_result}'")
             else:
                 total_file = 0
                 with Progress(
@@ -182,7 +240,7 @@ class Callback:
                                 rich.print(f"{fullpath}")
                                 progress.advance(task)
                 if total_file < 1:
-                    raise exception_factory(FileNotFoundError, f"File startswith '{value}' not found from '{dir_start_result}' path")
+                    raise FileNotFoundError(f"File startswith '{value}' not found from '{dir_start_result}' path")
                 else:
                     rich.print(f"Search file startswith '{value}' [bold green]success![/bold green]")
                     raise typer.Exit()
@@ -193,7 +251,7 @@ class Callback:
             dir_start_result = dir_start.launch()
 
             if not pathlib.Path(dir_start_result).is_dir():
-                raise exception_factory(FileNotFoundError, f"File or Path not found, path: '{dir_start_result}'")
+                raise FileNotFoundError(f"File or Path not found, path: '{dir_start_result}'")
             else:
                 total_file = 0
                 with Progress(
@@ -212,8 +270,8 @@ class Callback:
                                 rich.print(f"{fullpath}")
                                 progress.advance(task)
                 if total_file < 1:
-                    raise exception_factory(FileNotFoundError, f"File endswith '{value}' not found from '{dir_start_result}' path")
+                    raise FileNotFoundError(f"File endswith '{value}' not found from '{dir_start_result}' path")
                 else:
                     rich.print(f"Search file startswith '{value}' [bold green]success![/bold green]")
                     raise typer.Exit()
-    
+

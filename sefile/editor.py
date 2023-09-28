@@ -6,7 +6,6 @@ from sefile import (
     os, 
     pathlib
     )
-from sefile.config import exception_factory
 
 # write your custom code editor here 
 class CodeEditorApp(npyscreen.NPSAppManaged):
@@ -94,7 +93,7 @@ class CodeEditor(npyscreen.ActionForm):
         if curr_path.is_dir():
             real_path = os.path.join(curr_path, self.filename.value)
             if os.path.exists(real_path):
-                raise exception_factory(FileExistsError, f"File exists: {real_path}")
+                raise FileExistsError(f"File exists: {real_path}")
             else:
                 if self.filename.value.endswith('.txt'):
                     with open(os.path.join(self.path.value, self.filename.value), "a+") as file:

@@ -118,8 +118,6 @@ python -m pip install art
 
 It's quite easy, you just need to enter the command **python -m sefile --help**, then you get the output like this:
 
-# this is the video showing CLI in generally!
-
 ### How to show CLI version?
 
 ```bash
@@ -171,6 +169,17 @@ python -m sefile find --endswith=.py
 
 This flag has same functional as **--startswith** flag, but search file by the end name of the file that match with your custome prefix.
 
+> [!NOTE]
+> **--lazy** flag has been as **is_eager=True**, meaning this parameter will be executed and the main parameter will be overridden.
+
+```bash
+python -m sefile find --lazy
+```
+
+This flag can be use if you to lazy to input CLI command. You only need to enter a special custom query, namely **find <filename> from <path>**. This custom query has same functionality as **python -m sefile find <filename> <path>** command.
+
+**NOTE**: You can also do **'quit'** or **'exit'** custom query in input field. This situation will needed if you want to **cancel** the find activity. So it makes more flexible for you to use **find** command
+
 ### How to create a file?
 
 ```bash
@@ -188,7 +197,7 @@ python -m sefile create example.txt /home/username/Documents
 The system will automatically create a file with a certain file type (according to the type you add at the end of the file) in the directory you enter.
 
 > [!NOTE]
-> In newest update, there's one Options called **--auto**. This useful for you if you too lazy for creating simple project. **Remember** this Options, will create **Python, Javascript, or Go** project, depends on your choice. You can detected it from your **home** directory.
+> In newest update, there's one Options called **--auto**. This useful for you if you too lazy for creating simple project. **Remember** this Options, will create **Python, Javascript, or Go** project, depends on your choice.
 
 To run **--auto** Options, you just simply write it in your terminal like this below:
 
@@ -196,7 +205,7 @@ To run **--auto** Options, you just simply write it in your terminal like this b
 python -m sefile create --auto
 ```
 
-# This video showing about --auto options only!
+**NOTE**: You can do **'quit'** or **'exit'** command in input field. This command so useful if you are in the situation where you don't wanna input anything, or you do wrong input name in project name, or project directory, or when you choose the wrong project what you want to make.
 
 ### How to read a file?
 
@@ -270,10 +279,6 @@ You can add the path as you wish, but make sure that the files you delete are in
 ```bash
 python -m sefile write
 ```
-
-And you get this layer of nice UI
-
-# This video showing about GUI of simple code editor on Write command only! 
 
 > [!NOTE]
 > you need specifiy the Filename and Path first, before you do code or creating text.

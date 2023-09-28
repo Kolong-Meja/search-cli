@@ -16,10 +16,7 @@ from sefile import (
     Panel,
     Syntax
     )
-from sefile.config import (
-    FileTypes, 
-    exception_factory
-    )
+from sefile.config import FileTypes
 from sefile.editor import CodeEditorApp
 
 @dataclass(frozen=True)
@@ -40,11 +37,11 @@ class Controller:
             pass
         else:
             params = [param for param in inspect.signature(self._is_file).parameters.keys()]
-            raise exception_factory(ValueError, message=f"'{params[0]}' needs file type at the end, file: '{filename}'")
+            raise ValueError(message=f"'{params[0]}' needs file type at the end, file: '{filename}'")
     # to be implement in find_controller() method
     def _is_zero_total(self, total: int, filename: str) -> None:
         if total < 1:
-            raise exception_factory(FileNotFoundError, f"File '{filename}' not found.")
+            raise FileNotFoundError(f"File '{filename}' not found.")
         else:
             rich.print(f"Find {filename} file [bold green]success![/bold green]")
             raise typer.Exit()
@@ -59,7 +56,7 @@ class Controller:
                 code_syntax = Syntax(user_file.read(), read_type.value, theme="monokai", line_numbers=True)
                 Console().print(Panel(code_syntax, title=f"{filename}", title_align="center"))
 
-    def find_controller(self, startswith: str, endswith: str) -> None:
+    def find_controller(self, startswith: str, endswith: str, lazy: Optional[bool]) -> None:
         self._is_file(filename=self.filename)
         if (curr_path := pathlib.Path(self.path)) and (curr_path.is_dir()):
             with Progress(
@@ -79,14 +76,14 @@ class Controller:
                             progress.advance(task)
             self._is_zero_total(total=same_file_total, filename=self.filename)
         else:
-            raise exception_factory(FileNotFoundError, f"File or Directory not found: {curr_path}")
+            raise FileNotFoundError(f"File or Directory not found: {curr_path}")
 
     def create_controller(self, auto: Optional[bool] = None) -> None:
         if self.filename is not None and self.path is not None:
             self._is_file(filename=self.filename)
             if (curr_path := pathlib.Path(self.path)) and (curr_path.is_dir()):
                 if (real_path := os.path.join(curr_path, self.filename)) and (os.path.exists(real_path)):
-                    raise exception_factory(FileExistsError, f"File exists: {real_path}")
+                    raise FileExistsError(f"File exists: {real_path}")
                 else:
                     with open(os.path.join(curr_path, self.filename), 'x'):
                         rich.print(f"[bold green]Success creating file[/bold green], {real_path}")
@@ -94,7 +91,7 @@ class Controller:
                 rich.print(f"Create {self.filename} file [bold green]success![/bold green]")
                 raise typer.Exit()
             else:
-                raise exception_factory(FileNotFoundError, f"File or Directory not found: {curr_path}")
+                raise FileNotFoundError(f"File or Directory not found: {curr_path}")
         else:
             # ensure that the --auto callback is executed
             pass
@@ -103,14 +100,14 @@ class Controller:
         self._is_file(filename=self.filename)
         if (curr_path := pathlib.Path(self.path)) and (curr_path.is_dir()):
             if (real_path := os.path.join(curr_path, self.filename)) and not os.path.exists(real_path):
-                raise exception_factory(FileNotFoundError, f"File not exists: {real_path}")
+                raise FileNotFoundError(f"File not exists: {real_path}")
             else:
                 self._output_certain_file(filename=self.filename, path=curr_path, read_type=read_type)
 
             rich.print(f"Read {self.filename} file [bold green]success![/bold green]")
             raise typer.Exit()
         else:
-            raise exception_factory(FileNotFoundError, f"File or Directory not found: {curr_path}")
+            raise FileNotFoundError(f"File or Directory not found: {curr_path}")
 
     def write_controller() -> None:
         code_editor_app = CodeEditorApp()
@@ -122,7 +119,7 @@ class Controller:
         self._is_file(filename=self.filename)
         if (curr_path := pathlib.Path(self.path)) and (curr_path.is_dir()):
             if (real_path := os.path.join(curr_path, self.filename)) and not os.path.exists(real_path):
-                raise exception_factory(FileNotFoundError, f"File or Directory not found: {real_path}")
+                raise FileNotFoundError(f"File or Directory not found: {real_path}")
             else:
                 choice = typer.confirm("Are you sure want to delete it?", abort=True)
                 os.remove(real_path)
@@ -131,4 +128,4 @@ class Controller:
             rich.print(f"Delete {self.filename} file [bold green]success![/bold green]")
             raise typer.Exit()
         else:
-            raise exception_factory(FileNotFoundError, f"File or Directory not found: {curr_path}")
+            raise FileNotFoundError(f"File or Directory not found: {curr_path}")

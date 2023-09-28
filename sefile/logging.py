@@ -8,8 +8,11 @@ from sefile import (
     functools,
     Optional,
     )
-from sefile.config import exception_factory
 
+
+# create factory for exception.
+def exception_factory(exception, message: str) -> Exception:
+    raise exception(message)
 
 def log_file():
     fullpath = os.path.join(pathlib.Path.cwd(), 'search', 'logs')
