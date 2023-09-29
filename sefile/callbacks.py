@@ -221,18 +221,17 @@ class Callback:
             init_files = []
             for root, dirs, files in os.walk(dir_start_result, topdown=True):
                 for empty_file in files:
+                    fullpath = os.path.join(root, empty_file)
+                    if os.stat(fullpath).st_size == 0:
+                        total_empty_file += 1
                     if empty_file == "__init__.py":
                         init_files.append(empty_file)
-                    # fullpath = os.path.join(root, empty_file)
-            
-            print(init_files)
+            rich.print(f"There's {len(init_files)} __init__.py file")
+            if total_empty_file < 1:
+                rich.print("There's no empty files")
+            else:
+                rich.print(f"Theres are {total_empty_file} empty files") 
             raise typer.Exit()
-            
-            # if total_empty_file < 1:
-            #     rich.print("There's no empty files")
-            # else:
-            #     rich.print(f"Theres are {total_empty_file} empty files") 
-    
     def lazy_search(self, value: bool) -> None:
         if value:
             user_input = Input(f"Command 😃> ", word_color=colors.foreground["yellow"])
