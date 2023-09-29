@@ -81,12 +81,12 @@ def delete(filename: str = typer.Argument(metavar="FILENAME",
             auto: Optional[bool] = typer.Option(None, "--auto", 
                                                 help="Search empty file from <path> and delete it automatically.", 
                                                 is_eager=True, 
-                                                callback=None)) -> None:
+                                                callback=Callback.auto_delete_callback)) -> None:
     """
     TODO: Define write logic from controllers
     """
     delete_logic = Controller(filename=filename, path=path)
-    delete_logic.delete_controller()
+    delete_logic.delete_controller(auto=auto)
 
 # main function in here!
 @app.callback()

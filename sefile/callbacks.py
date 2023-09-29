@@ -208,6 +208,31 @@ class Callback:
                 print("See ya! 👋")
                 raise typer.Exit()
     
+    def auto_delete_callback(self, value: bool) -> None:
+        if value:
+            dir_start = Input(f"From where do you want to check empty files? ", word_color=colors.foreground["yellow"])
+            dir_start_result = dir_start.launch()
+            if dir_start_result.find("quit") != -1 or dir_start_result.find("exit") != -1:
+                print("See ya! 👋")
+                raise typer.Exit()
+            if not pathlib.Path(dir_start_result).is_dir():
+                raise FileNotFoundError(f"File or Path not found, path: '{dir_start_result}'")
+            total_empty_file = 0
+            init_files = []
+            for root, dirs, files in os.walk(dir_start_result, topdown=True):
+                for empty_file in files:
+                    if empty_file == "__init__.py":
+                        init_files.append(empty_file)
+                    # fullpath = os.path.join(root, empty_file)
+            
+            print(init_files)
+            raise typer.Exit()
+            
+            # if total_empty_file < 1:
+            #     rich.print("There's no empty files")
+            # else:
+            #     rich.print(f"Theres are {total_empty_file} empty files") 
+    
     def lazy_search(self, value: bool) -> None:
         if value:
             user_input = Input(f"Command 😃> ", word_color=colors.foreground["yellow"])

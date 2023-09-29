@@ -115,7 +115,7 @@ class Controller:
         rich.print('See ya :wave:')
         raise typer.Exit()
     
-    def delete_controller(self) -> None:
+    def delete_controller(self, auto: Optional[bool] = None) -> None:
         self._is_file(filename=self.filename)
         if (curr_path := pathlib.Path(self.path)) and (curr_path.is_dir()):
             if (real_path := os.path.join(curr_path, self.filename)) and not os.path.exists(real_path):
