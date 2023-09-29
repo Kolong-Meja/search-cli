@@ -35,7 +35,7 @@ def find(filename: str = typer.Argument(help="Name of file to [bold yellow]searc
     TODO: Define find logic from controllers
     """
     find_logic = Controller(filename=filename, path=path)
-    find_logic.find_controller(startswith=startswith, endswith=endswith)
+    find_logic.find_controller(startswith=startswith, endswith=endswith, lazy=lazy)
 
 @app.command(help="Command to [bold green]create[/bold green] new file followed by a path :cookie:.")
 def create(filename: str = typer.Argument(default=None, metavar="FILENAME", 
@@ -77,11 +77,7 @@ def write() -> None:
 def delete(filename: str = typer.Argument(metavar="FILENAME", 
                                         help="Name of file to be deleted. :page_facing_up:"),
             path: str = typer.Argument(metavar="PATH", 
-                                       help="Directory of file to be deleted. :file_folder:"),
-            auto: Optional[bool] = typer.Option(None, "--auto", 
-                                                help="Search empty file from <path> and delete it automatically.", 
-                                                is_eager=True, 
-                                                callback=Callback.auto_delete_callback)) -> None:
+                                       help="Directory of file to be deleted. :file_folder:")) -> None:
     """
     TODO: Define write logic from controllers
     """

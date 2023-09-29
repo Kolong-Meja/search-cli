@@ -8,11 +8,8 @@ from sefile import (
     functools,
     Optional,
     )
+from sefile.exception import exception_factory
 
-
-# create factory for exception.
-def exception_factory(exception, message: str) -> Exception:
-    raise exception(message)
 
 def log_file():
     fullpath = os.path.join(pathlib.Path.cwd(), 'search', 'logs')
@@ -83,19 +80,19 @@ class CustomLogging:
         logging.basicConfig(filename=log_file(), filemode='a+', 
                             format=self.format_log,
                             level=logging.DEBUG)
-        logging.error(message)
+        logging.debug(message)
     
     def warning_log(self, message: str) -> None:
         logging.basicConfig(filename=log_file(), filemode='a+', 
                             format=self.format_log,
                             level=logging.WARNING)
-        logging.error(message)
+        logging.warning(message)
     
     def critical_log(self, message: str) -> None:
         logging.basicConfig(filename=log_file(), filemode='a+', 
                             format=self.format_log,
                             level=logging.CRITICAL)
-        logging.error(message)
+        logging.critical(message)
     
     def notset_log(self, message: str) -> None:
         logging.basicConfig(filename=log_file(), filemode='a+', 

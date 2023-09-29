@@ -33,7 +33,7 @@ from typing import (
     Optional, 
     Union
     )
-from rich.console import Console
+from rich.console import Console, Group
 from rich.panel import Panel
 from rich.progress import (
     Progress, 
@@ -41,6 +41,7 @@ from rich.progress import (
     TextColumn
     )
 from rich.syntax import Syntax
+from rich.layout import Layout
 
 # throw all information about this CLI below
 __app_name__ = "Sefile CLI Tool"

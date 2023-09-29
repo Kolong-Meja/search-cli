@@ -14,10 +14,14 @@ from sefile import (
     Optional,
     Console,
     Panel,
-    Syntax
+    Syntax,
+    Group,
+    Layout
     )
 from sefile.config import FileTypes
 from sefile.editor import CodeEditorApp
+from sefile.exception import InvalidFileFormat
+
 
 @dataclass(frozen=True)
 class Controller:
@@ -36,8 +40,7 @@ class Controller:
             # ensure to execute next programs
             pass
         else:
-            params = [param for param in inspect.signature(self._is_file).parameters.keys()]
-            raise ValueError(message=f"'{params[0]}' needs file type at the end, file: '{filename}'")
+            raise InvalidFileFormat(f"Invalid file format, file: {filename}")
     # to be implement in find_controller() method
     def _is_zero_total(self, total: int, filename: str) -> None:
         if total < 1:
@@ -53,8 +56,14 @@ class Controller:
                 rich.print(Panel(user_file.read(), title=f"{filename}", title_align="center", style="white"))
         else:
             with open(os.path.join(path, filename), 'r') as user_file:
-                code_syntax = Syntax(user_file.read(), read_type.value, theme="monokai", line_numbers=True)
-                Console().print(Panel(code_syntax, title=f"{filename}", title_align="center"))
+                code_syntax = Syntax(
+                    user_file.read(), 
+                    read_type.value, 
+                    theme="monokai", 
+                    line_numbers=True,
+                    indent_guides=True)
+                curr_panel = Panel(code_syntax, title=f"{filename}", title_align="center")
+                rich.print(curr_panel)
 
     def find_controller(self, startswith: str, endswith: str, lazy: Optional[bool]) -> None:
         self._is_file(filename=self.filename)
@@ -65,16 +74,14 @@ class Controller:
                 auto_refresh=True,
                 transient=True,
             ) as progress:
-                task = progress.add_task(f"Find '{self.filename}' file from {self.path}", total=100_000)
-                same_file_total = 0
-                for root, dirs, files in os.walk(curr_path, topdown=True):
-                    for some_file in files:
-                        if fnmatch.fnmatchcase(some_file, self.filename):
-                            same_file_total += 1
-                            fullpath = os.path.join(f"[white]{root}[/white]", f"[bold yellow]{some_file}[/bold yellow]")
-                            rich.print(f"{fullpath}")
-                            progress.advance(task)
-            self._is_zero_total(total=same_file_total, filename=self.filename)
+                task = progress.add_task("Please wait for a moment", total=100_000)
+                similiar_files = [os.path.join(root, some_file) 
+                             for root, dirs, files in os.walk(curr_path)
+                             for some_file in filter(lambda f: fnmatch.fnmatchcase(f, self.filename), files)]
+                for f in similiar_files:
+                    rich.print(f)
+                    progress.advance(task)
+            self._is_zero_total(total=len(similiar_files), filename=self.filename)
         else:
             raise FileNotFoundError(f"File or Directory not found: {curr_path}")
 

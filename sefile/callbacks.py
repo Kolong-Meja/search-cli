@@ -4,6 +4,7 @@ from sefile import (
     art,
     rich,
     typer,
+    time,
     colored,
     dataclass,
     os,
@@ -23,6 +24,11 @@ from sefile import (
     Console,
     Panel,
     )
+from sefile.exception import (
+    InvalidFormat, 
+    InvalidFileFormat
+    )
+
 
 @dataclass(frozen=True)
 class _ProjectType:
@@ -37,52 +43,52 @@ class _ProjectType:
     def _py_project(self) -> None:
         os.mkdir(self.dir_path)
         # create sub directory
-        for subdir in ["src", "tests"]:
-            os.makedirs(os.path.join(self.dir_path, subdir))
-        # create files in src directory
-        for src_file in ['__init__.py', 'main.py']:
-            open(os.path.join(os.path.join(self.dir_path, 'src'), src_file), 'x')
-        # create files in tests directory
-        for tests_file in ['__init__.py', 'test.py']:
-            open(os.path.join(os.path.join(self.dir_path, 'tests'), tests_file), 'x')
-        # create required file on project.
-        for req_file in ['LICENSE.md', 'README.md', 'requirements.txt']:
-            open(os.path.join(self.dir_path, req_file), 'x')
+        [os.makedirs(os.path.join(self.dir_path, subdir)) 
+         for subdir in ["src", "tests"]]
+        # create files in sub directory
+        [open(os.path.join(os.path.join(self.dir_path, "src"), src_file), 'x') 
+         for src_file in ["__init__.py", "main.py"]]
+        # create files in sub directory
+        [open(os.path.join(os.path.join(self.dir_path, "tests"), tests_file), 'x') 
+         for tests_file in ["__init__.py", "test.py"]]
+        # create required files for deployment
+        [open(os.path.join(self.dir_path, req_file), 'x') 
+         for req_file in ["LICENSE.md", "README.md", "requirements.txt"]]
         rich.print(f"All [bold green]Done![/bold green] ✅, path: '{self.dir_path}'")
     
     def _js_project(self) -> None:
         os.mkdir(self.dir_path)
         # create sub directory
-        for subdir in ["src", "tests", "public"]:
-            os.makedirs(os.path.join(self.dir_path, subdir))
-        # create files in src directory
-        for src_file in ["index.js", "app.js"]:
-            open(os.path.join(os.path.join(self.dir_path, 'src'), src_file), 'x')
-        # create files in public directory
-        for public_file in ['index.html', 'style.css', 'script.js']:
-            open(os.path.join(os.path.join(self.dir_path, 'public'), public_file), 'x')
-        # create files in tests directory
-        for tests_file in ['service.test.js', 'component.test.js']:
-            open(os.path.join(os.path.join(self.dir_path, 'tests'), tests_file), 'x')
-        # create required file on project
-        for req_file in ['LICENSE.md', 'README.md', 'package.json']:
-            open(os.path.join(self.dir_path, req_file), 'x')
+        [os.makedirs(os.path.join(self.dir_path, subdir)) 
+         for subdir in ["src", "tests", "public"]]
+        # create files in sub directory
+        [open(os.path.join(os.path.join(self.dir_path, "src"), src_file), "x") 
+         for src_file in ["index.js", "app.js"]]
+        # create files in sub directory
+        [open(os.path.join(os.path.join(self.dir_path, "public"), public_file), "x") 
+         for public_file in ["index.html", "style.css", "script.js"]]
+        # create files in sub directory
+        [open(os.path.join(os.path.join(self.dir_path, "tests"), tests_file), "x") 
+         for tests_file in ["service.test.js", "component.test.js"]]
+        # create required files for deployment
+        [open(os.path.join(self.dir_path, req_file), "x") 
+         for req_file in ["LICENSE.md", "README.md", "package.json"]]
         rich.print(f"All [bold green]Done![/bold green] ✅, path: {self.dir_path}")
     
     def _go_project(self) -> None:
         os.mkdir(self.dir_path)
         # create sub directory
-        for subdir in ["src", "tests"]:
-            os.makedirs(os.path.join(self.dir_path, subdir))
-        # create files in src directory
-        for src_file in ["main.go", "utils.go"]:
-            open(os.path.join(os.path.join(self.dir_path, 'src'), src_file), 'x')
-        # create files in tests directory
-        for tests_file in ["test.go"]:
-            open(os.path.join(os.path.join(self.dir_path, 'tests'), tests_file), 'x')
-        # create required file on project
-        for req_file in ["LICENSE.md", "README.md", "config.go"]:
-            open(os.path.join(self.dir_path, req_file), 'x')
+        [os.makedirs(os.path.join(self.dir_path, subdir)) 
+         for subdir in ["src", "tests"]]
+        # create files in sub directory
+        [open(os.path.join(os.path.join(self.dir_path, "src"), src_file), "x") 
+         for src_file in ["main.go", "utils.go"]]
+        # create files in sub directory
+        [open(os.path.join(os.path.join(self.dir_path, "tests"), tests_file), "x") 
+         for tests_file in ["test.go"]]
+        # create required file for deployment
+        [open(os.path.join(self.dir_path, req_file), "x") 
+         for req_file in ["LICENSE.md", "README.md", "config.go"]]
         rich.print(f"All [bold green]Done![/bold green] ✅, path: {self.dir_path}")
 
 @dataclass
@@ -135,16 +141,16 @@ class Callback:
             for i, value in enumerate(user_input.split()):
                 _results[i].append(value)
         except:
-            raise ValueError(f"Invalid input format. Please use format: find <filename> from <path>, input: '{user_input}'")
+            raise InvalidFormat(f"Invalid input format. Please use format: find <filename> from <path>, input: '{user_input}'")
         if len(_results[-1]) == 0:
-            raise ValueError(f"Path is required")
+            raise InvalidFormat(f"Invalid input format. Please use format: find <filename> from <path>, input: '{user_input}'")
         # then we flat the sublist into 1-dimensional list
         _flat_list = [subitem for item in _results for subitem in item]
         if _flat_list[0] != "find" or _flat_list[2] != "from":
-            raise ValueError(f"Invalid input format. Please use format: find <filename> from <path>, input: '{user_input}'")
+            raise InvalidFormat(f"Invalid input format. Please use format: find <filename> from <path>, input: '{user_input}'")
         # if 2 (second) element does not have file type, it will be error.
         if _flat_list[1].find(".") == -1:
-            raise ValueError(f"Need to specified file, file: {_flat_list[1]}")
+            raise InvalidFileFormat(f"Invalid file format, file: {_flat_list[1]}")
         # then we check if the path is a real directory or folder
         if (curr_path := pathlib.Path(_flat_list[-1])) and not curr_path.is_dir():
             raise FileNotFoundError(f"Directory '{_flat_list[-1]}' not found.")
@@ -157,16 +163,14 @@ class Callback:
             get_time=None,
         ) as progress:
             task = progress.add_task(f"Please wait for a moment...", total=100_000)
-            same_file_total = 0
-            for root, dirs, files in os.walk(curr_path):
-                for some_file in files:
-                    if fnmatch.fnmatchcase(some_file, _flat_list[1]):
-                        same_file_total += 1
-                        fullpath = os.path.join(f"[white]{root}[/white]", f"[bold yellow]{some_file}[/bold yellow]")
-                        rich.print(f"{fullpath}")
-                        progress.advance(task)
-        if same_file_total < 1:
-            raise FileNotFoundError(f"File '{_flat_list[1]}' not found.")
+            similiar_files = [os.path.join(root, some_file) 
+                             for root, dirs, files in os.walk(curr_path)
+                             for some_file in filter(lambda f: fnmatch.fnmatchcase(f, _flat_list[1]), files)]
+            for f in similiar_files:
+                rich.print(f)
+                progress.advance(task)
+        if len(similiar_files) < 1:
+            raise FileNotFoundError(f"File {_flat_list[1]} not found.")
         else:
             rich.print(f"Find {_flat_list[1]} file [bold green]success![/bold green]")
             raise typer.Exit()
@@ -207,31 +211,7 @@ class Callback:
             else:
                 print("See ya! 👋")
                 raise typer.Exit()
-    
-    def auto_delete_callback(self, value: bool) -> None:
-        if value:
-            dir_start = Input(f"From where do you want to check empty files? ", word_color=colors.foreground["yellow"])
-            dir_start_result = dir_start.launch()
-            if dir_start_result.find("quit") != -1 or dir_start_result.find("exit") != -1:
-                print("See ya! 👋")
-                raise typer.Exit()
-            if not pathlib.Path(dir_start_result).is_dir():
-                raise FileNotFoundError(f"File or Path not found, path: '{dir_start_result}'")
-            total_empty_file = 0
-            init_files = []
-            for root, dirs, files in os.walk(dir_start_result, topdown=True):
-                for empty_file in files:
-                    fullpath = os.path.join(root, empty_file)
-                    if os.stat(fullpath).st_size == 0:
-                        total_empty_file += 1
-                    if empty_file == "__init__.py":
-                        init_files.append(empty_file)
-            rich.print(f"There's {len(init_files)} __init__.py file")
-            if total_empty_file < 1:
-                rich.print("There's no empty files")
-            else:
-                rich.print(f"Theres are {total_empty_file} empty files") 
-            raise typer.Exit()
+
     def lazy_search(self, value: bool) -> None:
         if value:
             user_input = Input(f"Command 😃> ", word_color=colors.foreground["yellow"])
@@ -248,7 +228,6 @@ class Callback:
             if not pathlib.Path(dir_start_result).is_dir():
                 raise FileNotFoundError(f"File or Path not found, path: '{dir_start_result}'")
             else:
-                total_file = 0
                 with Progress(
                     SpinnerColumn(spinner_name="dots9"),
                     TextColumn("[progress.description]{task.description}"),
@@ -257,14 +236,13 @@ class Callback:
                     get_time=None,
                 ) as progress:
                     task = progress.add_task(f"Please wait for a moment...", total=100_000)
-                    for root, dirs, files in os.walk(dir_start_result, topdown=True):
-                        for some_file in files:
-                            if some_file.startswith(value):
-                                total_file += 1
-                                fullpath = os.path.join(f"[white]{root}[/white]", f"[bold yellow]{some_file}[/bold yellow]")
-                                rich.print(f"{fullpath}")
-                                progress.advance(task)
-                if total_file < 1:
+                    certain_files = [os.path.join(root, some_file)
+                                    for root, dirs, files in os.walk(dir_start_result, topdown=True)
+                                    for some_file in filter(lambda f: f.startswith(value), files)]
+                    for f in certain_files:
+                        rich.print(f)
+                        progress.advance(task)
+                if len(certain_files) < 1:
                     raise FileNotFoundError(f"File startswith '{value}' not found from '{dir_start_result}' path")
                 else:
                     rich.print(f"Search file startswith '{value}' [bold green]success![/bold green]")
@@ -280,7 +258,6 @@ class Callback:
             if not pathlib.Path(dir_start_result).is_dir():
                 raise FileNotFoundError(f"File or Path not found, path: '{dir_start_result}'")
             else:
-                total_file = 0
                 with Progress(
                     SpinnerColumn(spinner_name="dots9"),
                     TextColumn("[progress.description]{task.description}"),
@@ -289,14 +266,13 @@ class Callback:
                     get_time=None,
                 ) as progress:
                     task = progress.add_task(f"Please wait for a moment...", total=100_000)
-                    for root, dirs, files in os.walk(dir_start_result, topdown=True):
-                        for some_file in files:
-                            if some_file.endswith(value):
-                                total_file += 1
-                                fullpath = os.path.join(f"[white]{root}[/white]", f"[bold yellow]{some_file}[/bold yellow]")
-                                rich.print(f"{fullpath}")
-                                progress.advance(task)
-                if total_file < 1:
+                    certain_files = [os.path.join(root, some_file)
+                                    for root, dirs, files in os.walk(dir_start_result, topdown=True)
+                                    for some_file in filter(lambda f: f.endswith(value), files)]
+                    for f in certain_files:
+                        rich.print(f)
+                        progress.advance(task)
+                if len(certain_files) < 1:
                     raise FileNotFoundError(f"File endswith '{value}' not found from '{dir_start_result}' path")
                 else:
                     rich.print(f"Search file startswith '{value}' [bold green]success![/bold green]")
