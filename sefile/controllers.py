@@ -29,7 +29,8 @@ from sefile.config import (
     )
 from sefile.exception import (
     InvalidFileFormat, 
-    RequiredFile
+    InvalidFilename,
+    InvalidPath,
     )
 
 
@@ -53,7 +54,7 @@ class Controller:
             else:
                 raise InvalidFileFormat(f"Invalid file format, file: {filename}")
         else:
-            raise RequiredFile(f"<file> is required, file: {filename}")
+            raise InvalidFilename(f"Invalid filename, file: '{filename}'")
     # to be implement in find_controller() method
     def _is_zero_total(self, total: int, filename: str) -> None:
         if total < 1:
@@ -155,10 +156,12 @@ class Controller:
         subfolder: bool = False
         ) -> None:
         if subfolder != False:
+            if not self.path:
+                raise InvalidPath(f"Invalid path, path: '{self.path}'.")
             if (curr_path := pathlib.Path(self.path)) and (curr_path.is_dir()):
                 all_items = os.listdir(curr_path)
                 subdirs = [d for d in all_items if os.path.isdir(os.path.join(curr_path, d))]
-                rich.print(f"[bold green]{'[bold yellow] | [/bold yellow]'.join(subdirs)}[/bold green]")
+                rich.print(f"\n[bold green]{'[bold yellow] | [/bold yellow]'.join(subdirs)}[/bold green]\n")
                 rich.print(f"There's {len(subdirs)} sub directory on '{curr_path}'.")
                 subdir = Input(f"What sub directory you want to remove? ", word_color=colors.foreground["yellow"])
                 subdir_result = subdir.launch()

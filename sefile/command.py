@@ -103,7 +103,7 @@ def remove(path: Optional[str] = typer.Argument(default=None,
 
 # main function in here!
 @app.callback()
-def main(version: Optional[bool] = typer.Option(None, "--version", "-v", 
+def main(info: Optional[bool] = typer.Option(None, "--info", "-i", 
                                                 help="Show version of search CLI.", 
                                                 is_eager=True, 
                                                 callback=Callback.version_callback)) -> None: return

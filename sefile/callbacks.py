@@ -23,6 +23,7 @@ from sefile import (
     Input,
     Console,
     Panel,
+    random,
     )
 from sefile.exception import (
     InvalidFormat, 
@@ -179,21 +180,27 @@ class Callback:
 
     def version_callback(self, value: bool) -> None:
         if value:
-            ascii_art = art.text2art("SEFILE", font="swampland", chr_ignore=True)
-            print(f"\n{colored(ascii_art, color='green', attrs=['bold'])}\n")
-            rich.print(f"""[bold]App name[/bold]: {__app_name__}\
-                    \n[bold]{__app_name__} version[/bold]: {__version__}\
-                    \n[bold]Creator name[/bold]: {__creator__}\
-                    \n[bold]Creator email[/bold]: {__creator_email__}\
-                    \n[bold]Creator github[/bold]: {__project_url__}\
-                    """)
+            selected_font_arts = ["swampland", "tarty1", "rounded", "larry3d", "henry3d", "big"]
+            ascii_art = art.text2art("SEFILE", font=random.choice(selected_font_arts), chr_ignore=True)
+            print(f"{colored(ascii_art, color='light_green', attrs=['bold'])}")
+            rich.print(Panel(f"""[bold cyan]App name[/bold cyan]: {__app_name__}\
+                    \n[bold cyan]version[/bold cyan]: [white]{__version__}[/white]\
+                    \n[bold cyan]Creator name[/bold cyan]: {__creator__}\
+                    \n[bold cyan]Creator email[/bold cyan]: {__creator_email__}\
+                    \n[bold cyan]Creator github[/bold cyan]: [white]{__project_url__}[/white]\
+                    """, 
+                    title="Information", 
+                    title_align="left", 
+                    expand=True, 
+                    highlight=True,
+                    padding=(0, 1)))
             raise typer.Exit()
     
     def auto_create_callback(self, value: bool) -> None:
         if value:
             some_cli = Bullet(
-                "What's simple project you want to create? ", 
-                choices=["🐍 Python", "☕ Javascript", "🐼 Go", "❌ Cancel"],
+                "What's project you want to create? ", 
+                choices=["👽 Rest API", "🏃 Fast Website", "🍓 Graphql API", "❌ Nah, i'm good"],
                 bullet=" >",
                 margin=2,
                 bullet_color=colors.bright(colors.foreground["cyan"]),
@@ -204,12 +211,18 @@ class Callback:
                 )
             result = some_cli.launch()
 
-            if result == "🐍 Python":
-                Callback._create_project(choice=result)
-            elif result == "☕ Javascript":
-                Callback._create_project(choice=result)
-            elif result == "🐼 Go":
-                Callback._create_project(choice=result)
+            if result == "👽 Rest API":
+                print("You will using either FastAPI, Express JS, or Nest JS")
+                raise typer.Exit()
+                # Callback._create_project(choice=result)
+            elif result == "🏃 Fast Website":
+                print("You will using basic combination HTML, CSS, Javascript, or Vue JS + Django, or Vue JS + Nest JS")
+                raise typer.Exit()
+                # Callback._create_project(choice=result)
+            elif result == "🍓 Graphql API":
+                print("You will use FastAPI, or Flask with additional Strawberry python package.")
+                raise typer.Exit()
+                # Callback._create_project(choice=result)
             else:
                 print("See ya! 👋")
                 raise typer.Exit()

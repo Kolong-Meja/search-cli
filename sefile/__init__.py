@@ -16,6 +16,7 @@ import platform
 import rich
 import time
 import typer
+import random
 from bullet import (
     colors,
     Bullet, 
