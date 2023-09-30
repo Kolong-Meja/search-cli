@@ -25,3 +25,12 @@ class FileTypes(Enum):
     html = 'html'
     rust = 'rust'
 
+class ThemeSelection(Enum):
+    dark = "one-dark"
+    monokai = "monokai"
+    dracula = "dracula"
+    material = "material"
+    light = "gruvbox-light"
+    bulb = "lightbulb"
+
+

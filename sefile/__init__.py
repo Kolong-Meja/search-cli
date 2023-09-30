@@ -31,7 +31,7 @@ from enum import Enum
 from termcolor import colored
 from typing import (
     Optional, 
-    Union
+    Union,
     )
 from rich.console import Console, Group
 from rich.panel import Panel

@@ -18,8 +18,10 @@ from sefile import (
     Group,
     Layout
     )
-from sefile.config import FileTypes
-from sefile.editor import CodeEditorApp
+from sefile.config import (
+    FileTypes, 
+    ThemeSelection
+    )
 from sefile.exception import InvalidFileFormat
 
 
@@ -35,12 +37,15 @@ class Controller:
         return f"{self.__class__.__name__}('{self.filename}', '{self.path}')"
 
     # check if file has type at the end
-    def _is_file(self, filename: str) -> None:
-        if filename.find(".") != -1:
-            # ensure to execute next programs
-            pass
+    def _is_file(self, filename: Optional[str] = None) -> None:
+        if filename is not None:
+            if filename.find(".") != -1:
+                # ensure to execute next programs
+                pass
+            else:
+                raise InvalidFileFormat(f"Invalid file format, file: {filename}")
         else:
-            raise InvalidFileFormat(f"Invalid file format, file: {filename}")
+            pass
     # to be implement in find_controller() method
     def _is_zero_total(self, total: int, filename: str) -> None:
         if total < 1:
@@ -50,7 +55,14 @@ class Controller:
             raise typer.Exit()
 
     # to be implement in read_controller() method    
-    def _output_certain_file(self, filename: str, path: str, read_type: FileTypes) -> None:
+    def _output_certain_file(
+        self, 
+        filename: str, 
+        path: str, 
+        format: str, 
+        theme: str, 
+        indent: bool = False
+        ) -> None:
         if filename.endswith(".txt"):
             with open(os.path.join(path, filename), 'r') as user_file:
                 rich.print(Panel(user_file.read(), title=f"{filename}", title_align="center", style="white"))
@@ -58,14 +70,19 @@ class Controller:
             with open(os.path.join(path, filename), 'r') as user_file:
                 code_syntax = Syntax(
                     user_file.read(), 
-                    read_type.value, 
-                    theme="monokai", 
+                    format.value, 
+                    theme=theme.value, 
                     line_numbers=True,
-                    indent_guides=True)
-                curr_panel = Panel(code_syntax, title=f"{filename}", title_align="center")
+                    indent_guides=indent)
+                curr_panel = Panel(code_syntax, title=f"{filename}", title_align="center", border_style="yellow")
                 rich.print(curr_panel)
 
-    def find_controller(self, startswith: str, endswith: str, lazy: Optional[bool]) -> None:
+    def find_controller(
+        self, 
+        startswith: str = None, 
+        endswith: str = None, 
+        lazy: Optional[bool] = None
+        ) -> None:
         self._is_file(filename=self.filename)
         if (curr_path := pathlib.Path(self.path)) and (curr_path.is_dir()):
             with Progress(
@@ -86,7 +103,7 @@ class Controller:
         else:
             raise FileNotFoundError(f"File or Directory not found: {curr_path}")
 
-    def create_controller(self, auto: Optional[bool] = None) -> None:
+    def create_controller(self, project: Optional[bool] = None, write: Optional[bool] = None) -> None:
         if self.filename is not None and self.path is not None:
             self._is_file(filename=self.filename)
             if (curr_path := pathlib.Path(self.path)) and (curr_path.is_dir()):
@@ -104,36 +121,50 @@ class Controller:
             # ensure that the --auto callback is executed
             pass
     
-    def read_controller(self, read_type: FileTypes) -> None:
+    def read_controller(self, format: str, theme: str, indent: bool = False) -> None:
         self._is_file(filename=self.filename)
         if (curr_path := pathlib.Path(self.path)) and (curr_path.is_dir()):
             if (real_path := os.path.join(curr_path, self.filename)) and not os.path.exists(real_path):
                 raise FileNotFoundError(f"File not exists: {real_path}")
             else:
-                self._output_certain_file(filename=self.filename, path=curr_path, read_type=read_type)
+                self._output_certain_file(
+                    filename=self.filename, 
+                    path=curr_path, 
+                    format=format, 
+                    theme=theme, 
+                    indent=indent
+                    )
 
             rich.print(f"Read {self.filename} file [bold green]success![/bold green]")
             raise typer.Exit()
         else:
             raise FileNotFoundError(f"File or Directory not found: {curr_path}")
-
-    def write_controller() -> None:
-        code_editor_app = CodeEditorApp()
-        code_editor_app.run()
-        rich.print('See ya :wave:')
-        raise typer.Exit()
     
-    def delete_controller(self, auto: Optional[bool] = None) -> None:
-        self._is_file(filename=self.filename)
-        if (curr_path := pathlib.Path(self.path)) and (curr_path.is_dir()):
-            if (real_path := os.path.join(curr_path, self.filename)) and not os.path.exists(real_path):
-                raise FileNotFoundError(f"File or Directory not found: {real_path}")
-            else:
-                choice = typer.confirm("Are you sure want to delete it?", abort=True)
-                os.remove(real_path)
-                rich.print(f"Success to delete {real_path} file.")
+    def delete_controller(
+        self,
+        startswith: str = None, 
+        endswith: str = None, 
+        subfolder: bool = False
+        ) -> None:
+        if subfolder != False:
+            if (curr_path := pathlib.Path(self.path)) and (curr_path.is_dir()):
+                certain_subdirs = [os.path.join(root, subdir)
+                                  for root, dirs, files in os.walk(curr_path, topdown=True)
+                                  for subdir in dirs]
+                print(certain_subdirs)
+                raise typer.Exit()
+        else:    
+            self._is_file(filename=self.filename)
+            if (curr_path := pathlib.Path(self.path)) and (curr_path.is_dir()):
+                if (real_path := os.path.join(curr_path, self.filename)) and not os.path.exists(real_path):
+                    raise FileNotFoundError(f"File or Directory not found: {real_path}")
+                else:
+                    choice = typer.confirm("Are you sure want to delete it?", abort=True)
+                    os.remove(real_path)
+                    rich.print(f"Success to delete {real_path} file.")
 
-            rich.print(f"Delete {self.filename} file [bold green]success![/bold green]")
-            raise typer.Exit()
-        else:
-            raise FileNotFoundError(f"File or Directory not found: {curr_path}")
+                rich.print(f"Delete {self.filename} file [bold green]success![/bold green]")
+                raise typer.Exit()
+            else:
+                raise FileNotFoundError(f"File or Directory not found: {curr_path}")
+

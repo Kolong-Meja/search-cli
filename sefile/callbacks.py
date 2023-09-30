@@ -28,6 +28,7 @@ from sefile.exception import (
     InvalidFormat, 
     InvalidFileFormat
     )
+from sefile.editor import CodeEditorApp
 
 
 @dataclass(frozen=True)
@@ -212,6 +213,13 @@ class Callback:
             else:
                 print("See ya! 👋")
                 raise typer.Exit()
+    
+    def auto_write_callback(self, value: bool) -> None:
+        if value:
+            code_editor_app = CodeEditorApp()
+            code_editor_app.run()
+            rich.print('See ya :wave:')
+            raise typer.Exit()
 
     def lazy_search(self, value: bool) -> None:
         if value:
