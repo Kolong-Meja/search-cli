@@ -43,7 +43,7 @@ def create(filename: str = typer.Argument(default=None, metavar="FILENAME",
            path: str = typer.Argument(default=None, metavar="PATH", 
                                       help="Directory [bold blue]path[/bold blue] for file that has been created. :file_folder:"),
            auto: Optional[bool] = typer.Option(None, "--auto", 
-                                               help=f"Automatically create simple (Python, Javascript, and Go) project in '{pathlib.Path.home()}'", 
+                                               help=f"Automatically create simple (Python, Javascript, and Go).", 
                                                is_eager=True,
                                                callback=Callback.auto_create_callback)) -> None:
     """
@@ -90,6 +90,3 @@ def main(version: Optional[bool] = typer.Option(None, "--version", "-v",
                                                 help="Show version of search CLI.", 
                                                 is_eager=True, 
                                                 callback=Callback.version_callback)) -> None: return
-
-
-

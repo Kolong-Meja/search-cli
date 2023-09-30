@@ -74,13 +74,14 @@ class Controller:
                 auto_refresh=True,
                 transient=True,
             ) as progress:
-                task = progress.add_task("Please wait for a moment", total=100_000)
+                task = progress.add_task("Please wait for a moment...", total=100_000)
                 similiar_files = [os.path.join(root, some_file) 
                              for root, dirs, files in os.walk(curr_path)
                              for some_file in filter(lambda f: fnmatch.fnmatchcase(f, self.filename), files)]
                 for f in similiar_files:
-                    rich.print(f)
-                    progress.advance(task)
+                    if os.path.getsize(f) != 0:
+                        rich.print(f)
+                        progress.advance(task)
             self._is_zero_total(total=len(similiar_files), filename=self.filename)
         else:
             raise FileNotFoundError(f"File or Directory not found: {curr_path}")

@@ -167,8 +167,9 @@ class Callback:
                              for root, dirs, files in os.walk(curr_path)
                              for some_file in filter(lambda f: fnmatch.fnmatchcase(f, _flat_list[1]), files)]
             for f in similiar_files:
-                rich.print(f)
-                progress.advance(task)
+                if os.path.getsize(f) != 0:
+                    rich.print(f)
+                    progress.advance(task)
         if len(similiar_files) < 1:
             raise FileNotFoundError(f"File {_flat_list[1]} not found.")
         else:
@@ -240,8 +241,9 @@ class Callback:
                                     for root, dirs, files in os.walk(dir_start_result, topdown=True)
                                     for some_file in filter(lambda f: f.startswith(value), files)]
                     for f in certain_files:
-                        rich.print(f)
-                        progress.advance(task)
+                        if os.path.getsize() != 0:
+                            rich.print(f)
+                            progress.advance(task)
                 if len(certain_files) < 1:
                     raise FileNotFoundError(f"File startswith '{value}' not found from '{dir_start_result}' path")
                 else:
@@ -270,8 +272,9 @@ class Callback:
                                     for root, dirs, files in os.walk(dir_start_result, topdown=True)
                                     for some_file in filter(lambda f: f.endswith(value), files)]
                     for f in certain_files:
-                        rich.print(f)
-                        progress.advance(task)
+                        if os.path.getsize(f) != 0:
+                            rich.print(f)
+                            progress.advance(task)
                 if len(certain_files) < 1:
                     raise FileNotFoundError(f"File endswith '{value}' not found from '{dir_start_result}' path")
                 else:
