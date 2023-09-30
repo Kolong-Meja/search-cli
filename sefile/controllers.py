@@ -16,13 +16,21 @@ from sefile import (
     Panel,
     Syntax,
     Group,
-    Layout
+    Layout,
+    shutil,
+    Input,
+    colors,
+    colored,
+    stat,
     )
 from sefile.config import (
     FileTypes, 
     ThemeSelection
     )
-from sefile.exception import InvalidFileFormat
+from sefile.exception import (
+    InvalidFileFormat, 
+    RequiredFile
+    )
 
 
 @dataclass(frozen=True)
@@ -45,7 +53,7 @@ class Controller:
             else:
                 raise InvalidFileFormat(f"Invalid file format, file: {filename}")
         else:
-            pass
+            raise RequiredFile(f"<file> is required, file: {filename}")
     # to be implement in find_controller() method
     def _is_zero_total(self, total: int, filename: str) -> None:
         if total < 1:
@@ -116,7 +124,7 @@ class Controller:
                 rich.print(f"Create {self.filename} file [bold green]success![/bold green]")
                 raise typer.Exit()
             else:
-                raise FileNotFoundError(f"File or Directory not found: {curr_path}")
+                raise FileNotFoundError(f"File or Directory not found: {curr_path}.")
         else:
             # ensure that the --auto callback is executed
             pass
@@ -125,7 +133,7 @@ class Controller:
         self._is_file(filename=self.filename)
         if (curr_path := pathlib.Path(self.path)) and (curr_path.is_dir()):
             if (real_path := os.path.join(curr_path, self.filename)) and not os.path.exists(real_path):
-                raise FileNotFoundError(f"File not exists: {real_path}")
+                raise FileNotFoundError(f"File not exists: {real_path}.")
             else:
                 self._output_certain_file(
                     filename=self.filename, 
@@ -148,11 +156,30 @@ class Controller:
         ) -> None:
         if subfolder != False:
             if (curr_path := pathlib.Path(self.path)) and (curr_path.is_dir()):
-                certain_subdirs = [os.path.join(root, subdir)
-                                  for root, dirs, files in os.walk(curr_path, topdown=True)
-                                  for subdir in dirs]
-                print(certain_subdirs)
-                raise typer.Exit()
+                all_items = os.listdir(curr_path)
+                subdirs = [d for d in all_items if os.path.isdir(os.path.join(curr_path, d))]
+                rich.print(f"[bold green]{'[bold yellow] | [/bold yellow]'.join(subdirs)}[/bold green]")
+                rich.print(f"There's {len(subdirs)} sub directory on '{curr_path}'.")
+                subdir = Input(f"What sub directory you want to remove? ", word_color=colors.foreground["yellow"])
+                subdir_result = subdir.launch()
+                if subdir_result.find("quit") != -1 or subdir_result.find("exit") != -1:
+                    print("See ya! 👋")
+                    raise typer.Exit()
+                else:
+                    real_subdir = os.path.join(curr_path, subdir_result)
+                    if not pathlib.Path(real_subdir).is_dir():
+                        raise FileNotFoundError(f"Sub directory '{real_subdir}' not found.")
+                    else:
+                        removed_subdir = os.path.join(curr_path, subdir_result)
+                        shutil.rmtree(removed_subdir)
+                        rich.print(f"Sub directory '{removed_subdir}' [bold green]successfully removed![/bold green]")
+                        raise typer.Exit()
+        elif startswith:
+            print("You using --startswith flag")
+            raise typer.Exit()
+        elif endswith:
+            print("You using --endswith flag")
+            raise typer.Exit()
         else:    
             self._is_file(filename=self.filename)
             if (curr_path := pathlib.Path(self.path)) and (curr_path.is_dir()):
@@ -166,5 +193,5 @@ class Controller:
                 rich.print(f"Delete {self.filename} file [bold green]success![/bold green]")
                 raise typer.Exit()
             else:
-                raise FileNotFoundError(f"File or Directory not found: {curr_path}")
+                raise FileNotFoundError(f"File or Directory not found: {curr_path}.")
 

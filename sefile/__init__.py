@@ -9,6 +9,8 @@ import logging
 import npyscreen
 import curses
 import os
+import shutil
+import stat
 import pathlib
 import platform
 import rich
