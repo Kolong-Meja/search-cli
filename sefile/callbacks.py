@@ -131,6 +131,33 @@ class Callback:
                 pass
     
     @staticmethod
+    def _test_create_project(choice: str) -> None:
+        project_name = Input(f"What's the name of the {choice} project? ", word_color=colors.foreground["yellow"])
+        project_name_result = project_name.launch()
+        if project_name_result.find("quit") != -1 or project_name_result.find("exit") != -1:
+            print("See ya! 👋")
+            raise typer.Exit()
+        project_dir = Input(f"Where <path> do you want to save this {project_name_result}? ", word_color=colors.foreground["yellow"])
+        project_dir_result = project_dir.launch()
+        if not pathlib.Path(project_dir_result).is_dir():
+            raise FileNotFoundError(f"File or Path not found, path: '{project_dir_result}'")
+        else:    
+            project_path = os.path.join(project_dir_result, project_name_result)
+
+        if os.path.exists(project_path):
+            raise FileExistsError(f"Folder exists: '{project_path}'")
+        else:
+            if "Rest API" in choice:
+                rich.print("You will using either FastAPI, Express JS, or Nest JS")
+            elif "Fast Website" in choice:
+                rich.print("You will using basic combination HTML, CSS, Javascript, or Vue JS + Django, or Vue JS + Nest JS")
+            elif "Graphql API" in choice:
+                rich.print("You will use FastAPI, or Flask with additional Strawberry python package.")
+            else:
+                pass
+    
+
+    @staticmethod
     def _lazy_controller(user_input: str) -> None:
         # exit if user input 'quit' or 'exit'
         if user_input.find("quit") != -1 or user_input.find("exit") != -1:
@@ -212,17 +239,11 @@ class Callback:
             result = some_cli.launch()
 
             if result == "👽 Rest API":
-                print("You will using either FastAPI, Express JS, or Nest JS")
-                raise typer.Exit()
-                # Callback._create_project(choice=result)
+                Callback._test_create_project(choice=result)
             elif result == "🏃 Fast Website":
-                print("You will using basic combination HTML, CSS, Javascript, or Vue JS + Django, or Vue JS + Nest JS")
-                raise typer.Exit()
-                # Callback._create_project(choice=result)
+                Callback._test_create_project(choice=result)
             elif result == "🍓 Graphql API":
-                print("You will use FastAPI, or Flask with additional Strawberry python package.")
-                raise typer.Exit()
-                # Callback._create_project(choice=result)
+                Callback._test_create_project(choice=result)
             else:
                 print("See ya! 👋")
                 raise typer.Exit()
