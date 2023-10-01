@@ -17,6 +17,7 @@ import rich
 import time
 import typer
 import random
+import subprocess
 from bullet import (
     colors,
     Bullet, 

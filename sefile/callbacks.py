@@ -24,6 +24,7 @@ from sefile import (
     Console,
     Panel,
     random,
+    subprocess,
     )
 from sefile.exception import (
     InvalidFormat, 
@@ -92,6 +93,15 @@ class _ProjectType:
         [open(os.path.join(self.dir_path, req_file), "x") 
          for req_file in ["LICENSE.md", "README.md", "config.go"]]
         rich.print(f"All [bold green]Done![/bold green] ✅, path: {self.dir_path}")
+    
+    def rest_api(self) -> None:
+        os.mkdir(self.dir_path)
+        """
+        TODO: Create a doc string to user for installing the venv and fastapi package in the <path> directory.
+        """
+        install_framework_process = subprocess.Popen(["echo", "Hello World"])
+        install_framework_process.wait()
+        rich.print(f"All [bold green]completed![/bold green], project path: {self.dir_path}")
 
 @dataclass
 class Callback:
@@ -149,6 +159,8 @@ class Callback:
         else:
             if "Rest API" in choice:
                 rich.print("You will using either FastAPI, Express JS, or Nest JS")
+                _rest_api_project = _ProjectType(dir_path=project_path)
+                _rest_api_project.rest_api()
             elif "Fast Website" in choice:
                 rich.print("You will using basic combination HTML, CSS, Javascript, or Vue JS + Django, or Vue JS + Nest JS")
             elif "Graphql API" in choice:
