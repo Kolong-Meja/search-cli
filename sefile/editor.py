@@ -4,14 +4,8 @@ from sefile import (
     npyscreen, 
     curses, 
     os, 
-    pathlib
+    pathlib,
     )
-
-# write your custom code editor here 
-class CodeEditorApp(npyscreen.NPSAppManaged):
-    def onStart(self):
-        self.appTheme = npyscreen.setTheme(CustomTheme)
-        self.addForm("MAIN", CodeEditor, name="Code Editor V1")
 
 # test creating custom theme
 class CustomTheme(npyscreen.ThemeManager):
@@ -45,7 +39,7 @@ class CodeEditor(npyscreen.ActionFormV2):
 
     def activate(self):
         self.edit()
-        self.parentApp.setNextForm(None)
+        self.parentApp.setNextForm("SUB_MAIN_FIRST")
 
     def draw_title_and_help(self):
         if self.name:
@@ -119,3 +113,10 @@ class CodeEditor(npyscreen.ActionFormV2):
                         else:
                             file.write(f"# {self.filename.value}\n\n"+self.code.value)
                         file.close()
+        
+# write your custom code editor here 
+class CodeEditorApp(npyscreen.NPSAppManaged):
+    def onStart(self):
+        self.appTheme = npyscreen.setTheme(CustomTheme)
+        self.addForm("MAIN", CodeEditor, name="Code Editor V1")
+

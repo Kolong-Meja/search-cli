@@ -5,27 +5,17 @@ from sefile import (
     os, 
     pathlib, 
     fnmatch, 
-    inspect,
     rich,
     typer,
     Progress,
     SpinnerColumn,
     TextColumn,
     Optional,
-    Console,
     Panel,
     Syntax,
-    Group,
-    Layout,
     shutil,
     Input,
     colors,
-    colored,
-    stat,
-    )
-from sefile.config import (
-    FileTypes, 
-    ThemeSelection
     )
 from sefile.exception import (
     InvalidFileFormat, 

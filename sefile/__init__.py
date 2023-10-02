@@ -37,6 +37,7 @@ from termcolor import colored
 from typing import (
     Optional, 
     Union,
+    Literal,
     )
 from rich.console import Console, Group
 from rich.panel import Panel
@@ -47,6 +48,7 @@ from rich.progress import (
     )
 from rich.syntax import Syntax
 from rich.layout import Layout
+
 
 # throw all information about this CLI below
 __app_name__ = "Sefile CLI Tool"

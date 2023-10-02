@@ -4,7 +4,6 @@ from sefile import (
     art,
     rich,
     typer,
-    time,
     colored,
     dataclass,
     os,
@@ -21,17 +20,15 @@ from sefile import (
     colors,
     Bullet,
     Input,
-    Console,
     Panel,
     random,
-    subprocess,
-    sys,
+    Console,
     )
 from sefile.exception import (
     InvalidFormat, 
     InvalidFileFormat
     )
-from sefile.editor import CodeEditorApp, CodeEditor
+from sefile.editor import CodeEditorApp
 
 
 @dataclass(frozen=True)
@@ -227,11 +224,22 @@ class Callback:
         if value:
             code_editor_app = CodeEditorApp()
             code_editor_app.run()
-            rich.print('See ya :wave:')
             raise typer.Exit()
 
     def lazy_search(self, value: bool) -> None:
         if value:
+            content = """[bold yellow]There are several input command you can do[/bold yellow]:\
+            \n
+1. find <filename> from <path>
+[bold]example for Linux OS[/bold]: find main.py from /home/(user)/Documents
+\n
+2. find file from <path> startswith <prefix>
+[bold]example for Linux OS[/bold]: find file from /home/(user)/Documents startswith main
+\n
+3. find file from <path> endswith <prefix>
+[bold]example for Linux OS[/bold]: find file from /home/(user)/Documents endswith .py
+            """
+            rich.print(Panel(content, title="Guide Information"))
             user_input = Input(f"Command 😃> ", word_color=colors.foreground["yellow"])
             user_input_result = user_input.launch()
             Callback._lazy_controller(user_input=user_input_result)

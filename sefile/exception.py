@@ -11,6 +11,6 @@ class InvalidPath(Exception): ...
 
 def exception_factory(exception, message: str) -> Exception:
     """
-    custom exception factory
+    Custom exception factory
     """
     raise exception(message)
