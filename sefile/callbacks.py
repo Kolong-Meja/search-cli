@@ -7,7 +7,6 @@ from sefile import (
     colored,
     dataclass,
     os,
-    fnmatch,
     pathlib,
     Progress,
     SpinnerColumn,
@@ -22,15 +21,11 @@ from sefile import (
     Input,
     Panel,
     random,
-    Console,
-    )
-from sefile.exception import (
-    InvalidFormat, 
-    InvalidFileFormat
     )
 from sefile.editor import CodeEditorApp
+from sefile._custom_query import CustomQuery
 
-
+                
 @dataclass(frozen=True)
 class _ProjectType:
     dir_path: str
@@ -131,51 +126,15 @@ class Callback:
 
     @staticmethod
     def _lazy_controller(user_input: str) -> None:
-        # exit if user input 'quit' or 'exit'
-        if user_input.find("quit") != -1 or user_input.find("exit") != -1:
+        if (user_input.find("quit") != -1 or 
+            user_input.find("exit") != -1):
             print("See ya! 👋")
             raise typer.Exit()
-        # we must input all user input into sublist
-        # so we can detect if user input more than 4 command
-        _results = [[] for _ in range(4)]
-        try:
-            for i, value in enumerate(user_input.split()):
-                _results[i].append(value)
-        except:
-            raise InvalidFormat(f"Invalid input format. Please use format: find <filename> from <path>, input: '{user_input}'")
-        if len(_results[-1]) == 0:
-            raise InvalidFormat(f"Invalid input format. Please use format: find <filename> from <path>, input: '{user_input}'")
-        # then we flat the sublist into 1-dimensional list
-        _flat_list = [subitem for item in _results for subitem in item]
-        if _flat_list[0] != "find" or _flat_list[2] != "from":
-            raise InvalidFormat(f"Invalid input format. Please use format: find <filename> from <path>, input: '{user_input}'")
-        # if 2 (second) element does not have file type, it will be error.
-        if _flat_list[1].find(".") == -1:
-            raise InvalidFileFormat(f"Invalid file format, file: {_flat_list[1]}")
-        # then we check if the path is a real directory or folder
-        if (curr_path := pathlib.Path(_flat_list[-1])) and not curr_path.is_dir():
-            raise FileNotFoundError(f"Directory '{_flat_list[-1]}' not found.")
-        rich.print(f"System 🤖> [bold green]Allright[/bold green] we'll search [bold yellow]{_flat_list[1]}[/bold yellow] from [bold yellow]{_flat_list[-1]}[/bold yellow] for you\n")
-        with Progress(
-            SpinnerColumn(spinner_name="dots9"),
-            TextColumn("[progress.description]{task.description}"),
-            auto_refresh=True,
-            transient=True,
-            get_time=None,
-        ) as progress:
-            task = progress.add_task(f"Please wait for a moment...", total=100_000)
-            similiar_files = [os.path.join(root, some_file) 
-                             for root, dirs, files in os.walk(curr_path)
-                             for some_file in filter(lambda f: fnmatch.fnmatchcase(f, _flat_list[1]), files)]
-            for f in similiar_files:
-                if os.path.getsize(f) != 0:
-                    rich.print(f)
-                    progress.advance(task)
-        if len(similiar_files) < 1:
-            raise FileNotFoundError(f"File {_flat_list[1]} not found.")
-        else:
-            rich.print(f"Find {_flat_list[1]} file [bold green]success![/bold green]")
-            raise typer.Exit()
+        _queries = CustomQuery(command_input=user_input)
+        if len(user_input.split()) == 4:
+            _queries.simple_command()
+        if len(user_input.split()) == 5:
+            _queries.advance_command()
 
     def version_callback(self, value: bool) -> None:
         if value:
@@ -233,11 +192,11 @@ class Callback:
 1. find <filename> from <path>
 [bold]example for Linux OS[/bold]: find main.py from /home/(user)/Documents
 \n
-2. find file from <path> startswith <prefix>
+2. find from <path> startswith <prefix>
 [bold]example for Linux OS[/bold]: find file from /home/(user)/Documents startswith main
 \n
-3. find file from <path> endswith <prefix>
-[bold]example for Linux OS[/bold]: find file from /home/(user)/Documents endswith .py
+3. find from <path> like <prefix>
+[bold]example for Linux OS[/bold]: find file from /home/(user)/Documents like test
             """
             rich.print(Panel(content, title="Guide Information"))
             user_input = Input(f"Command 😃> ", word_color=colors.foreground["yellow"])

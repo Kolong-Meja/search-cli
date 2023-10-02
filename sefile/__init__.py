@@ -14,6 +14,7 @@ import stat
 import pathlib
 import platform
 import rich
+import re
 import time
 import typer
 import random
