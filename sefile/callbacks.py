@@ -21,74 +21,56 @@ from sefile import (
     Input,
     Panel,
     random,
+    Literal,
     )
 from sefile.editor import CodeEditorApp
 from sefile._custom_query import CustomQuery
+from sefile._create_project import CreateProject
 
-                
-@dataclass(frozen=True)
-class _ProjectType:
-    dir_path: str
-
-    def __str__(self) -> None:
-        return f"({self.dir_path})"
-    
-    def __repr__(self) -> None:
-        return f"{self.__class__.__name__}({self.dir_path})"
-
-    def _py_project(self) -> None:
-        os.mkdir(self.dir_path)
-        # create sub directory
-        [os.makedirs(os.path.join(self.dir_path, subdir)) 
-         for subdir in ["src", "tests"]]
-        # create files in sub directory
-        [open(os.path.join(os.path.join(self.dir_path, "src"), src_file), 'x') 
-         for src_file in ["__init__.py", "main.py"]]
-        # create files in sub directory
-        [open(os.path.join(os.path.join(self.dir_path, "tests"), tests_file), 'x') 
-         for tests_file in ["__init__.py", "test.py"]]
-        # create required files for deployment
-        [open(os.path.join(self.dir_path, req_file), 'x') 
-         for req_file in ["LICENSE.md", "README.md", "requirements.txt"]]
-        rich.print(f"All [bold green]Done![/bold green] ✅, path: '{self.dir_path}'")
-    
-    def _js_project(self) -> None:
-        os.mkdir(self.dir_path)
-        # create sub directory
-        [os.makedirs(os.path.join(self.dir_path, subdir)) 
-         for subdir in ["src", "tests", "public"]]
-        # create files in sub directory
-        [open(os.path.join(os.path.join(self.dir_path, "src"), src_file), "x") 
-         for src_file in ["index.js", "app.js"]]
-        # create files in sub directory
-        [open(os.path.join(os.path.join(self.dir_path, "public"), public_file), "x") 
-         for public_file in ["index.html", "style.css", "script.js"]]
-        # create files in sub directory
-        [open(os.path.join(os.path.join(self.dir_path, "tests"), tests_file), "x") 
-         for tests_file in ["service.test.js", "component.test.js"]]
-        # create required files for deployment
-        [open(os.path.join(self.dir_path, req_file), "x") 
-         for req_file in ["LICENSE.md", "README.md", "package.json"]]
-        rich.print(f"All [bold green]Done![/bold green] ✅, path: {self.dir_path}")
-    
-    def _go_project(self) -> None:
-        os.mkdir(self.dir_path)
-        # create sub directory
-        [os.makedirs(os.path.join(self.dir_path, subdir)) 
-         for subdir in ["src", "tests"]]
-        # create files in sub directory
-        [open(os.path.join(os.path.join(self.dir_path, "src"), src_file), "x") 
-         for src_file in ["main.go", "utils.go"]]
-        # create files in sub directory
-        [open(os.path.join(os.path.join(self.dir_path, "tests"), tests_file), "x") 
-         for tests_file in ["test.go"]]
-        # create required file for deployment
-        [open(os.path.join(self.dir_path, req_file), "x") 
-         for req_file in ["LICENSE.md", "README.md", "config.go"]]
-        rich.print(f"All [bold green]Done![/bold green] ✅, path: {self.dir_path}")
 
 @dataclass
 class Callback:
+    def __str__(self) -> str:
+        return f"{self.__class__.__name__}"
+    
+    def __repr__(self) -> str:
+        return f"{self.__class__.__name__}"
+    
+    @staticmethod
+    def _is_valid_return(items: list, value: str) -> None:
+        if len(items) < 1:
+            raise FileNotFoundError(f"File '{value}' not found")
+        else:
+            rich.print(f"Find file '{value}' [bold green]success![/bold green]")
+            raise typer.Exit()
+    
+    @staticmethod
+    def _data_progress(path: pathlib.Path, value: str, prefix_type: Literal["startswith", "endswith"]) -> None:
+        all_files = None
+        with Progress(
+            SpinnerColumn(spinner_name="dots9"),
+            TextColumn("[progress.description]{task.description}"),
+            auto_refresh=True,
+            transient=True,
+            get_time=None,
+        ) as progress:
+            task = progress.add_task(f"Please wait for a moment...", total=100_000)
+            if prefix_type == "startswith":
+                all_files = [os.path.join(root, some_file)
+                                for root, dirs, files in os.walk(path, topdown=True)
+                                for some_file in filter(lambda f: f.startswith(value), files)]
+            elif prefix_type == "endswith":
+                all_files = [os.path.join(root, some_file)
+                                for root, dirs, files in os.walk(path, topdown=True)
+                                for some_file in filter(lambda f: f.endswith(value), files)]
+            else:
+                raise ValueError(f"Invalid prefix type: '{prefix_type}'. Accepted values 'startswith', 'endswith'")
+            for f in all_files:
+                if os.path.getsize(f) != 0:
+                    rich.print(f)
+                    progress.advance(task)
+        Callback._is_valid_return(items=all_files, value=value)
+
     @staticmethod
     def _create_project(choice: str) -> None:
         # input project name
@@ -113,13 +95,13 @@ class Callback:
             raise FileExistsError(f"Folder exists: '{project_path}'")
         else:
             if choice.find("Python") != -1:
-                _python_project = _ProjectType(dir_path=project_path)
+                _python_project = CreateProject(dir_path=project_path)
                 _python_project._py_project()
             elif choice.find("Javascript") != -1:
-                _javascript_project = _ProjectType(dir_path=project_path)
+                _javascript_project = CreateProject(dir_path=project_path)
                 _javascript_project._js_project()
             elif choice.find("Go") != -1:
-                _golang_project = _ProjectType(dir_path=project_path)
+                _golang_project = CreateProject(dir_path=project_path)
                 _golang_project._go_project()
             else:
                 pass
@@ -213,26 +195,7 @@ class Callback:
             if not pathlib.Path(dir_start_result).is_dir():
                 raise FileNotFoundError(f"File or Path not found, path: '{dir_start_result}'")
             else:
-                with Progress(
-                    SpinnerColumn(spinner_name="dots9"),
-                    TextColumn("[progress.description]{task.description}"),
-                    auto_refresh=True,
-                    transient=True,
-                    get_time=None,
-                ) as progress:
-                    task = progress.add_task(f"Please wait for a moment...", total=100_000)
-                    certain_files = [os.path.join(root, some_file)
-                                    for root, dirs, files in os.walk(dir_start_result, topdown=True)
-                                    for some_file in filter(lambda f: f.startswith(value), files)]
-                    for f in certain_files:
-                        if os.path.getsize() != 0:
-                            rich.print(f)
-                            progress.advance(task)
-                if len(certain_files) < 1:
-                    raise FileNotFoundError(f"File startswith '{value}' not found from '{dir_start_result}' path")
-                else:
-                    rich.print(f"Search file startswith '{value}' [bold green]success![/bold green]")
-                    raise typer.Exit()
+                Callback._data_progress(path=dir_start_result, value=value, prefix_type="startswith")
     
     def endswith_search(self, value: str) -> None:
         if value:
@@ -244,24 +207,5 @@ class Callback:
             if not pathlib.Path(dir_start_result).is_dir():
                 raise FileNotFoundError(f"File or Path not found, path: '{dir_start_result}'")
             else:
-                with Progress(
-                    SpinnerColumn(spinner_name="dots9"),
-                    TextColumn("[progress.description]{task.description}"),
-                    auto_refresh=True,
-                    transient=True,
-                    get_time=None,
-                ) as progress:
-                    task = progress.add_task(f"Please wait for a moment...", total=100_000)
-                    certain_files = [os.path.join(root, some_file)
-                                    for root, dirs, files in os.walk(dir_start_result, topdown=True)
-                                    for some_file in filter(lambda f: f.endswith(value), files)]
-                    for f in certain_files:
-                        if os.path.getsize(f) != 0:
-                            rich.print(f)
-                            progress.advance(task)
-                if len(certain_files) < 1:
-                    raise FileNotFoundError(f"File endswith '{value}' not found from '{dir_start_result}' path")
-                else:
-                    rich.print(f"Search file startswith '{value}' [bold green]success![/bold green]")
-                    raise typer.Exit()
+                Callback._data_progress(path=dir_start_result, value=value, prefix_type="endswith")
 

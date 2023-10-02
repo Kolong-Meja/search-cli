@@ -27,7 +27,7 @@ class CustomQuery:
         if len(items) < 1:
                raise FileNotFoundError(f"File startswith {commands[-1]} not found")
         else:
-            rich.print(f"Find file startswith '{commands[-1]}' [bold green]success![/bold green]")
+            rich.print(f"Find file '{commands[-1]}' [bold green]success![/bold green]")
             raise typer.Exit()
     
     def _data_progress(self, commands: list, path: pathlib.Path, query_type: Literal["simple", "like", "startswith"]) -> None:
