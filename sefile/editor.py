@@ -38,10 +38,14 @@ class CustomTheme(npyscreen.ThemeManager):
     }
 
 # define our action form
-class CodeEditor(npyscreen.ActionForm):
+class CodeEditor(npyscreen.ActionFormV2):
     # define custom button text
     OK_BUTTON_TEXT = "SAVE"
     CANCEL_BUTTON_TEXT = "EXIT"
+
+    def activate(self):
+        self.edit()
+        self.parentApp.setNextForm(None)
 
     def draw_title_and_help(self):
         if self.name:
@@ -79,9 +83,6 @@ class CodeEditor(npyscreen.ActionForm):
             scroll_exit=True,
             )
     
-    def returning_output(self):
-        return self.filename.value
-    
     # add method for condition where user pick 'SAVE' button
     def on_ok(self):
         # raise error if filename not include file type
@@ -118,8 +119,3 @@ class CodeEditor(npyscreen.ActionForm):
                         else:
                             file.write(f"# {self.filename.value}\n\n"+self.code.value)
                         file.close()
-        self.parentApp.setNextForm(None)
-    
-    # add method for condition where user pick 'EXIT' button
-    def on_cancel(self):
-        self.parentApp.setNextForm(None)

@@ -227,7 +227,6 @@ class Callback:
         if value:
             code_editor_app = CodeEditorApp()
             code_editor_app.run()
-            print(CodeEditor().returning_output())
             rich.print('See ya :wave:')
             raise typer.Exit()
 
