@@ -25,12 +25,13 @@ from sefile import (
     Panel,
     random,
     subprocess,
+    sys,
     )
 from sefile.exception import (
     InvalidFormat, 
     InvalidFileFormat
     )
-from sefile.editor import CodeEditorApp
+from sefile.editor import CodeEditorApp, CodeEditor
 
 
 @dataclass(frozen=True)
@@ -93,15 +94,6 @@ class _ProjectType:
         [open(os.path.join(self.dir_path, req_file), "x") 
          for req_file in ["LICENSE.md", "README.md", "config.go"]]
         rich.print(f"All [bold green]Done![/bold green] ✅, path: {self.dir_path}")
-    
-    def rest_api(self) -> None:
-        os.mkdir(self.dir_path)
-        """
-        TODO: Create a doc string to user for installing the venv and fastapi package in the <path> directory.
-        """
-        install_framework_process = subprocess.Popen(["echo", "Hello World"])
-        install_framework_process.wait()
-        rich.print(f"All [bold green]completed![/bold green], project path: {self.dir_path}")
 
 @dataclass
 class Callback:
@@ -128,46 +120,17 @@ class Callback:
         if os.path.exists(project_path):
             raise FileExistsError(f"Folder exists: '{project_path}'")
         else:
-            if "Python" in choice:
+            if choice.find("Python") != -1:
                 _python_project = _ProjectType(dir_path=project_path)
                 _python_project._py_project()
-            elif "Javascript" in choice:
+            elif choice.find("Javascript") != -1:
                 _javascript_project = _ProjectType(dir_path=project_path)
                 _javascript_project._js_project()
-            elif "Go" in choice:
+            elif choice.find("Go") != -1:
                 _golang_project = _ProjectType(dir_path=project_path)
                 _golang_project._go_project()
             else:
                 pass
-    
-    @staticmethod
-    def _test_create_project(choice: str) -> None:
-        project_name = Input(f"What's the name of the {choice} project? ", word_color=colors.foreground["yellow"])
-        project_name_result = project_name.launch()
-        if project_name_result.find("quit") != -1 or project_name_result.find("exit") != -1:
-            print("See ya! 👋")
-            raise typer.Exit()
-        project_dir = Input(f"Where <path> do you want to save this {project_name_result}? ", word_color=colors.foreground["yellow"])
-        project_dir_result = project_dir.launch()
-        if not pathlib.Path(project_dir_result).is_dir():
-            raise FileNotFoundError(f"File or Path not found, path: '{project_dir_result}'")
-        else:    
-            project_path = os.path.join(project_dir_result, project_name_result)
-
-        if os.path.exists(project_path):
-            raise FileExistsError(f"Folder exists: '{project_path}'")
-        else:
-            if "Rest API" in choice:
-                rich.print("You will using either FastAPI, Express JS, or Nest JS")
-                _rest_api_project = _ProjectType(dir_path=project_path)
-                _rest_api_project.rest_api()
-            elif "Fast Website" in choice:
-                rich.print("You will using basic combination HTML, CSS, Javascript, or Vue JS + Django, or Vue JS + Nest JS")
-            elif "Graphql API" in choice:
-                rich.print("You will use FastAPI, or Flask with additional Strawberry python package.")
-            else:
-                pass
-    
 
     @staticmethod
     def _lazy_controller(user_input: str) -> None:
@@ -239,7 +202,7 @@ class Callback:
         if value:
             some_cli = Bullet(
                 "What's project you want to create? ", 
-                choices=["👽 Rest API", "🏃 Fast Website", "🍓 Graphql API", "❌ Nah, i'm good"],
+                choices=["🐍 Easy Python", "👑 The king of Javascript", "🐼 Cute Go", "❌ Nah, i'm good"],
                 bullet=" >",
                 margin=2,
                 bullet_color=colors.bright(colors.foreground["cyan"]),
@@ -250,12 +213,12 @@ class Callback:
                 )
             result = some_cli.launch()
 
-            if result == "👽 Rest API":
-                Callback._test_create_project(choice=result)
-            elif result == "🏃 Fast Website":
-                Callback._test_create_project(choice=result)
-            elif result == "🍓 Graphql API":
-                Callback._test_create_project(choice=result)
+            if result == "🐍 Easy Python":
+                Callback._create_project(choice=result)
+            elif result == "👑 The king of Javascript":
+                Callback._create_project(choice=result)
+            elif result == "🐼 Cute Go":
+                Callback._create_project(choice=result)
             else:
                 print("See ya! 👋")
                 raise typer.Exit()
@@ -264,6 +227,7 @@ class Callback:
         if value:
             code_editor_app = CodeEditorApp()
             code_editor_app.run()
+            print(CodeEditor().returning_output())
             rich.print('See ya :wave:')
             raise typer.Exit()
 

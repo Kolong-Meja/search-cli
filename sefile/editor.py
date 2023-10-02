@@ -79,6 +79,9 @@ class CodeEditor(npyscreen.ActionForm):
             scroll_exit=True,
             )
     
+    def returning_output(self):
+        return self.filename.value
+    
     # add method for condition where user pick 'SAVE' button
     def on_ok(self):
         # raise error if filename not include file type

@@ -178,11 +178,67 @@ class Controller:
                         rich.print(f"Sub directory '{removed_subdir}' [bold green]successfully removed![/bold green]")
                         raise typer.Exit()
         elif startswith:
-            print("You using --startswith flag")
-            raise typer.Exit()
+            if self.path is None:
+                raise InvalidPath(f"Invalid path, path: {self.path}")
+            if not pathlib.Path(self.path).is_dir():
+                raise FileNotFoundError(f"File or Path not found, path: '{self.path}'")
+            else:
+                with Progress(
+                    SpinnerColumn(spinner_name="dots9"),
+                    TextColumn("[progress.description]{task.description}"),
+                    auto_refresh=True,
+                    transient=True,
+                    get_time=None,
+                ) as progress:
+                    task = progress.add_task(f"Please wait for a moment...", total=100_000)
+                    certain_files = [os.path.join(root, some_file)
+                                    for root, dirs, files in os.walk(self.path, topdown=True)
+                                    for some_file in filter(lambda f: f.startswith(startswith), files)]
+                    for f in certain_files:
+                        if os.path.getsize(f) != 0:
+                            rich.print(f)
+                            progress.advance(task)
+                if len(certain_files) < 1:
+                    raise FileNotFoundError(f"File startswith '{startswith}' not found from '{self.path}' path")
+                else:
+                    rich.print(f"There's {len(certain_files)} files with '{startswith}' prefix")
+                    choice = typer.confirm("Are you sure want to delete it?", abort=True)
+                    for f in certain_files:
+                        if os.path.isfile(f):
+                            os.remove(f)
+                    rich.print("All files removed successfully!")
+
         elif endswith:
-            print("You using --endswith flag")
-            raise typer.Exit()
+            if self.path is None:
+                raise InvalidPath(f"Invalid path, path: {self.path}")
+            if not pathlib.Path(self.path).is_dir():
+                raise FileNotFoundError(f"File or Path not found, path: '{self.path}'")
+            else:
+                with Progress(
+                    SpinnerColumn(spinner_name="dots9"),
+                    TextColumn("[progress.description]{task.description}"),
+                    auto_refresh=True,
+                    transient=True,
+                    get_time=None,
+                ) as progress:
+                    task = progress.add_task(f"Please wait for a moment...", total=100_000)
+                    certain_files = [os.path.join(root, some_file)
+                                    for root, dirs, files in os.walk(self.path, topdown=True)
+                                    for some_file in filter(lambda f: f.endswith(endswith), files)]
+                    for f in certain_files:
+                        if os.path.getsize(f) != 0:
+                            rich.print(f)
+                            progress.advance(task)
+                if len(certain_files) < 1:
+                    raise FileNotFoundError(f"File startswith '{endswith}' not found from '{self.path}' path")
+                else:
+                    rich.print(f"There's {len(certain_files)} files with '{endswith}' prefix")
+                    choice = typer.confirm("Are you sure want to delete it?", abort=True)
+                    for f in certain_files:
+                        if os.path.isfile(f):
+                            os.remove(f)
+                    rich.print("All files removed successfully!")
+
         else:    
             self._is_file(filename=self.filename)
             if (curr_path := pathlib.Path(self.path)) and (curr_path.is_dir()):

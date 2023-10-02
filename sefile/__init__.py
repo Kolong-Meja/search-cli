@@ -18,6 +18,7 @@ import time
 import typer
 import random
 import subprocess
+import sys
 from bullet import (
     colors,
     Bullet, 
@@ -49,7 +50,7 @@ from rich.layout import Layout
 
 # throw all information about this CLI below
 __app_name__ = "Sefile CLI Tool"
-__version__ = "1.0.11"
+__version__ = "1.0.12"
 __creator__ = "Faisal Ramadhan"
 __creator_email__ = "faisalramadhan1299@gmail.com"
 __project_url__ = "https://github.com/kolong-meja"
