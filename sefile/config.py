@@ -13,10 +13,6 @@ app = typer.Typer(help="[bold green]Easiest[/bold green] way to [bold yellow]fin
                 pretty_exceptions_enable=True,
                 rich_markup_mode='rich')
 
-# create factory for exception.
-def exception_factory(exception, message: str) -> Exception:
-    return exception(message)
-
 class FileTypes(Enum):
     text = 'text'
     python = 'python'

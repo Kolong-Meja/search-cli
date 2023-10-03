@@ -54,7 +54,7 @@ from rich.layout import Layout
 
 # throw all information about this CLI below
 __app_name__ = "Sefile CLI Tool"
-__version__ = "1.0.16"
+__version__ = "0.0.16"
 __creator__ = "Faisal Ramadhan"
 __creator_email__ = "faisalramadhan1299@gmail.com"
 __project_url__ = "https://github.com/kolong-meja"
