@@ -1,0 +1,2 @@
+# sefile/_decorator.py
+
