@@ -1,18 +1,17 @@
-# sefile/editor.py
+"""
+This file contain logic for Code Editor Interface that shows up when do create -w options. 
+To be honest, this program not 100 % good, because the main package of this program, 
+was not updated from 2015 ago, so i think, this program could be not used in this CLI tool,
+maybe in next update? we'll see.
+"""
+# search/npyscreen_app.py
 
 from sefile import (
     npyscreen, 
     curses, 
     os, 
-    pathlib
+    pathlib,
     )
-from sefile.logging import exception_factory
-
-# write your custom code editor here 
-class CodeEditorApp(npyscreen.NPSAppManaged):
-    def onStart(self):
-        self.appTheme = npyscreen.setTheme(CustomTheme)
-        self.addForm("MAIN", CodeEditor, name="Code Editor V1")
 
 # test creating custom theme
 class CustomTheme(npyscreen.ThemeManager):
@@ -39,10 +38,14 @@ class CustomTheme(npyscreen.ThemeManager):
     }
 
 # define our action form
-class CodeEditor(npyscreen.ActionForm):
+class CodeEditor(npyscreen.ActionFormV2):
     # define custom button text
     OK_BUTTON_TEXT = "SAVE"
     CANCEL_BUTTON_TEXT = "EXIT"
+
+    def activate(self):
+        self.edit()
+        self.parentApp.setNextForm("SUB_MAIN_FIRST")
 
     def draw_title_and_help(self):
         if self.name:
@@ -94,7 +97,7 @@ class CodeEditor(npyscreen.ActionForm):
         if curr_path.is_dir():
             real_path = os.path.join(curr_path, self.filename.value)
             if os.path.exists(real_path):
-                raise exception_factory(FileExistsError, f"File exists: {real_path}")
+                raise FileExistsError(f"File exists: {real_path}")
             else:
                 if self.filename.value.endswith('.txt'):
                     with open(os.path.join(self.path.value, self.filename.value), "a+") as file:
@@ -116,8 +119,10 @@ class CodeEditor(npyscreen.ActionForm):
                         else:
                             file.write(f"# {self.filename.value}\n\n"+self.code.value)
                         file.close()
-        self.parentApp.setNextForm(None)
-    
-    # add method for condition where user pick 'EXIT' button
-    def on_cancel(self):
-        self.parentApp.setNextForm(None)
+        
+# write your custom code editor here 
+class CodeEditorApp(npyscreen.NPSAppManaged):
+    def onStart(self):
+        self.appTheme = npyscreen.setTheme(CustomTheme)
+        self.addForm("MAIN", CodeEditor, name="Code Editor V1")
+

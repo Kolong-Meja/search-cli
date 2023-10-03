@@ -1,14 +1,18 @@
-# sefile/logging.py
+"""
+This file contain all custom logging. In the past this CLI tool used this custom logging, 
+but for some reason, i removed it. because it's annoying when i work on this CLI tool in development environment. 
+So i'm not using this logging for all next update. But, still i don't want to delete this file, 
+because maybe it can be useful in any stuff that i created in the future
+"""
+# search/logs.py
 
 from sefile import (
     dataclass,
     os, 
     pathlib, 
     logging,
-    functools,
-    Optional,
     )
-from sefile.config import exception_factory
+from sefile.exception import exception_factory
 
 
 def log_file():
@@ -22,36 +26,6 @@ def log_file():
         pathlib.Path(fullpath).mkdir(exist_ok=False)
         file_target = os.path.join(fullpath, 'log.txt')
         return file_target
-
-# create decorator for logging
-def do_log(func=None, 
-           message: Optional[str] = None, 
-           pause: bool = True, 
-           format: str = '%(name)s | %(asctime)s %(levelname)s - %(message)s'
-           ) -> None:
-    def decorator(func):
-        @functools.wraps(func)
-        def wrapper(*args, **kwargs):
-            if pause:
-                return func(*args, **kwargs)
-            else:
-                try:
-                    some_object = func(*args, **kwargs)
-                except Exception as error:
-                    logging.basicConfig(filename=log_file(), filemode='a+', 
-                            format=format,
-                            level=logging.ERROR)
-                    logging.error(error)
-                    raise error
-                else:
-                    logging.basicConfig(filename=log_file(), 
-                            filemode='a+', 
-                            format='%(name)s | %(asctime)s %(levelname)s - %(message)s', 
-                            level=logging.INFO)
-                    logging.info(message)
-            return some_object
-        return wrapper
-    return decorator
 
 @dataclass(frozen=True)
 class CustomLogging:
@@ -80,19 +54,19 @@ class CustomLogging:
         logging.basicConfig(filename=log_file(), filemode='a+', 
                             format=self.format_log,
                             level=logging.DEBUG)
-        logging.error(message)
+        logging.debug(message)
     
     def warning_log(self, message: str) -> None:
         logging.basicConfig(filename=log_file(), filemode='a+', 
                             format=self.format_log,
                             level=logging.WARNING)
-        logging.error(message)
+        logging.warning(message)
     
     def critical_log(self, message: str) -> None:
         logging.basicConfig(filename=log_file(), filemode='a+', 
                             format=self.format_log,
                             level=logging.CRITICAL)
-        logging.error(message)
+        logging.critical(message)
     
     def notset_log(self, message: str) -> None:
         logging.basicConfig(filename=log_file(), filemode='a+', 
