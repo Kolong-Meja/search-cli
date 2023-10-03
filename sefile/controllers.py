@@ -23,11 +23,12 @@ from sefile.exception import (
     InvalidPath,
     )
 
-
-@dataclass(frozen=True)
 class Controller:
-    filename: Optional[str] = None
-    path: Optional[str] = None
+    __slots__ = ("filename", "path")
+
+    def __init__(self, filename: Optional[str] = None, path: Optional[str] = None) -> None:
+        self.filename = filename
+        self.path = path
 
     def __str__(self) -> None:
         return f"('{self.filename}', '{self.path}')"
@@ -36,44 +37,46 @@ class Controller:
         return f"{self.__class__.__name__}('{self.filename}', '{self.path}')"
 
     # check if file has type at the end
-    def _is_file(self, filename: Optional[str] = None) -> None:
-        if filename is not None:
-            if filename.find(".") != -1:
+    @staticmethod
+    def _is_file(file_name: Optional[str] = None) -> None:
+        if file_name is not None:
+            if file_name.find(".") != -1:
                 # ensure to execute next programs
                 pass
             else:
-                raise InvalidFileFormat(f"Invalid file format, file: {filename}")
+                raise InvalidFileFormat(f"Invalid file format, file: {file_name}")
         else:
-            raise InvalidFilename(f"Invalid filename, file: '{filename}'")
+            raise InvalidFilename(f"Invalid filename, file: '{file_name}'")
     # to be implement in find_controller() method
-    def _is_zero_total(self, total: int, filename: str) -> None:
+    @staticmethod
+    def _is_zero_total(total: int, file_name: str) -> None:
         if total < 1:
-            raise FileNotFoundError(f"File '{filename}' not found.")
+            raise FileNotFoundError(f"File '{file_name}' not found.")
         else:
-            rich.print(f"Find {filename} file [bold green]success![/bold green]")
+            rich.print(f"Find {file_name} file [bold green]success![/bold green]")
             raise typer.Exit()
 
     # to be implement in read_controller() method    
+    @staticmethod
     def _output_certain_file(
-        self, 
-        filename: str, 
+        file_name: str, 
         path: str, 
         format: str, 
         theme: str, 
         indent: bool = False
         ) -> None:
-        if filename.endswith(".txt"):
-            with open(os.path.join(path, filename), 'r') as user_file:
-                rich.print(Panel(user_file.read(), title=f"{filename}", title_align="center", style="white"))
+        if file_name.endswith(".txt"):
+            with open(os.path.join(path, file_name), 'r') as user_file:
+                rich.print(Panel(user_file.read(), title=f"{file_name}", title_align="center", style="white"))
         else:
-            with open(os.path.join(path, filename), 'r') as user_file:
+            with open(os.path.join(path, file_name), 'r') as user_file:
                 code_syntax = Syntax(
                     user_file.read(), 
                     format.value, 
                     theme=theme.value, 
                     line_numbers=True,
                     indent_guides=indent)
-                curr_panel = Panel(code_syntax, title=f"{filename}", title_align="center", border_style="yellow")
+                curr_panel = Panel(code_syntax, title=f"{file_name}", title_align="center", border_style="yellow")
                 rich.print(curr_panel)
 
     def find_controller(
@@ -82,7 +85,7 @@ class Controller:
         endswith: str = None, 
         lazy: Optional[bool] = None
         ) -> None:
-        self._is_file(filename=self.filename)
+        Controller._is_file(file_name=self.filename)
         if (curr_path := pathlib.Path(self.path)) and (curr_path.is_dir()):
             with Progress(
                 SpinnerColumn(spinner_name="dots9"),
@@ -98,13 +101,13 @@ class Controller:
                     if os.path.getsize(f) != 0:
                         rich.print(f)
                         progress.advance(task)
-            self._is_zero_total(total=len(similiar_files), filename=self.filename)
+            Controller._is_zero_total(total=len(similiar_files), file_name=self.filename)
         else:
             raise FileNotFoundError(f"File or Directory not found: {curr_path}")
 
     def create_controller(self, project: Optional[bool] = None, write: Optional[bool] = None) -> None:
         if self.filename is not None and self.path is not None:
-            self._is_file(filename=self.filename)
+            Controller._is_file(file_name=self.filename)
             if (curr_path := pathlib.Path(self.path)) and (curr_path.is_dir()):
                 if (real_path := os.path.join(curr_path, self.filename)) and (os.path.exists(real_path)):
                     raise FileExistsError(f"File exists: {real_path}")
@@ -121,13 +124,13 @@ class Controller:
             pass
     
     def read_controller(self, format: str, theme: str, indent: bool = False) -> None:
-        self._is_file(filename=self.filename)
+        Controller._is_file(file_name=self.filename)
         if (curr_path := pathlib.Path(self.path)) and (curr_path.is_dir()):
             if (real_path := os.path.join(curr_path, self.filename)) and not os.path.exists(real_path):
                 raise FileNotFoundError(f"File not exists: {real_path}.")
             else:
-                self._output_certain_file(
-                    filename=self.filename, 
+                Controller._output_certain_file(
+                    file_name=self.filename, 
                     path=curr_path, 
                     format=format, 
                     theme=theme, 
@@ -230,7 +233,7 @@ class Controller:
                     rich.print("All files removed successfully!")
 
         else:    
-            self._is_file(filename=self.filename)
+            Controller._is_file(file_name=self.filename)
             if (curr_path := pathlib.Path(self.path)) and (curr_path.is_dir()):
                 if (real_path := os.path.join(curr_path, self.filename)) and not os.path.exists(real_path):
                     raise FileNotFoundError(f"File or Directory not found: {real_path}")

@@ -21,6 +21,7 @@ FOR BACKEND PURPOSE, DO NOT USE FOR INHERITANCE CLASS!
 
 @dataclass(frozen=True)
 class CustomQuery:
+    __slots__ = ("command_input")
     command_input: str
 
     def _is_valid_return(self, items: list, commands: list) -> None:

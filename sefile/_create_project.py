@@ -9,6 +9,7 @@ from sefile import (
 
 @dataclass(frozen=True)
 class CreateProject:
+    __slots__ = ("dir_path")
     dir_path: str
 
     def __str__(self) -> None:

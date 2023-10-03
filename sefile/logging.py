@@ -5,8 +5,6 @@ from sefile import (
     os, 
     pathlib, 
     logging,
-    functools,
-    Optional,
     )
 from sefile.exception import exception_factory
 
@@ -22,36 +20,6 @@ def log_file():
         pathlib.Path(fullpath).mkdir(exist_ok=False)
         file_target = os.path.join(fullpath, 'log.txt')
         return file_target
-
-# create decorator for logging
-def do_log(func=None, 
-           message: Optional[str] = None, 
-           pause: bool = True, 
-           format: str = '%(name)s | %(asctime)s %(levelname)s - %(message)s'
-           ) -> None:
-    def decorator(func):
-        @functools.wraps(func)
-        def wrapper(*args, **kwargs):
-            if pause:
-                return func(*args, **kwargs)
-            else:
-                try:
-                    some_object = func(*args, **kwargs)
-                except Exception as error:
-                    logging.basicConfig(filename=log_file(), filemode='a+', 
-                            format=format,
-                            level=logging.ERROR)
-                    logging.error(error)
-                    raise error
-                else:
-                    logging.basicConfig(filename=log_file(), 
-                            filemode='a+', 
-                            format='%(name)s | %(asctime)s %(levelname)s - %(message)s', 
-                            level=logging.INFO)
-                    logging.info(message)
-            return some_object
-        return wrapper
-    return decorator
 
 @dataclass(frozen=True)
 class CustomLogging:
