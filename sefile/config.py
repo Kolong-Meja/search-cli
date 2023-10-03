@@ -2,7 +2,7 @@
 
 from sefile import (
     typer, 
-    Enum
+    Enum,
     )
 
 

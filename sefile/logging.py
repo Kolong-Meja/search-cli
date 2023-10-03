@@ -1,3 +1,9 @@
+"""
+This file contain all custom logging. In the past this CLI tool used this custom logging, 
+but for some reason, i removed it. because it's annoying when i work on this CLI tool in development environment. 
+So i'm not using this logging for all next update. But, still i don't want to delete this file, 
+because maybe it can be useful in any stuff that i created in the future
+"""
 # search/logs.py
 
 from sefile import (

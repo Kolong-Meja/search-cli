@@ -1,3 +1,9 @@
+"""
+This file contain logic for Code Editor Interface that shows up when do create -w options. 
+To be honest, this program not 100 % good, because the main package of this program, 
+was not updated from 2015 ago, so i think, this program could be not used in this CLI tool,
+maybe in next update? we'll see.
+"""
 # search/npyscreen_app.py
 
 from sefile import (

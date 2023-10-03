@@ -1,7 +1,10 @@
+"""
+A file that contain all controllers that will be passing 
+into command.py file and used by the CLI app for displaying all command, options, etc.
+"""
 # search/controllers.py
 
 from sefile import (
-    dataclass,
     os, 
     pathlib, 
     fnmatch, 
@@ -16,19 +19,37 @@ from sefile import (
     shutil,
     Input,
     colors,
+    Literal,
     )
 from sefile.exception import (
     InvalidFileFormat, 
     InvalidFilename,
     InvalidPath,
+    ReadOnlyAttribute,
     )
 
 class Controller:
-    __slots__ = ("filename", "path")
+    __slots__ = ("_filename", "_path")
 
     def __init__(self, filename: Optional[str] = None, path: Optional[str] = None) -> None:
-        self.filename = filename
-        self.path = path
+        self._filename = filename
+        self._path = path
+    
+    @property
+    def filename(self):
+        return self._filename
+
+    @filename.setter
+    def filename(self, value: str):
+        raise ReadOnlyAttribute("filename attr is read-only.")
+    
+    @property
+    def path(self):
+        return self._path
+    
+    @path.setter
+    def path(self, value: str):
+        raise ReadOnlyAttribute("path attr is read-only.")
 
     def __str__(self) -> None:
         return f"('{self.filename}', '{self.path}')"
@@ -55,6 +76,18 @@ class Controller:
         else:
             rich.print(f"Find {file_name} file [bold green]success![/bold green]")
             raise typer.Exit()
+    
+    @staticmethod
+    def _is_zero_total_for_remove(total: int, items: list, value: str, path: str) -> None:
+        if total < 1:
+            raise FileNotFoundError(f"File like'{value}' not found from '{path}' path")
+        else:
+            rich.print(f"There's {total} files with '{value}' prefix")
+            choice = typer.confirm("Are you sure want to delete it?", abort=True)
+            for f in items:
+                if os.path.isfile(f):
+                    os.remove(f)
+            rich.print("All files removed successfully!")
 
     # to be implement in read_controller() method    
     @staticmethod
@@ -78,6 +111,51 @@ class Controller:
                     indent_guides=indent)
                 curr_panel = Panel(code_syntax, title=f"{file_name}", title_align="center", border_style="yellow")
                 rich.print(curr_panel)
+    
+    @staticmethod
+    def _data_progress(file_name: str, path: str) -> None:
+        with Progress(
+            SpinnerColumn(spinner_name="dots9"),
+            TextColumn("[progress.description]{task.description}"),
+            auto_refresh=True,
+            transient=True,
+        ) as progress:
+            task = progress.add_task("Please wait for a moment...", total=100_000)
+            similiar_files = [os.path.join(root, some_file) 
+                            for root, dirs, files in os.walk(path)
+                            for some_file in filter(lambda f: fnmatch.fnmatchcase(f, file_name), files)]
+            for f in similiar_files:
+                if os.path.getsize(f) != 0:
+                    rich.print(f)
+                    progress.advance(task)
+        Controller._is_zero_total(total=len(similiar_files), file_name=file_name)
+    
+    @staticmethod
+    def _data_progress_for_remove(value: str, path: str, flag_type: Literal["startswith", "endswith"]) -> None:
+        _all_files = None
+        with Progress(
+            SpinnerColumn(spinner_name="dots9"),
+            TextColumn("[progress.description]{task.description}"),
+            auto_refresh=True,
+            transient=True,
+            get_time=None,
+        ) as progress:
+            task = progress.add_task(f"Please wait for a moment...", total=100_000)
+            if flag_type == "startswith":
+                _all_files = [os.path.join(root, some_file)
+                             for root, dirs, files in os.walk(path, topdown=True)
+                             for some_file in filter(lambda f: f.startswith(value), files)]
+            elif flag_type == "endswith":
+                _all_files = [os.path.join(root, some_file)
+                             for root, dirs, files in os.walk(path, topdown=True)
+                             for some_file in filter(lambda f: f.endswith(value), files)]
+            else:
+                raise ValueError(f"Invalid flag type: '{flag_type}'. Accepted values 'startswith', 'endswith'.")
+            for f in _all_files:
+                if os.path.getsize(f) != 0:
+                    rich.print(f)
+                    progress.advance(task)
+        Controller._is_zero_total_for_remove(total=len(_all_files), items=_all_files, value=value, path=path)
 
     def find_controller(
         self, 
@@ -87,21 +165,7 @@ class Controller:
         ) -> None:
         Controller._is_file(file_name=self.filename)
         if (curr_path := pathlib.Path(self.path)) and (curr_path.is_dir()):
-            with Progress(
-                SpinnerColumn(spinner_name="dots9"),
-                TextColumn("[progress.description]{task.description}"),
-                auto_refresh=True,
-                transient=True,
-            ) as progress:
-                task = progress.add_task("Please wait for a moment...", total=100_000)
-                similiar_files = [os.path.join(root, some_file) 
-                             for root, dirs, files in os.walk(curr_path)
-                             for some_file in filter(lambda f: fnmatch.fnmatchcase(f, self.filename), files)]
-                for f in similiar_files:
-                    if os.path.getsize(f) != 0:
-                        rich.print(f)
-                        progress.advance(task)
-            Controller._is_zero_total(total=len(similiar_files), file_name=self.filename)
+            Controller._data_progress(file_name=self.filename, path=self.path)
         else:
             raise FileNotFoundError(f"File or Directory not found: {curr_path}")
 
@@ -154,7 +218,7 @@ class Controller:
             if (curr_path := pathlib.Path(self.path)) and (curr_path.is_dir()):
                 all_items = os.listdir(curr_path)
                 subdirs = [d for d in all_items if os.path.isdir(os.path.join(curr_path, d))]
-                rich.print(f"\n[bold green]{'[bold yellow] | [/bold yellow]'.join(subdirs)}[/bold green]\n")
+                rich.print(f"""\n[bold green]{'[bold yellow] | [/bold yellow]'.join(subdirs)}[/bold green]\n""")
                 rich.print(f"There's {len(subdirs)} sub directory on '{curr_path}'.")
                 subdir = Input(f"What sub directory you want to remove? ", word_color=colors.foreground["yellow"])
                 subdir_result = subdir.launch()
@@ -176,62 +240,14 @@ class Controller:
             if not pathlib.Path(self.path).is_dir():
                 raise FileNotFoundError(f"File or Path not found, path: '{self.path}'")
             else:
-                with Progress(
-                    SpinnerColumn(spinner_name="dots9"),
-                    TextColumn("[progress.description]{task.description}"),
-                    auto_refresh=True,
-                    transient=True,
-                    get_time=None,
-                ) as progress:
-                    task = progress.add_task(f"Please wait for a moment...", total=100_000)
-                    certain_files = [os.path.join(root, some_file)
-                                    for root, dirs, files in os.walk(self.path, topdown=True)
-                                    for some_file in filter(lambda f: f.startswith(startswith), files)]
-                    for f in certain_files:
-                        if os.path.getsize(f) != 0:
-                            rich.print(f)
-                            progress.advance(task)
-                if len(certain_files) < 1:
-                    raise FileNotFoundError(f"File startswith '{startswith}' not found from '{self.path}' path")
-                else:
-                    rich.print(f"There's {len(certain_files)} files with '{startswith}' prefix")
-                    choice = typer.confirm("Are you sure want to delete it?", abort=True)
-                    for f in certain_files:
-                        if os.path.isfile(f):
-                            os.remove(f)
-                    rich.print("All files removed successfully!")
-
+                Controller._data_progress_for_remove(value=startswith, path=self.path, flag_type="startswith")
         elif endswith:
             if self.path is None:
                 raise InvalidPath(f"Invalid path, path: {self.path}")
             if not pathlib.Path(self.path).is_dir():
                 raise FileNotFoundError(f"File or Path not found, path: '{self.path}'")
             else:
-                with Progress(
-                    SpinnerColumn(spinner_name="dots9"),
-                    TextColumn("[progress.description]{task.description}"),
-                    auto_refresh=True,
-                    transient=True,
-                    get_time=None,
-                ) as progress:
-                    task = progress.add_task(f"Please wait for a moment...", total=100_000)
-                    certain_files = [os.path.join(root, some_file)
-                                    for root, dirs, files in os.walk(self.path, topdown=True)
-                                    for some_file in filter(lambda f: f.endswith(endswith), files)]
-                    for f in certain_files:
-                        if os.path.getsize(f) != 0:
-                            rich.print(f)
-                            progress.advance(task)
-                if len(certain_files) < 1:
-                    raise FileNotFoundError(f"File startswith '{endswith}' not found from '{self.path}' path")
-                else:
-                    rich.print(f"There's {len(certain_files)} files with '{endswith}' prefix")
-                    choice = typer.confirm("Are you sure want to delete it?", abort=True)
-                    for f in certain_files:
-                        if os.path.isfile(f):
-                            os.remove(f)
-                    rich.print("All files removed successfully!")
-
+                Controller._data_progress_for_remove(value=endswith, path=self.path, flag_type="endswith")
         else:    
             Controller._is_file(file_name=self.filename)
             if (curr_path := pathlib.Path(self.path)) and (curr_path.is_dir()):

@@ -1,3 +1,8 @@
+"""
+This file contain all custom decorator, that maybe useful in the future. 
+Also all decorator in here, has different functionality, 
+so be careful when you want to use one or more custom decorator in this file.
+"""
 # sefile/_decorator.py
 
 from sefile import (

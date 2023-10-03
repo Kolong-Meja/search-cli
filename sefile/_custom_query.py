@@ -1,3 +1,8 @@
+"""
+This file contain custom queries logic. 
+So this is not the input logic but the backend system of the input.
+The purpose of this file, is to make the logic of --lazy options more readable, and easy to use. 
+"""
 # sefile/_custom_query.py
 
 from sefile import (
@@ -24,14 +29,16 @@ class CustomQuery:
     __slots__ = ("command_input")
     command_input: str
 
-    def _is_valid_return(self, items: list, commands: list) -> None:
+    @staticmethod
+    def _is_valid_return(items: list, commands: list) -> None:
         if len(items) < 1:
                raise FileNotFoundError(f"File startswith {commands[-1]} not found")
         else:
             rich.print(f"Find file '{commands[-1]}' [bold green]success![/bold green]")
             raise typer.Exit()
     
-    def _data_progress(self, commands: list, path: pathlib.Path, query_type: Literal["simple", "like", "startswith"]) -> None:
+    @staticmethod
+    def _data_progress(commands: list, path: pathlib.Path, query_type: Literal["simple", "like", "startswith"]) -> None:
         all_files = None
         with Progress(
             SpinnerColumn(spinner_name="dots9"),
@@ -59,7 +66,7 @@ class CustomQuery:
                 if os.path.getsize(f) != 0:
                     rich.print(f)
                     progress.advance(task)
-        self._is_valid_return(items=all_files, commands=commands)
+        CustomQuery._is_valid_return(items=all_files, commands=commands)
 
     def simple_command(self) -> None:
         _MAX_SIMPLE_COMMAND = 4
@@ -84,7 +91,7 @@ class CustomQuery:
         if (curr_path := pathlib.Path(_all_commands[-1])) and not curr_path.is_dir():
             raise FileNotFoundError(f"Directory '{_all_commands[-1]}' not found.")
 
-        self._data_progress(commands=_all_commands, path=curr_path, query_type="simple")
+        CustomQuery._data_progress(commands=_all_commands, path=curr_path, query_type="simple")
     
     def advance_command(self) -> None:
         _MAX_ADVANCE_COMMAND = 5
@@ -110,7 +117,7 @@ class CustomQuery:
             raise InvalidFormat(f"Invalid format, input: '{self.command_input}'")
         
         if _all_commands[3] == "like":
-            self._data_progress(commands=_all_commands, path=curr_path, query_type="like")
+            CustomQuery._data_progress(commands=_all_commands, path=curr_path, query_type="like")
         
         if _all_commands[3] == "startswith":
-            self._data_progress(commands=_all_commands, path=curr_path, query_type="startswith")
+            CustomQuery._data_progress(commands=_all_commands, path=curr_path, query_type="startswith")

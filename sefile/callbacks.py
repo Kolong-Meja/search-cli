@@ -1,3 +1,7 @@
+"""
+A file that contain all callback logic that used in command.py file.
+This file also has all CLI requirements, so don't delete it. 
+"""
 # search/callback.py
 
 from sefile import (
@@ -172,13 +176,19 @@ class Callback:
             content = """[bold yellow]There are several input command you can do[/bold yellow]:\
             \n
 1. find <filename> from <path>
-[bold]example for Linux OS[/bold]: find main.py from /home/(user)/Documents
+[bold]for Linux OS[/bold]: find main.py from /home/(user)/Documents
+[bold]for Windows OS[/bold]: find main.py from C:\Directory\SubDirectory
 \n
 2. find from <path> startswith <prefix>
-[bold]example for Linux OS[/bold]: find file from /home/(user)/Documents startswith main
+[bold]for Linux OS[/bold]: find file from /home/(user)/Documents startswith main
+[bold]for Windows OS[/bold]: find file from C:\Directory\SubDirectory startswith main
 \n
 3. find from <path> like <prefix>
-[bold]example for Linux OS[/bold]: find file from /home/(user)/Documents like test
+[bold]for Linux OS[/bold]: find file from /home/(user)/Documents like test
+[bold]for Windows OS[/bold]: find file from C:\Directory\SubDirectory like test
+\n
+4. quit or exit
+[bold]Note[/bold]: It's can be used for all OS.
             """
             rich.print(Panel(content, title="Guide Information"))
             user_input = Input(f"Command 😃> ", word_color=colors.foreground["yellow"])

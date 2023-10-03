@@ -1,3 +1,8 @@
+"""
+This file contain backend system of creating project from create command.
+Every folder and file that automatically created by the system it's build on top of list comprehension,
+which make the create system more faster instead of using flat list.
+"""
 # sefile/_create_project.py
 
 from sefile import (
