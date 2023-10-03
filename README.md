@@ -115,22 +115,22 @@ python -m pip install art
 
 It's quite easy, you just need to enter the command **python -m sefile --help**, then you get the output like this:
 
-### How to show CLI version?
+### How to show CLI version and information?
 
 ```bash
-python -m sefile --version
+sefile --version
 ```
 
 or
 
 ```bash
-python -m sefile -v
+sefile -v
 ```
 
 ### How to find a file?
 
 ```bash
-python -m sefile find example.txt
+sefile find <filename>
 ```
 
 or
@@ -139,7 +139,7 @@ or
 > You can specify the initial directory path to find the file you want.
 
 ```bash
-python -m sefile find example.txt /home/yourname/Documents
+sefile find <filename> <path>
 ```
 
 At first I created this based only on the filename, but eventually I added new flag options, namely --startswith and --endswith.
@@ -147,10 +147,10 @@ At first I created this based only on the filename, but eventually I added new f
 * **--startswith** flag is useful for searching files with your own custom prefix. Usage examples:
 
 > [!NOTE] 
-> **--startswith** flag has been set as **is_eager=True**, meaning this parameter will be executed and the main parameter will be overridden.
+> **--startswith** flag has been set as **is_eager=True**, meaning this parameter will be executed and the main parameter will be overridden. Also, you need to input from what **(path)** you want to search file startswith **(prefix)**.
 
 ```bash
-python -m sefile find --startswith=main
+sefile find --startswith main
 ```
 
 When you do this, the system will automatically look for files with a certain (in this case **main**) prefix from each directory or sub-directory that matches the initial directory.
@@ -161,26 +161,46 @@ When you do this, the system will automatically look for files with a certain (i
 > **--endswith** flag has been set as **is_eager=True**, meaning this parameter will be executed and the main parameter will be overridden.
 
 ```bash
-python -m sefile find --endswith=.py
+sefile find --endswith .py
 ```
 
-This flag has same functional as **--startswith** flag, but search file by the end name of the file that match with your custome prefix.
+This flag has same functional as **--startswith** flag, but search file by the end name of the file that match with your custome prefix. Also, you need to input from what **(path)** you want to search file endswith **(prefix)**.
 
 > [!NOTE]
 > **--lazy** flag has been as **is_eager=True**, meaning this parameter will be executed and the main parameter will be overridden.
 
 ```bash
-python -m sefile find --lazy
+sefile find --lazy
 ```
 
-This flag can be use if you to lazy to input CLI command. You only need to enter a special custom query, namely **find <filename> from <path>**. This custom query has same functionality as **python -m sefile find <filename> <path>** command.
+This flag can be use if you to lazy to input CLI command. You only need to enter a special custom query, namely **find <filename> from <path>**. This custom query has same functionality as **sefile find <filename> <path>** command.
+
+There are several input command you can do:
+
+* find **(filename)** from **(path)**
+
+for Linux OS: find main.py from /home/(user)/Documents
+
+for Windows OS: find main.py from C:\Directory\SubDirectory
+
+* find from **(path)** startswith **(prefix)**
+
+for Linux OS: find file from /home/(user)/Documents startswith main
+
+for Windows OS: find file from C:\Directory\SubDirectory startswith main
+
+* find from **(path)** like **(prefix)**
+
+for Linux OS: find file from /home/(user)/Documents like test
+
+for Windows OS: find file from C:\Directory\SubDirectory like test
 
 **NOTE**: You can also do **'quit'** or **'exit'** custom query in input field. This situation will needed if you want to **cancel** the find activity. So it makes more flexible for you to use **find** command
 
 ### How to create a file?
 
 ```bash
-python -m sefile create example.txt
+sefile create <filename>
 ```
 > [!NOTE] 
 > Default directory set as **/home/username**
@@ -188,26 +208,45 @@ python -m sefile create example.txt
 or 
 
 ```bash
-python -m sefile create example.txt /home/username/Documents
+sefile create <filename> <path>
 ```
 
 The system will automatically create a file with a certain file type (according to the type you add at the end of the file) in the directory you enter.
 
 > [!NOTE]
-> In newest update, there's one Options called **--auto**. This useful for you if you too lazy for creating simple project. **Remember** this Options, will create **Python, Javascript, or Go** project, depends on your choice.
+> In newest update, there's one Options called **--project**. This useful for you if you too lazy for creating simple project. **Remember** this Options, will create **Python, Javascript, or Go** project, depends on your choice.
 
-To run **--auto** Options, you just simply write it in your terminal like this below:
+To run **--project** Options, you just simply write it in your terminal like this below:
 
 ```bash
-python -m sefile create --auto
+sefile create --project
 ```
 
 **NOTE**: You can do **'quit'** or **'exit'** command in input field. This command so useful if you are in the situation where you don't wanna input anything, or you do wrong input name in project name, or project directory, or when you choose the wrong project what you want to make.
 
+In the newest update, i add another functionality for this create command. It's **--write** options. To using it, just simply type:
+
+```bash
+sefile create --write
+```
+
+It's automatically displaying Code Editor Interface in your terminal.
+
+> [!NOTE]
+> you need specifiy the Filename and Path first, before you do code or creating text.
+
+So this write command, doesn't need ARGS at all, you just input command in your terminal above, and you can do code in your terminal.
+
+**INFORMATION**:
+
+So if you notice, theres is **'EXIT'** button and **'SAVE'** button right? the functionality of these 2(two) button are same as **'EXIT'** button and **'SAVE'** button in your code editor. 
+
+You can exit whatever you want, but you can't save the code if you not input value in **'Filename'** and **'Folder Path'**. So be careful when you use this. 
+
 ### How to read a file?
 
 ```bash
-python -m sefile read example.py /home
+sefile read <filename> <path>
 ```
 
 or
@@ -219,7 +258,7 @@ or
 Do this command in your terminal:
 
 ```bash
-python -m sefile read example.py /home --read-type=python
+sefile read <filename> <path> --format python 
 ```
 
 And you get a result like this in your terminal (**NOTE**: This is just example)
@@ -236,7 +275,7 @@ def my_func() -> None:
 Do this command in terminal:
 
 ```bash
-python -m sefile read example.py /home --read-type=go
+sefile read <filename> <path> --read-type go
 ```
 
 And you get a result like this in your terminal (**NOTE**: This is just example)
@@ -263,37 +302,53 @@ func playingPythagoras(altitude, base, hypotenus float64) {
 > [!NOTE] 
 > this is just an example, the output will vary depending on the type of file you entered and the program in the file you entered
 
-### How to delete a file?
+If you want to add indent for read code, you just simply add **--indent** or **-i**, you can just type like:
 
 ```bash
-python -m sefile delete example.py /home
+sefile read <filename> <path> --format python --indent
 ```
 
-You can add the path as you wish, but make sure that the files you delete are in your destination directory.
-
-### How to write a file?
+If you want to change theme also want to add indent, you can just type like:
 
 ```bash
-python -m sefile write
+sefile read <filename> <path> --format python --indent --theme monokai
+```
+
+For list of all theme, you can type **--help** options, like this:
+
+```bash
+sefile read --help
+```
+
+### How to rmeove a file?
+
+```bash
+sefile remove <path> <filename>
+```
+So you must input the path directory first then file that inside the directory.
+
+In other hand, this command also has many options. The first one is **--startswith** or you just simpy type **-s**. To implement this command, you can type like:
+
+```bash
+sefile remove <path> --startswith <prefix>
 ```
 
 > [!NOTE]
-> you need specifiy the Filename and Path first, before you do code or creating text.
+> For **--startswith** and **--endswith** options, it must required a prefix that related into this two options. For example, if you want to search file startswith something (depends on what value you inputed), you must use **--startswith**, but if you want to search file format endswith, let's say **.py**, then you must use **--endswith** options.
 
-So this write command, doesn't need ARGS at all, you just input command in your terminal above, and you can do code in your terminal.
+The second options is **--endswith** or you just simply type **-e**. To implement this command, you can type like:
 
-**INFORMATION**:
+```bash
+sefile remove <path> --endswith <prefix>
+```
 
-So if you notice, theres is **'EXIT'** button and **'SAVE'** button right? the functionality of these 2(two) button are same as **'EXIT'** button and **'SAVE'** button in your code editor. 
+The last one is **--subfolder** or you just simply type **-sf**. This options has functionality to remove sub folder and it's content from path directory target. To implement this command, you can type like:
 
-You can exit whatever you want, but you can't save the code if you not input value in **'Filename'** and **'Folder Path'**. So be careful when you use this. 
-
-## Other information
-
-When you do execute the command, it will automatically **log** itself. You can check out in **logs/log.txt** file.
-
+```bash
+sefile remove <path> --subfolder
+```
 
 ## Keep in mind
 
-This program is only useful for **find, create, read, write and delete**. Apart from that, I have nothing to add. I personally will only focus on the main command program, because there are still many things that can be updated in the future.
+This program is only useful for **find, create, read, write and remove**. Apart from that, I have nothing to add. I personally will only focus on the main command program, because there are still many things that can be updated in the future.
 
