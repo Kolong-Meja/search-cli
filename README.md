@@ -1,6 +1,6 @@
 # Sefile CLI
 
-**Logo of the CLI tool**
+![SEFILE](https://github.com/Kolong-Meja/search-cli/assets/90602095/da52b9b5-0c2d-489c-a837-d2078cf6f11b)
 
 Sefile CLI is a personal project created by Faisal Ramadhan or myself. This project was built using the Python programming language. At the time of its creation, this CLI was only useful for finding the desired file according to the initial directory, but over time I started adding several new commands, such as Create, Read, Write and Delete. All of these commands have their own purpose and function.
 
@@ -50,10 +50,6 @@ For Windows OS:
 
 > [!NOTE]
 > For this operating system, i know you can do it by yourself, right?
-
-For Mac OS:
-
-
 
 ## Requirements
 
@@ -308,8 +304,6 @@ sefile create --write
 
 It's automatically displaying Code Editor Interface in your terminal.
 
-**Photo of code editor**
-
 > [!NOTE]
 > you need specifiy the Filename and Path first, before you do code or creating text.
 
@@ -329,7 +323,7 @@ sefile read <filename> <path>
 
 or
 
-* **--read-type** flag is especially useful for reading files of a certain type. Default file typer set as **text** or **.txt**. Example of the output:
+* **--format** flag is especially useful for reading files of a certain type. Default file typer set as **text** or **.txt**. Example of the output:
 
 **Example 1**:
 
