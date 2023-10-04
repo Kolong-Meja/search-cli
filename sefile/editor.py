@@ -45,7 +45,7 @@ class CodeEditor(npyscreen.ActionFormV2):
 
     def activate(self):
         self.edit()
-        self.parentApp.setNextForm("SUB_MAIN_FIRST")
+        self.parentApp.setNextForm(None)
 
     def draw_title_and_help(self):
         if self.name:

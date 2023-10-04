@@ -1,21 +1,59 @@
 # Sefile CLI
 
-![SEFILE_v1](https://github.com/Kolong-Meja/search-cli/assets/90602095/579d3cd7-6e68-451f-8c1f-575d8059ef5f)
+**Logo of the CLI tool**
 
 Sefile CLI is a personal project created by Faisal Ramadhan or myself. This project was built using the Python programming language. At the time of its creation, this CLI was only useful for finding the desired file according to the initial directory, but over time I started adding several new commands, such as Create, Read, Write and Delete. All of these commands have their own purpose and function.
 
-## Installation
+This CLI tool has available in https://pypi.org/ you can access it in https://pypi.org/project/new-sefile/ from there you can know how this CLI tool was made.
 
-You can install this cli from https://pypi.org/project/new-sefile/ or you can just type in command into your terminal like below:
+To install this CLI tool, you can simply type on your terminal or CMD:
 
 ```bash
 python3 -m pip install new-sefile
 ```
 
-Enjoy your exploration on my CLI tool!
+To upgrade the CLI tool to the newest version, you can simply type on your terminal or CMD:
 
-> **Warning**
-This project does not support yet for Windows and Mac operating system.
+```bash
+python3 -m pip install --upgrade new-sefile
+```
+
+> [!WARNING]
+> To execute this package as a CLI tool, you must first registred the python $PATH for this package. So go check out your directory that save all of your python package. All operating system, has a different path where the python package saved, so search for it in Google first.
+
+For Linux OS & Mac OS:
+
+```bash
+sudo nano ~/.bashrc
+```
+
+And now you are in .bashrc file, then add new line code, like:
+
+```bash
+export PATH="/home/(user)/(path)/bin:$PATH
+```
+
+Remember the (path) is different for every linux users, so from me is that you must search first where all you python package was saved. Then you can add new PATH into your python PATH, like above.
+
+There are some different file names, that run executable dotfiles (.file) is your system, such as:
+
+* .bashrc
+* .profile
+* .bash_profile
+* .zprofile
+* .zlogin
+* .bash_login
+
+So in my opinion, that you must search where the executable file that execute your python package.
+
+For Windows OS:
+
+> [!NOTE]
+> For this operating system, i know you can do it by yourself, right?
+
+For Mac OS:
+
+
 
 ## Requirements
 
@@ -246,7 +284,17 @@ To run **--project** Options, you just simply write it in your terminal like thi
 sefile create --project
 ```
 
-![Screenshot from 2023-09-25 18-05-02](https://github.com/Kolong-Meja/search-cli/assets/90602095/a42f5fe5-d51b-49e4-839f-92fae0aff8f2)
+And you got this little thing:
+
+```bash
+What's project you want to create? 
+ >  🐍 Easy Python                                                                                                                     
+    👑 The king of Javascript                                                                                                          
+    🐼 Cute Go                                                                                                                         
+    ❌ Nah, i'm good         
+What's the name of the 🐍 Easy Python project? my_api_project
+Where do you want to save this my_api_project? /home/users/Documents
+```
 
 **NOTE**: You can do **'quit'** or **'exit'** command in input field. This command so useful if you are in the situation where you don't wanna input anything, or you do wrong input name in project name, or project directory, or when you choose the wrong project what you want to make.
 
@@ -259,6 +307,8 @@ sefile create --write
 ![Screenshot from 2023-09-25 18-05-15](https://github.com/Kolong-Meja/search-cli/assets/90602095/85b9d585-8f73-4b59-9a1f-d84e2b5083fb)
 
 It's automatically displaying Code Editor Interface in your terminal.
+
+**Photo of code editor**
 
 > [!NOTE]
 > you need specifiy the Filename and Path first, before you do code or creating text.
@@ -286,47 +336,72 @@ or
 Do this command in your terminal:
 
 ```bash
-sefile read <filename> <path> --format python 
+sefile read <filename> <path> --format python --indent --theme one-dark 
 ```
 
 And you get a result like this in your terminal (**NOTE**: This is just example)
 
 ```python
-# example.py
-
-def my_func() -> None:
-    print("Hello World!")
+╭────────────────────────────────────────────────────────── experiments.py ───────────────────────────────────────────────────────────╮
+│    1 # ./learn_class/experiments.py                                                                                                 │
+│    2                                                                                                                                │
+│    3 import geocoder                                                                                                                │
+│    4                                                                                                                                │
+│    5 from dataclasses import dataclass                                                                                              │
+│    6 from fuzzywuzzy import fuzz, process                                                                                           │
+│    7 from geopy.geocoders import Nominatim                                                                                          │
+│    8 from geonamescache import GeonamesCache                                                                                        │
+│    9 from timezonefinder import TimezoneFinder                                                                                      │
+│   10                                                                                                                                │
+│   11 @dataclass                                                                                                                     │
+│   12 class Experiment:                                                                                                              │
+│   13 │                                                                                                                              │
+│   14 │   @staticmethod                                                                                                              │
+│   15 │   def first_experiment() -> None:                                                                                            │
+│   16 │   │   """                                                                                                                    │
+│   17 │   │   ------------                                                                                                           │
+│   18 │   │   |Definition|                                                                                                           │
+│   19 │   │   ------------                                                                                                           │
+│   20 │   │                                                                                                                          │
+│   21 │   │   This function is useful for tracking the current location by using the user's IP address.                              │
+│   22 │   │   """                                                                                                                    │
+│   23 │   │   locator = Nominatim(user_agent="My App")                                                                               │
+│   24 │   │   my_location = geocoder.ip('me')                                                                                        │
+│   25 │   │   latitude = my_location.geojson['features'][0]['properties']['lat']                                                     │
+│   26 │   │   longtitude = my_location.geojson['features'][0]['properties']['lng']                                                   │
+│   27 │   │                                                                                                                          │
+│   28 │   │   location = locator.reverse(f"{latitude}, {longtitude}")                                                                │
+│   29 │   │   print(f"Your current IP location: {location}")                                                                         │
+│   30 │                                                                                                                              │
+│   31 │   @staticmethod                                                                                                              │
+│   32 │   def second_experiment(city: str) -> None:                                                                                  │
+│   33 │   │   """                                                                                                                    │
+│   34 │   │   ------------                                                                                                           │
+│   35 │   │   |Definition|                                                                                                           │
+│   36 │   │   ------------                                                                                                           │
+│   37 │   │                                                                                                                          │
+│   38 │   │   This function is useful for tracking the current location by simply entering the city inputted by the user.            │
+│   39 │   │   """                                                                                                                    │
+│   40 │   │   geolocator = Nominatim(user_agent='My App')                                                                            │
+│   41 │   │   location = geolocator.geocode(city)                                                                                    │
+│   42 │   │   latitude = location.latitude                                                                                           │
+│   43 │   │   longitude = location.longitude                                                                                         │
+│   44 │   │   print(f"City name: {city}\nLatitude: {latitude}\nLongitude: {longitude}\n")                                            │
+│   45 │   │                                                                                                                          │
+│   46 │   │   timezone = TimezoneFinder()                                                                                            │
+│   47 │   │   timezone_of_the_city = timezone.timezone_at(lat=latitude, lng=longitude)                                               │
+│   48 │   │   print(f"Timezone of {city}: {timezone_of_the_city}")                                                                   │
+│   49 │   │                                                                                                                          │
+│   50 │   │   geonamescache_obj = GeonamesCache()                                                                                    │
+│   51 │   │   cities = [city['name'] for city in geonamescache_obj.get_cities().values()]                                            │
+│   52 │   │   print(cities[:100])                                                                                                    │
+│   53                                                                                                                                │
+│   54                                                                                                                                │
+│   55                                                                                                                                │
+╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ```
 
-**Example 2**:
 
-Do this command in terminal:
-
-```bash
-sefile read <filename> <path> --format go
-```
-
-And you get a result like this in your terminal (**NOTE**: This is just example)
-
-```go
-// main.go
-
-func playingPythagoras(altitude, base, hypotenus float64) {
-	if altitude == 0.0 {
-		formula := math.Pow(hypotenus, 2.0) - math.Pow(base, 2.0)
-		fmt.Printf("altitude = %.1f² - %.1f²", hypotenus, base)
-		fmt.Printf("Result = %.1f", math.Round(formula))
-	} else if base == 0.0 {
-		formula := math.Pow(hypotenus, 2.0) - math.Pow(altitude, 2.0)
-		fmt.Printf("base = %.1f² - %.1f²", hypotenus, altitude)
-		fmt.Printf("Result = %.1f", math.Round(formula))
-	} else {
-		formula := math.Pow(altitude, 2.0) + math.Pow(base, 2.0)
-		fmt.Printf("hypotenus = %.1f² + %.1f²", altitude, base)
-		fmt.Printf("\nResult = %.1f", math.Round(formula))
-	}
-}
-```
 > [!NOTE] 
 > this is just an example, the output will vary depending on the type of file you entered and the program in the file you entered
 
@@ -342,13 +417,23 @@ If you want to change theme also want to add indent, you can just type like:
 sefile read <filename> <path> --format python --indent --theme monokai
 ```
 
-For list of all theme, you can type **--help** options, like this:
+All of theme that i add are:
+* one-dark 		(dark theme)
+* monokai 		(dark theme)
+* dracula 		(dark theme)
+* material 		(dark theme)
+* gruvbox-light (light theme)
+* lightbulb 	(light theme)
+
+Or you can just type,
 
 ```bash
 sefile read --help
 ```
 
-### How to rmeove a file?
+For to know what all themes that available.
+
+### How to remove a file?
 
 ```bash
 sefile remove <path> <filename>
